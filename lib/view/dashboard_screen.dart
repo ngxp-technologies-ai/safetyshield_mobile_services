@@ -481,40 +481,6 @@ class _ZoneCard extends StatelessWidget {
   }
 }
 
-class _StatChip extends StatelessWidget {
-  final String label;
-  final String value;
-  final IconData icon;
-  final Color valueColor;
-
-  const _StatChip({
-    required this.label,
-    required this.value,
-    required this.icon,
-    this.valueColor = Colors.black87,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Icon(icon, size: 28, color: const Color(0xFF1F8FB5)),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: valueColor,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
-      ],
-    );
-  }
-}
-
 class _PlaceholderTab extends StatelessWidget {
   final String label;
 

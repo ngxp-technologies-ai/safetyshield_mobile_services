@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safety_management/utils/app_colors.dart';
 
 class SafetyShieldAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -13,13 +14,13 @@ class SafetyShieldAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       elevation: 0,
       shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       // ------- Left: Hamburger menu -------
       leading: IconButton(
-        icon: const Icon(Icons.menu, color: Colors.black87, size: 26),
+        icon: const Icon(Icons.menu, color: AppColors.black, size: 26),
         onPressed: onMenuTap ?? () => Scaffold.of(context).openDrawer(),
         tooltip: 'Menu',
       ),
@@ -34,7 +35,7 @@ class SafetyShieldAppBar extends StatelessWidget
       // ------- Right: Search icon -------
       actions: [
         IconButton(
-          icon: const Icon(Icons.search, color: Colors.black87, size: 26),
+          icon: const Icon(Icons.search, color: AppColors.black, size: 26),
           onPressed: onSearchTap,
           tooltip: 'Search',
         ),
@@ -42,5 +43,3 @@ class SafetyShieldAppBar extends StatelessWidget
     );
   }
 }
-
-
