@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:safety_management/view/dashboard_screen.dart';
 import 'package:safety_management/view/sign_up_screen.dart';
 import '../utils/app_size.dart';
 import '../utils/screen_size.dart';
@@ -107,7 +106,7 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => DashboardScreen()));
+
                         },
                         child: const Text(
                           "Login",
