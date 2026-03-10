@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safety_management/common_widgets/common_widgets.dart';
+import 'package:safety_management/utils/app_colors.dart';
+import 'package:safety_management/utils/app_styles.dart';
 
 /// Example dashboard screen demonstrating how to use
 /// [SafetyShieldAppBar] and [SafetyShieldBottomNavBar] together.
@@ -28,7 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F6FA),
+      backgroundColor: AppColors.light,
       // ─── AppBar ───────────────────────────────────────────────────────────
       appBar: SafetyShieldAppBar(
         onMenuTap: () => Scaffold.of(context).openDrawer(),
@@ -76,19 +78,23 @@ class _HomeTab extends StatelessWidget {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'Good Morning ☀️',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 4),
+                children: [
+                  Text('Good Morning ☀️', style: AppStyles.headlinePoppins),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
-                      Icon(Icons.person_outline, size: 14, color: Colors.grey),
-                      SizedBox(width: 4),
+                      const Icon(
+                        Icons.person_outline,
+                        size: 14,
+                        color: AppColors.grey,
+                      ),
+                      const SizedBox(width: 4),
                       Text(
                         'Jacob Santos',
-                        style: TextStyle(color: Colors.grey, fontSize: 13),
+                        style: AppStyles.poppins(
+                          color: AppColors.grey,
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),
@@ -100,13 +106,13 @@ class _HomeTab extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2DB468),
+                  color: AppColors.success,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Text(
+                child: Text(
                   '● On Shift',
-                  style: TextStyle(
-                    color: Colors.white,
+                  style: AppStyles.poppins(
+                    color: AppColors.white,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -135,24 +141,27 @@ class _HomeTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Assigned Site',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                  style: AppStyles.poppins(color: AppColors.grey, fontSize: 12),
                 ),
                 const SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
                       'Metro Line 3',
-                      style: TextStyle(
+                      style: AppStyles.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     Text(
                       'online since  07:00',
-                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                      style: AppStyles.poppins(
+                        color: AppColors.grey,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -181,7 +190,7 @@ class _HomeTab extends StatelessWidget {
                 label: 'Escalation',
                 value: '1',
                 icon: Icons.report_outlined,
-                valueColor: Color(0xFFE53935),
+                valueColor: AppColors.error,
               ),
             ],
           ),
@@ -208,18 +217,21 @@ class _StatChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, size: 28, color: const Color(0xFF1F8FB5)),
+        Icon(icon, size: 28, color: AppColors.primary),
         const SizedBox(height: 4),
         Text(
           value,
-          style: TextStyle(
+          style: AppStyles.poppins(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: valueColor,
           ),
         ),
         const SizedBox(height: 2),
-        Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+        Text(
+          label,
+          style: AppStyles.poppins(fontSize: 11, color: AppColors.grey),
+        ),
       ],
     );
   }
@@ -234,7 +246,7 @@ class _PlaceholderTab extends StatelessWidget {
     return Center(
       child: Text(
         label,
-        style: const TextStyle(fontSize: 20, color: Colors.grey),
+        style: AppStyles.poppins(fontSize: 20, color: AppColors.grey),
       ),
     );
   }

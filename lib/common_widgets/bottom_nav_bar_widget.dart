@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:safety_management/utils/app_colors.dart';
+import 'package:safety_management/utils/app_styles.dart';
 
 /// Tab items for the SafetyShield bottom navigation bar.
 enum SafetyShieldTab { home, alerts, camera, settings, profile }
@@ -39,8 +41,8 @@ class SafetyShieldBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Color(0xFFEEEEEE), width: 1)),
+        color: AppColors.white,
+        border: Border(top: BorderSide(color: AppColors.greyLight, width: 1)),
         boxShadow: [
           BoxShadow(
             color: Color(0x14000000),
@@ -125,8 +127,8 @@ class _NavItem extends StatelessWidget {
     this.activeIconData,
   });
 
-  static const Color _activeColor = Color(0xFF1F8FB5);
-  static const Color _inactiveColor = Color(0xFFAAAAAA);
+  static const Color _activeColor = AppColors.primary;
+  static const Color _inactiveColor = AppColors.grey;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +144,7 @@ class _NavItem extends StatelessWidget {
             const SizedBox(height: 3),
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
-              style: TextStyle(
+              style: AppStyles.poppins(
                 fontSize: 10,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
                 color: isActive ? _activeColor : _inactiveColor,
@@ -253,8 +255,8 @@ class _CameraNavItemState extends State<_CameraNavItem>
   late final AnimationController _blinkController;
   late final Animation<double> _blinkAnim;
 
-  static const Color _activeColor = Color(0xFF1F8FB5);
-  static const Color _inactiveColor = Color(0xFFAAAAAA);
+  static const Color _activeColor = AppColors.primary;
+  static const Color _inactiveColor = AppColors.grey;
 
   @override
   void initState() {
@@ -328,7 +330,7 @@ class _CameraNavItemState extends State<_CameraNavItem>
             const SizedBox(height: 3),
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
-              style: TextStyle(
+              style: AppStyles.poppins(
                 fontSize: 10,
                 fontWeight: widget.isActive ? FontWeight.w600 : FontWeight.w400,
                 color: widget.isActive ? _activeColor : _inactiveColor,
