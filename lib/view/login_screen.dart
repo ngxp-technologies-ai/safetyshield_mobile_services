@@ -9,14 +9,12 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     ScreenSize.init(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-
           /// Background Image
           SizedBox(
             width: ScreenSize.width,
@@ -48,7 +46,6 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     /// Title
                     const Text(
                       "Login",
@@ -61,10 +58,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: AppSizes.spaceMedium),
 
                     /// Email
-                    _inputField(
-                      hint: "Email",
-                      icon: Icons.email_outlined,
-                    ),
+                    _inputField(hint: "Email", icon: Icons.email_outlined),
 
                     SizedBox(height: AppSizes.spaceSmall),
 
@@ -80,10 +74,7 @@ class LoginScreen extends StatelessWidget {
                     /// Remember + Forgot
                     Row(
                       children: [
-                        Checkbox(
-                          value: false,
-                          onChanged: (v) {},
-                        ),
+                        Checkbox(value: false, onChanged: (v) {}),
                         const Text("Remember Me"),
                         const Spacer(),
                         TextButton(
@@ -107,7 +98,12 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => DashboardScreen()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => DashboardScreen(),
+                            ),
+                          );
                         },
                         child: const Text(
                           "Login",
