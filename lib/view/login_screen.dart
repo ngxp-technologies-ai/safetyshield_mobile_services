@@ -1,60 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:safety_management/view/dashboard_screen.dart';
 import 'package:safety_management/view/sign_up_screen.dart';
-
-import 'dashboard_screen.dart';
+import '../utils/app_size.dart';
+import '../utils/screen_size.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    ScreenSize.init(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
+
           /// Background Image
           SizedBox(
-            width: double.infinity,
+            width: ScreenSize.width,
             child: Image.asset(
               "assets/images/login_curve_img.png",
               fit: BoxFit.cover,
             ),
           ),
 
-          /// Back Button
-          Positioned(
-            top: 50,
-            left: 20,
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Image.asset(
-                'assets/icons/back_icon_black.png',
-                width: 40,
-                height: 40,
-              ),
-            ),
-          ),
-
           /// Logo
           Positioned(
-            top: 50,
-            right: 20,
+            top: ScreenSize.height * 0.06,
+            right: ScreenSize.width * 0.05,
             child: Image.asset(
               "assets/images/sa_logo_white_bg.png",
-              height: 40,
+              height: ScreenSize.height * 0.05,
             ),
           ),
 
           /// Form Section
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(top: 360),
+              padding: EdgeInsets.only(top: ScreenSize.height * 0.40),
               child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+                width: ScreenSize.width,
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSizes.horizontalPadding,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
                     /// Title
                     const Text(
                       "Login",
@@ -64,45 +58,32 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: AppSizes.spaceMedium),
 
-                    /// Email Field
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: "Email",
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
-                        suffixIcon: const Icon(Icons.email_outlined),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                    /// Email
+                    _inputField(
+                      hint: "Email",
+                      icon: Icons.email_outlined,
                     ),
 
-                    const SizedBox(height: 15),
+                    SizedBox(height: AppSizes.spaceSmall),
 
-                    /// Password Field
-                    TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: "Password",
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
-                        suffixIcon: const Icon(Icons.visibility_outlined),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                    /// Password
+                    _inputField(
+                      hint: "Password",
+                      icon: Icons.visibility_outlined,
+                      isPassword: true,
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: AppSizes.spaceSmall),
 
                     /// Remember + Forgot
                     Row(
                       children: [
-                        Checkbox(value: false, onChanged: (v) {}),
+                        Checkbox(
+                          value: false,
+                          onChanged: (v) {},
+                        ),
                         const Text("Remember Me"),
                         const Spacer(),
                         TextButton(
@@ -112,12 +93,12 @@ class LoginScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: AppSizes.spaceSmall),
 
                     /// Login Button
                     SizedBox(
-                      width: double.infinity,
-                      height: 50,
+                      width: ScreenSize.width,
+                      height: AppSizes.buttonHeight,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF1F8FB5),
@@ -125,18 +106,17 @@ class LoginScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        onPressed: () {  Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => DashboardScreen()),
-                        );},
-                        child: Text(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => DashboardScreen()));
+                        },
+                        child: const Text(
                           "Login",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 25),
+                    SizedBox(height: AppSizes.spaceMedium),
 
                     /// OR Divider
                     Row(
@@ -150,21 +130,30 @@ class LoginScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: AppSizes.spaceMedium),
 
                     /// Social Icons
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset("assets/icons/google_icon.png", height: 32),
-                        const SizedBox(width: 25),
-                        Image.asset("assets/icons/fb_icon.png", height: 32),
-                        const SizedBox(width: 25),
-                        Image.asset("assets/icons/apple_icon.png", height: 32),
+                        Image.asset(
+                          "assets/icons/google_icon.png",
+                          height: AppSizes.socialIcon,
+                        ),
+                        SizedBox(width: ScreenSize.width * 0.06),
+                        Image.asset(
+                          "assets/icons/fb_icon.png",
+                          height: AppSizes.socialIcon,
+                        ),
+                        SizedBox(width: ScreenSize.width * 0.06),
+                        Image.asset(
+                          "assets/icons/apple_icon.png",
+                          height: AppSizes.socialIcon,
+                        ),
                       ],
                     ),
 
-                    const SizedBox(height: 25),
+                    SizedBox(height: AppSizes.spaceMedium),
 
                     /// Signup
                     Row(
@@ -175,7 +164,9 @@ class LoginScreen extends StatelessWidget {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (_) => SignUpScreen()),
+                              MaterialPageRoute(
+                                builder: (_) => const SignUpScreen(),
+                              ),
                             );
                           },
                           child: const Text(
@@ -189,13 +180,47 @@ class LoginScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 30),
+                    SizedBox(height: AppSizes.spaceLarge),
                   ],
                 ),
               ),
             ),
           ),
+
+          /// Back Button
+          Positioned(
+            top: ScreenSize.height * 0.06,
+            left: ScreenSize.width * 0.05,
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Image.asset(
+                'assets/icons/back_icon_black.png',
+                width: ScreenSize.width * 0.10,
+              ),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  /// Reusable Input Field
+  Widget _inputField({
+    required String hint,
+    required IconData icon,
+    bool isPassword = false,
+  }) {
+    return TextField(
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        hintText: hint,
+        filled: true,
+        fillColor: Colors.grey.shade200,
+        suffixIcon: Icon(icon),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }
