@@ -1,5 +1,10 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:safety_management/common_widgets/common_widgets.dart';
+import 'package:safety_management/utils/app_colors.dart';
+import '../utils/app_size.dart';
+import '../utils/app_styles.dart';
+import '../utils/screen_size.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -25,6 +30,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenSize.init(context);
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
       // ─── AppBar ───────────────────────────────────────────────────────────
@@ -60,47 +67,51 @@ class _GoodMorningSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(AppSizes.cardPaddingLarge),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(AppSizes.radiusLarge),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// GOOD MORNING + SHIFT
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Row(
+              Row(
                 children: [
                   Text(
                     "Good Morning",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                  SizedBox(width: 6),
-                  Text("☀️", style: TextStyle(fontSize: 18)),
+                  SizedBox(width: AppSizes.space6),
+                  Text("☀️", style: TextStyle(fontSize: AppSizes.fs16)),
                 ],
               ),
-
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSizes.space12,
+                  vertical: AppSizes.space6,
                 ),
                 decoration: BoxDecoration(
                   color: const Color(0xffDFF4E8),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(AppSizes.radiusXLarge),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    CircleAvatar(radius: 4, backgroundColor: Color(0xff2DB468)),
-                    SizedBox(width: 6),
+                    CircleAvatar(
+                      radius: AppSizes.w(4),
+                      backgroundColor: const Color(0xff2DB468),
+                    ),
+                    SizedBox(width: AppSizes.space6),
                     Text(
                       "On Shift",
-                      style: TextStyle(
-                        color: Color(0xff2DB468),
-                        fontSize: 12,
+                      style: AppStyles.poppins(
+                        color: const Color(0xff2DB468),
+                        fontSize: AppSizes.fs10,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -109,67 +120,67 @@ class _GoodMorningSection extends StatelessWidget {
               ),
             ],
           ),
-
-          const SizedBox(height: 6),
-
-          /// USER NAME
-          const Row(
+          SizedBox(height: AppSizes.space6),
+          Row(
             children: [
-              Icon(Icons.person_outline, size: 16, color: Colors.grey),
-              SizedBox(width: 6),
+              Icon(Icons.person_outline, size: AppSizes.w(14), color: Colors.grey),
+              SizedBox(width: AppSizes.space6),
               Text(
                 "Jacob Santos",
-                style: TextStyle(fontSize: 13, color: Colors.grey),
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs12,
+                  color: Colors.grey,
+                ),
               ),
             ],
           ),
-
-          const SizedBox(height: 12),
-
+          SizedBox(height: AppSizes.space8),
           const Divider(),
-
-          const SizedBox(height: 12),
-
-          /// ASSIGNED SITE
+          SizedBox(height: AppSizes.space8),
           Container(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(AppSizes.cardPadding),
             decoration: BoxDecoration(
-              color: const Color(0xffE9EAEC),
-              borderRadius: BorderRadius.circular(14),
+              color: AppColors.greyLight,
+              borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Assigned Site",
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                      style: AppStyles.poppins(
+                        fontSize: AppSizes.fs11,
+                        color: Colors.grey,
+                      ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: AppSizes.space4),
                     Text(
                       "Metro Line 3",
-                      style: TextStyle(
-                        fontSize: 15,
+                      style: AppStyles.poppins(
+                        fontSize: AppSizes.fs13,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
                 ),
-
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppSizes.space12,
+                    vertical: AppSizes.space6,
                   ),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(AppSizes.radiusXLarge),
                   ),
-                  child: const Text(
+                  child: Text(
                     "online since: 07:00",
-                    style: TextStyle(fontSize: 11, color: Colors.grey),
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs11,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ],
@@ -238,28 +249,30 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 78,
-      height: 90,
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      width: AppSizes.statCardWidth,
+      height: AppSizes.statCardHeight,
+      padding: EdgeInsets.symmetric(vertical: AppSizes.space12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          /// ICON WITH OPTIONAL DOT
           Stack(
             children: [
-              Image.asset(icon, height: 22, color: iconColor),
-
+              Image.asset(
+                icon,
+                height: AppSizes.w(22),
+                color: iconColor,
+              ),
               if (showGreenDot)
                 Positioned(
                   right: 0,
                   top: 0,
                   child: Container(
-                    width: 8,
-                    height: 8,
+                    width: AppSizes.onlineDot,
+                    height: AppSizes.onlineDot,
                     decoration: const BoxDecoration(
                       color: Color(0xFF2DB468),
                       shape: BoxShape.circle,
@@ -268,76 +281,82 @@ class _StatCard extends StatelessWidget {
                 ),
             ],
           ),
-
-          /// TITLE
-          Text(title, style: const TextStyle(fontSize: 12, color: Colors.grey)),
-
-          /// VALUE
+          Text(
+            title,
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs11,
+              color: Colors.black45,
+            ),
+          ),
           Text(
             value,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs14,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ],
       ),
     );
   }
 }
-// ---------------------------------------------------------------------------
-// Placeholder tabs (replace with real page widgets)
-// ---------------------------------------------------------------------------
-
 class _HomeTab extends StatelessWidget {
   const _HomeTab();
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(AppSizes.pagePadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _GoodMorningSection(),
-          const SizedBox(height: 12),
-          _StatsSection(),
-          const SizedBox(height: 12),
+          const _GoodMorningSection(),
+          SizedBox(height: AppSizes.space12),
+          const _StatsSection(),
+          SizedBox(height: AppSizes.space12),
 
-          /// ASSIGNED ZONES HEADER
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Row(
                 children: [
                   Text(
                     "Assigned Zones",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs14,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  SizedBox(width: 6),
+                  SizedBox(width: AppSizes.space6),
                   Text(
                     "4 zones",
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs12,
+                      color: Colors.grey,
+                    ),
                   ),
                 ],
               ),
               Text(
                 "View All",
-                style: TextStyle(
-                  color: Color(0xFF1F8FB5),
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs12,
                   fontWeight: FontWeight.w500,
+                  color: const Color(0xFF1F8FB5),
                 ),
               ),
             ],
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: AppSizes.space12),
 
-          /// ZONES GRID
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 1.3,
+            crossAxisSpacing: AppSizes.space12,
+            mainAxisSpacing: AppSizes.space12,
+            childAspectRatio: ScreenSize.width < 360 ? 1.15 : 1.3,
             children: const [
               _ZoneCard(
                 title: "Foundation pit",
@@ -347,7 +366,6 @@ class _HomeTab extends StatelessWidget {
                 crew: 12,
                 alerts: 0,
               ),
-
               _ZoneCard(
                 title: "Scaffolding",
                 zone: "Zone B",
@@ -356,7 +374,6 @@ class _HomeTab extends StatelessWidget {
                 crew: 8,
                 alerts: 3,
               ),
-
               _ZoneCard(
                 title: "Crane Ops",
                 zone: "Zone C",
@@ -365,7 +382,6 @@ class _HomeTab extends StatelessWidget {
                 crew: 5,
                 alerts: 1,
               ),
-
               _ZoneCard(
                 title: "Material Storage",
                 zone: "Zone D",
@@ -377,7 +393,9 @@ class _HomeTab extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: AppSizes.space20),
+          const _TotalMetricsSection(),
+          SizedBox(height: AppSizes.space20),
         ],
       ),
     );
@@ -415,12 +433,10 @@ class _ZoneCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// ICON + STATUS
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Image.asset("assets/images/location_icon.png", height: 22),
-
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -441,20 +457,13 @@ class _ZoneCard extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 10),
-
-          /// TITLE
           Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            style: AppStyles.poppins(fontWeight: FontWeight.w500, fontSize: 14)
           ),
-
-          Text(zone, style: const TextStyle(color: Colors.grey, fontSize: 12)),
-
+          Text(zone, style: AppStyles.poppins(color: Colors.grey, fontSize: 12)),
           const Spacer(),
-
-          /// CREW + ALERT
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -462,7 +471,7 @@ class _ZoneCard extends StatelessWidget {
                 children: [
                   Image.asset("assets/images/crew_icon.png", height: 14),
                   const SizedBox(width: 4),
-                  Text("$crew", style: const TextStyle(fontSize: 12)),
+                  Text("$crew", style: AppStyles.poppins(fontSize: AppSizes.fs12)),
                 ],
               ),
 
@@ -470,7 +479,7 @@ class _ZoneCard extends StatelessWidget {
                 children: [
                   Image.asset("assets/images/alert_icon.png", height: 14),
                   const SizedBox(width: 4),
-                  Text("$alerts", style: const TextStyle(fontSize: 12)),
+                  Text("$alerts", style: AppStyles.poppins( fontSize: AppSizes.fs12)),
                 ],
               ),
             ],
@@ -481,6 +490,606 @@ class _ZoneCard extends StatelessWidget {
   }
 }
 
+class _TotalMetricsSection extends StatelessWidget {
+  const _TotalMetricsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        _TotalMetricsHeader(),
+        SizedBox(height: 12),
+        _MetricsCardsRow(),
+        SizedBox(height: 12),
+        _TrendChartCard(),
+        SizedBox(height: 12),
+        _AiInsightCard(),
+      ],
+    );
+  }
+}
+
+class _TotalMetricsHeader extends StatelessWidget {
+  const _TotalMetricsHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Total Metrics",
+          style: AppStyles.poppins(
+            fontSize: AppSizes.fs14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        Text(
+          "View All",
+          style: AppStyles.poppins(
+            fontSize: AppSizes.fs12,
+            fontWeight: FontWeight.w500,
+            color: const Color(0xFF1F8FB5),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MetricsCardsRow extends StatelessWidget {
+  const _MetricsCardsRow();
+
+  @override
+  Widget build(BuildContext context) {
+    final isSmall = ScreenSize.width < 360;
+
+    if (isSmall) {
+      return Column(
+        children: const [
+          Row(
+            children: [
+              Expanded(
+                child: _MetricCard(
+                  iconBg: Color(0xFFFFE5E8),
+                  iconColor: Color(0xFFFF6B6B),
+                  icon: Icons.notifications_none_rounded,
+                  value: '14',
+                  label: 'Total Alerts',
+                  footer: '3 Critical',
+                  footerColor: Color(0xFFE53935),
+                ),
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: _MetricCard(
+                  iconBg: Color(0xFFE3F7EA),
+                  iconColor: Color(0xFF39C67A),
+                  icon: Icons.access_time_rounded,
+                  value: '2m 34s',
+                  label: 'Avg Ack time',
+                  footer: '↓ 18%',
+                  footerColor: Color(0xFF2DB468),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          _MetricCard(
+            iconBg: Color(0xFFFFF3D8),
+            iconColor: Color(0xFFE0B100),
+            icon: Icons.warning_amber_rounded,
+            value: '1',
+            label: 'Escalation',
+            footer: '5 Prevented',
+            footerColor: Color(0xFF13A8E8),
+          ),
+        ],
+      );
+    }
+
+    return const Row(
+      children: [
+        Expanded(
+          child: _MetricCard(
+            iconBg: Color(0xFFFFE5E8),
+            iconColor: Color(0xFFFF6B6B),
+            icon: Icons.notifications_none_rounded,
+            value: '14',
+            label: 'Total Alerts',
+            footer: '3 Critical',
+            footerColor: Color(0xFFE53935),
+          ),
+        ),
+        SizedBox(width: 10),
+        Expanded(
+          child: _MetricCard(
+            iconBg: Color(0xFFE3F7EA),
+            iconColor: Color(0xFF39C67A),
+            icon: Icons.access_time_rounded,
+            value: '2m 34s',
+            label: 'Avg Ack time',
+            footer: '↓ 18%',
+            footerColor: Color(0xFF2DB468),
+          ),
+        ),
+        SizedBox(width: 10),
+        Expanded(
+          child: _MetricCard(
+            iconBg: Color(0xFFFFF3D8),
+            iconColor: Color(0xFFE0B100),
+            icon: Icons.warning_amber_rounded,
+            value: '1',
+            label: 'Escalation',
+            footer: '5 Prevented',
+            footerColor: Color(0xFF13A8E8),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MetricCard extends StatelessWidget {
+  final Color iconBg;
+  final Color iconColor;
+  final IconData icon;
+  final String value;
+  final String label;
+  final String footer;
+  final Color footerColor;
+
+  const _MetricCard({
+    required this.iconBg,
+    required this.iconColor,
+    required this.icon,
+    required this.value,
+    required this.label,
+    required this.footer,
+    required this.footerColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSizes.space10,
+        vertical: AppSizes.space10,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: AppSizes.smallIconBox,
+            height: AppSizes.smallIconBox,
+            decoration: BoxDecoration(
+              color: iconBg,
+              borderRadius: BorderRadius.circular(AppSizes.w(6)),
+            ),
+            child: Icon(icon, size: AppSizes.w(14), color: iconColor),
+          ),
+          SizedBox(height: AppSizes.space8),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs14,
+              fontWeight: FontWeight.w500,
+              color: AppColors.black,
+              height: 1,
+            ),
+          ),
+          SizedBox(height: AppSizes.space6),
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs11,
+              color: AppColors.grey,
+            ),
+          ),
+          // const Spacer(),
+          Text(
+            footer,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs11,
+              fontWeight: FontWeight.w500,
+              color: footerColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TrendChartCard extends StatelessWidget {
+  const _TrendChartCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Trend Chart',
+                  style: AppStyles.poppins(
+                    fontSize: AppSizes.fs14,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF343434),
+                  ),
+                ),
+              ),
+              _LegendDot(color: Color(0xFF0E9DE6), label: 'Alerts'),
+              const SizedBox(width: 14),
+              _LegendDot(color: Color(0xFFFF5A5A), label: 'Escalations'),
+            ],
+          ),
+          const SizedBox(height: 14),
+          SizedBox(
+            height: AppSizes.chartHeight,
+            child: CustomPaint(
+              painter: _TrendChartPainter(),
+              child: Container(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LegendDot extends StatelessWidget {
+  final Color color;
+  final String label;
+
+  const _LegendDot({
+    required this.color,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: 6),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12.5,
+            color: Color(0xFF666666),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TrendChartPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    const leftPad = 34.0;
+    const rightPad = 8.0;
+    const topPad = 8.0;
+    const bottomPad = 28.0;
+
+    final chartWidth = size.width - leftPad - rightPad;
+    final chartHeight = size.height - topPad - bottomPad;
+
+    final gridPaint = Paint()
+      ..color = const Color(0xFFDADDE3)
+      ..strokeWidth = 1;
+
+    final dashedLabels = ['16', '12', '8', '4', '0'];
+    final labelStyle = const TextStyle(
+      color: Color(0xFFA5A8AE),
+      fontSize: 11,
+      fontWeight: FontWeight.w400,
+    );
+
+    final dashPaint = Paint()
+      ..color = const Color(0xFFD8DCE3)
+      ..strokeWidth = 1;
+
+    for (int i = 0; i < 5; i++) {
+      final y = topPad + (chartHeight / 4) * i;
+
+      if (i < 4) {
+        double startX = leftPad;
+        while (startX < size.width - rightPad) {
+          canvas.drawLine(
+            Offset(startX, y),
+            Offset(math.min(startX + 4, size.width - rightPad), y),
+            dashPaint,
+          );
+          startX += 8;
+        }
+      }
+
+      final tp = TextPainter(
+        text: TextSpan(text: dashedLabels[i], style: labelStyle),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      tp.paint(canvas, Offset(0, y - 7));
+    }
+
+    final xLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    for (int i = 0; i < xLabels.length; i++) {
+      final x = leftPad + (chartWidth / 6) * i;
+      final tp = TextPainter(
+        text: TextSpan(text: xLabels[i], style: labelStyle),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      tp.paint(canvas, Offset(x - tp.width / 2, size.height - 18));
+    }
+
+    final blueValues = [8.8, 9.4, 7.1, 11.3, 8.0, 11.2, 9.4, 10.9, 16.0];
+    final redValues = [4.0, 5.8, 5.5, 7.1, 8.0, 4.2, 6.1, 7.8, 7.0];
+
+    final bluePath = _smoothPath(
+      values: blueValues,
+      width: chartWidth,
+      height: chartHeight,
+      leftPad: leftPad,
+      topPad: topPad,
+      maxValue: 16,
+    );
+
+    final redPath = _smoothPath(
+      values: redValues,
+      width: chartWidth,
+      height: chartHeight,
+      leftPad: leftPad,
+      topPad: topPad,
+      maxValue: 16,
+    );
+
+    final bluePaint = Paint()
+      ..color = const Color(0xFF109DE6)
+      ..strokeWidth = 2.2
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    final redPaint = Paint()
+      ..color = const Color(0xFFFF5D5D)
+      ..strokeWidth = 2.2
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawPath(bluePath, bluePaint);
+    canvas.drawPath(redPath, redPaint);
+  }
+
+  Path _smoothPath({
+    required List<double> values,
+    required double width,
+    required double height,
+    required double leftPad,
+    required double topPad,
+    required double maxValue,
+  }) {
+    final path = Path();
+    final points = <Offset>[];
+
+    for (int i = 0; i < values.length; i++) {
+      final x = leftPad + (width / (values.length - 1)) * i;
+      final y = topPad + height - ((values[i] / maxValue) * height);
+      points.add(Offset(x, y));
+    }
+
+    path.moveTo(points.first.dx, points.first.dy);
+
+    for (int i = 0; i < points.length - 1; i++) {
+      final p0 = points[i];
+      final p1 = points[i + 1];
+      final cx = (p0.dx + p1.dx) / 2;
+
+      path.cubicTo(
+        cx,
+        p0.dy,
+        cx,
+        p1.dy,
+        p1.dx,
+        p1.dy,
+      );
+    }
+
+    return path;
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _AiInsightCard extends StatelessWidget {
+  const _AiInsightCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.08,
+              child: CustomPaint(
+                painter: _SparklePatternPainter(),
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.auto_awesome,
+                    size: 16,
+                    color: Color(0xFF0EA5E9),
+                  ),
+                  SizedBox(width: 6),
+                  Text(
+                    'AI Insight',
+                    style: AppStyles.poppins(
+                      color: const Color(0xFF0EA5E9),
+                      fontWeight: FontWeight.w700,
+                      fontSize: AppSizes.fs15,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  style: AppStyles.poppins(
+                    fontSize: AppSizes.fs13,
+                    height: 1.45,
+                    color: const Color(0xFF5B5B5B),
+                  ),
+                  children: [
+                    const TextSpan(text: 'High PPE non-compliance trend detected near '),
+                    TextSpan(
+                      text: 'Scaffolding Zone',
+                      style: AppStyles.poppins(
+                        fontSize: AppSizes.fs13,
+                        color: const Color(0xFFFF8A00),
+                        fontWeight: FontWeight.w600,
+                        height: 1.45,
+                      ),
+                    ),
+                    const TextSpan(
+                      text: '. 3 helmet violations in the last 45 minutes. Consider a toolbox talk.',
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              const Row(
+                children: [
+                  _InsightTag(
+                    text: 'PPE Compliance',
+                    bgColor: Color(0xFF6CC3E8),
+                  ),
+                  SizedBox(width: 8),
+                  _InsightTag(
+                    text: 'Zone B',
+                    bgColor: Color(0xFFF7A53A),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _InsightTag extends StatelessWidget {
+  final String text;
+  final Color bgColor;
+
+  const _InsightTag({
+    required this.text,
+    required this.bgColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+}
+
+class _SparklePatternPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFF7EC8F0)
+      ..strokeWidth = 1.2
+      ..style = PaintingStyle.stroke;
+
+    final points = <Offset>[
+      const Offset(20, 18),
+      const Offset(72, 22),
+      const Offset(128, 18),
+      const Offset(184, 20),
+      const Offset(240, 18),
+      const Offset(35, 64),
+      const Offset(95, 72),
+      const Offset(154, 68),
+      const Offset(214, 72),
+      const Offset(268, 66),
+      const Offset(18, 112),
+      const Offset(78, 118),
+      const Offset(136, 112),
+      const Offset(198, 118),
+      const Offset(254, 110),
+    ];
+
+    for (final p in points) {
+      _drawSparkle(canvas, p, paint);
+    }
+  }
+
+  void _drawSparkle(Canvas canvas, Offset c, Paint paint) {
+    canvas.drawLine(Offset(c.dx - 5, c.dy), Offset(c.dx + 5, c.dy), paint);
+    canvas.drawLine(Offset(c.dx, c.dy - 5), Offset(c.dx, c.dy + 5), paint);
+    canvas.drawLine(
+      Offset(c.dx - 3.5, c.dy - 3.5),
+      Offset(c.dx + 3.5, c.dy + 3.5),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(c.dx - 3.5, c.dy + 3.5),
+      Offset(c.dx + 3.5, c.dy - 3.5),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
 class _PlaceholderTab extends StatelessWidget {
   final String label;
 

@@ -70,7 +70,7 @@ class SafetyShieldBottomNavBar extends StatelessWidget {
 
               // ── Alerts (static bell icon) ────────────────────────────────
               _NavItem(
-                iconAsset: 'assets/icons/home.png',
+                iconAsset: 'assets/icons/alert_grey.png',
                 label: 'Alerts',
                 isActive: currentIndex == 1,
                 onTap: () => onTabChanged(1),
@@ -85,7 +85,7 @@ class SafetyShieldBottomNavBar extends StatelessWidget {
 
               // ── Settings ────────────────────────────────────────────────
               _NavItem(
-                iconAsset: 'assets/icons/Frame-2.png',
+                iconAsset: 'assets/icons/setting_icon.png',
                 label: 'Settings',
                 isActive: currentIndex == 3,
                 onTap: () => onTabChanged(3),
@@ -93,7 +93,7 @@ class SafetyShieldBottomNavBar extends StatelessWidget {
 
               // ── Profile ─────────────────────────────────────────────────
               _NavItem(
-                iconAsset: 'assets/icons/Frame.png',
+                iconAsset: 'assets/icons/user_outlined.png',
                 label: 'Profile',
                 isActive: currentIndex == 4,
                 onTap: () => onTabChanged(4),

@@ -29,7 +29,7 @@ class LoginScreen extends StatelessWidget {
             top: ScreenSize.height * 0.06,
             right: ScreenSize.width * 0.05,
             child: Image.asset(
-              "assets/images/sa_logo_white_bg.png",
+              "assets/icons/sa_logo_white_bg.png",
               height: ScreenSize.height * 0.05,
             ),
           ),

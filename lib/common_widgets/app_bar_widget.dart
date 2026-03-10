@@ -27,7 +27,7 @@ class SafetyShieldAppBar extends StatelessWidget
       // ------- Center: Logo -------
       // AFTER
       title: Image.asset(
-        'assets/images/safety_appbar_logo.png',
+        'assets/icons/safety_appbar_logo.png',
         height: 30,
         fit: BoxFit.contain,
       ),
