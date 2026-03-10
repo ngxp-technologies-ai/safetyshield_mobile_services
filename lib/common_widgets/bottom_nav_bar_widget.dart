@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:safety_management/utils/app_colors.dart';
-import 'package:safety_management/utils/app_styles.dart';
 
 /// Tab items for the SafetyShield bottom navigation bar.
-enum SafetyShieldTab { home, alerts, camera, settings, profile }
+enum SafetyShieldTab { home, alerts, camera, map, profile }
 
 /// A reusable BottomNavigationBar widget matching the SafetyShield dashboard design.
 ///
 /// Features:
-/// - 5 tabs: Home, Alerts, Camera, Settings, Profile
-/// - Custom PNG icons for each tab
+/// - 5 tabs: Home, Alerts, Camera, Map, Profile
+/// - Custom PNG icons or Material icons
 /// - Alerts tab shows an animated blinking red-dot icon when [hasAlerts] is true
-/// - Active tab highlighted with the brand blue color
+/// - Active tab highlighted with the brand blue color and dot indicator
 ///
 /// Usage:
 /// ```dart
@@ -60,18 +59,16 @@ class SafetyShieldBottomNavBar extends StatelessWidget {
             children: [
               // ── Home ────────────────────────────────────────────────────
               _NavItem(
-                iconAsset: null,
                 iconData: Icons.home_outlined,
-                activeIconData: Icons.home,
-                label: 'Home',
+                activeIconData: Icons.home_outlined,
                 isActive: currentIndex == 0,
                 onTap: () => onTabChanged(0),
               ),
 
-              // ── Alerts (static bell icon) ────────────────────────────────
+              // ── Alerts (bell icon) ────────────────────────────────
               _NavItem(
-                iconAsset: 'assets/icons/home.png',
-                label: 'Alerts',
+                iconData: Icons.notifications_none,
+                activeIconData: Icons.notifications_none,
                 isActive: currentIndex == 1,
                 onTap: () => onTabChanged(1),
               ),
@@ -83,18 +80,18 @@ class SafetyShieldBottomNavBar extends StatelessWidget {
                 onTap: () => onTabChanged(2),
               ),
 
-              // ── Settings ────────────────────────────────────────────────
+              // ── Map ────────────────────────────────────────────────
               _NavItem(
-                iconAsset: 'assets/icons/Frame-2.png',
-                label: 'Settings',
+                iconData: Icons.map_outlined,
+                activeIconData: Icons.map_outlined,
                 isActive: currentIndex == 3,
                 onTap: () => onTabChanged(3),
               ),
 
               // ── Profile ─────────────────────────────────────────────────
               _NavItem(
-                iconAsset: 'assets/icons/Frame.png',
-                label: 'Profile',
+                iconData: Icons.person_outline,
+                activeIconData: Icons.person_outline,
                 isActive: currentIndex == 4,
                 onTap: () => onTabChanged(4),
               ),
@@ -111,18 +108,14 @@ class SafetyShieldBottomNavBar extends StatelessWidget {
 // ---------------------------------------------------------------------------
 
 class _NavItem extends StatelessWidget {
-  final String? iconAsset;
   final IconData? iconData;
   final IconData? activeIconData;
-  final String label;
   final bool isActive;
   final VoidCallback onTap;
 
   const _NavItem({
-    required this.label,
     required this.isActive,
     required this.onTap,
-    this.iconAsset,
     this.iconData,
     this.activeIconData,
   });
@@ -141,15 +134,14 @@ class _NavItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildIcon(),
-            const SizedBox(height: 3),
-            AnimatedDefaultTextStyle(
-              duration: const Duration(milliseconds: 200),
-              style: AppStyles.poppins(
-                fontSize: 10,
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                color: isActive ? _activeColor : _inactiveColor,
+            const SizedBox(height: 6),
+            Container(
+              width: 4,
+              height: 4,
+              decoration: BoxDecoration(
+                color: isActive ? _activeColor : Colors.transparent,
+                shape: BoxShape.circle,
               ),
-              child: Text(label),
             ),
           ],
         ),
@@ -158,18 +150,6 @@ class _NavItem extends StatelessWidget {
   }
 
   Widget _buildIcon() {
-    if (iconAsset != null) {
-      // PNG asset icon – tint with ColorFiltered when active
-      return AnimatedSwitcher(
-        duration: const Duration(milliseconds: 200),
-        child: ColorFiltered(
-          key: ValueKey(isActive),
-          colorFilter: ColorFilter.matrix(isActive ? _blueMatrix : _greyMatrix),
-          child: Image.asset(iconAsset!, width: 24, height: 24),
-        ),
-      );
-    }
-
     // Fallback to Material icon
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 200),
@@ -177,7 +157,7 @@ class _NavItem extends StatelessWidget {
         isActive ? (activeIconData ?? iconData) : iconData,
         key: ValueKey(isActive),
         color: isActive ? _activeColor : _inactiveColor,
-        size: 24,
+        size: 26,
       ),
     );
   }
@@ -188,17 +168,17 @@ class _NavItem extends StatelessWidget {
     0,
     0,
     0,
-    31 / 255,
+    31,
     0,
     0,
     0,
     0,
-    143 / 255,
+    143,
     0,
     0,
     0,
     0,
-    181 / 255,
+    181,
     0,
     0,
     0,
@@ -206,23 +186,23 @@ class _NavItem extends StatelessWidget {
     0,
   ];
 
-  /// ColorMatrix that keeps a greyscale icon grey (0xFFAAAAAA).
+  /// ColorMatrix that keeps a greyscale icon grey (0xFF9E9E9E).
   static const List<double> _greyMatrix = [
     0,
     0,
     0,
     0,
-    170 / 255,
+    158,
     0,
     0,
     0,
     0,
-    170 / 255,
+    158,
     0,
     0,
     0,
     0,
-    170 / 255,
+    158,
     0,
     0,
     0,
@@ -232,10 +212,10 @@ class _NavItem extends StatelessWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Camera nav item with blinking alertblink animation
+// Camera nav item with static red dot when hasAlerts is true
 // ---------------------------------------------------------------------------
 
-class _CameraNavItem extends StatefulWidget {
+class _CameraNavItem extends StatelessWidget {
   final bool isActive;
   final bool hasAlerts;
   final VoidCallback onTap;
@@ -246,96 +226,63 @@ class _CameraNavItem extends StatefulWidget {
     required this.onTap,
   });
 
-  @override
-  State<_CameraNavItem> createState() => _CameraNavItemState();
-}
-
-class _CameraNavItemState extends State<_CameraNavItem>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _blinkController;
-  late final Animation<double> _blinkAnim;
-
   static const Color _activeColor = AppColors.primary;
-  static const Color _inactiveColor = AppColors.grey;
-
-  @override
-  void initState() {
-    super.initState();
-    _blinkController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 700),
-    );
-    _blinkAnim = Tween<double>(begin: 1.0, end: 0.15).animate(
-      CurvedAnimation(parent: _blinkController, curve: Curves.easeInOut),
-    );
-    _updateBlink();
-  }
-
-  @override
-  void didUpdateWidget(_CameraNavItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.hasAlerts != widget.hasAlerts) {
-      _updateBlink();
-    }
-  }
-
-  void _updateBlink() {
-    if (widget.hasAlerts) {
-      _blinkController.repeat(reverse: true);
-    } else {
-      _blinkController.stop();
-      _blinkController.value = 1.0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _blinkController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: widget.onTap,
+      onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
         width: 64,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Blink the alertblink.png (CCTV + red dot) when hasAlerts is true,
-            // otherwise show the regular CCTV icon.
-            widget.hasAlerts
-                ? FadeTransition(
-                    opacity: _blinkAnim,
-                    child: Image.asset(
-                      'assets/icons/alertblink.png',
-                      width: 26,
-                      height: 26,
-                    ),
-                  )
-                : ColorFiltered(
+            // Use a Stack to position the red dot over the CCTV icon
+            SizedBox(
+              width: 32,
+              height: 32,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  ColorFiltered(
                     colorFilter: ColorFilter.matrix(
-                      widget.isActive
-                          ? _NavItem._blueMatrix
-                          : _NavItem._greyMatrix,
+                      isActive ? _NavItem._blueMatrix : _NavItem._greyMatrix,
                     ),
                     child: Image.asset(
                       'assets/icons/tabler_device-cctv.png',
-                      width: 24,
-                      height: 24,
+                      width: 26,
+                      height: 26,
                     ),
                   ),
-            const SizedBox(height: 3),
-            AnimatedDefaultTextStyle(
-              duration: const Duration(milliseconds: 200),
-              style: AppStyles.poppins(
-                fontSize: 10,
-                fontWeight: widget.isActive ? FontWeight.w600 : FontWeight.w400,
-                color: widget.isActive ? _activeColor : _inactiveColor,
+                  if (hasAlerts)
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: AppColors.error,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.white,
+                            width: 1.5,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
-              child: const Text('Camera'),
+            ),
+            const SizedBox(height: 2), // Adjusted spacing slightly
+            Container(
+              width: 4,
+              height: 4,
+              decoration: BoxDecoration(
+                color: isActive ? _activeColor : Colors.transparent,
+                shape: BoxShape.circle,
+              ),
             ),
           ],
         ),

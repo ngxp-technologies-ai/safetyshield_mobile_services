@@ -16,23 +16,114 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
 
   /// Whether there are unread alerts (drives the blinking icon on the Alerts tab).
-  bool _hasAlerts = true;
+  final bool _hasAlerts = true;
 
   /// Pages mapped to each bottom nav tab.
   final List<Widget> _pages = const [
     _HomeTab(),
     _PlaceholderTab(label: 'Alerts'),
     _PlaceholderTab(label: 'Camera'),
-    _PlaceholderTab(label: 'Settings'),
+    _PlaceholderTab(label: 'Map'),
     _PlaceholderTab(label: 'Profile'),
   ];
+
+  String? get _appBarTitle {
+    switch (_currentIndex) {
+      case 1:
+        return 'Alerts';
+      case 2:
+        return 'Camera';
+      case 3:
+        return 'Zone Map';
+      case 4:
+        return 'Profile';
+      default:
+        // Return null to show the logo instead of title
+        return null;
+    }
+  }
+
+  String? get _appBarSubtitle {
+    switch (_currentIndex) {
+      case 1:
+        return '14 Today • 5 Active';
+      case 2:
+        return '8 cameras • 4 with alerts';
+      case 3:
+        return 'Metro line 3 • Station B4';
+      default:
+        return null;
+    }
+  }
+
+  List<Widget>? get _appBarActions {
+    switch (_currentIndex) {
+      case 1:
+        return []; // No search action on Alerts page
+      case 2:
+        return [
+          IconButton(
+            icon: const Icon(Icons.search, color: AppColors.black, size: 26),
+            onPressed: () {},
+            tooltip: 'Search',
+          ),
+        ]; // Search on Camera page
+      case 3:
+        return [
+          IconButton(
+            icon: const Icon(
+              Icons.filter_alt_outlined,
+              color: AppColors.black,
+              size: 26,
+            ),
+            onPressed: () {},
+            tooltip: 'Filter',
+          ),
+        ]; // Filter icon on Zone Map
+      case 4:
+        return [
+          TextButton(
+            onPressed: () {},
+            child: Text(
+              'Logout',
+              style: AppStyles.poppins(
+                color: AppColors.error,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+        ]; // Logout button on Profile page
+      default:
+        return null; // Fallback to default in SafetyShieldAppBar
+    }
+  }
+
+  Widget? get _appBarLeading {
+    if (_currentIndex == 4) {
+      return IconButton(
+        icon: const Icon(Icons.arrow_back, color: AppColors.black, size: 26),
+        onPressed: () {
+          setState(() {
+            _currentIndex = 0; // Go back to Home
+          });
+        },
+      );
+    }
+    return null; // Fallback to sort icon in SafetyShieldAppBar
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.light,
+      backgroundColor: AppColors.white,
       // ─── AppBar ───────────────────────────────────────────────────────────
       appBar: SafetyShieldAppBar(
+        title: _appBarTitle,
+        subtitle: _appBarSubtitle,
+        actions: _appBarActions,
+        leading: _appBarLeading,
         onMenuTap: () => Scaffold.of(context).openDrawer(),
         onSearchTap: () {
           ScaffoldMessenger.of(
@@ -49,8 +140,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         onTabChanged: (index) {
           setState(() {
             _currentIndex = index;
-            // Clear alert blink when the user opens the Camera tab
-            if (index == 2) _hasAlerts = false;
+            // Removed clearing _hasAlerts here to maintain the dot
           });
         },
       ),
