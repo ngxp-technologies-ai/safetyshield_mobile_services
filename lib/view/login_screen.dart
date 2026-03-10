@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:safety_management/view/sign_up_screen.dart';
 
+import 'dashboard_screen.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -123,7 +125,10 @@ class LoginScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {  Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => DashboardScreen()),
+                        );},
                         child: Text(
                           "Login",
                           style: TextStyle(color: Colors.white),
