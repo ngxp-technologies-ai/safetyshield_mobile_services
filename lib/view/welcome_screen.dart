@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:safety_management/view/sign_up_screen.dart';
+import '../utils/app_size.dart';
+import '../utils/screen_size.dart';
 import 'login_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -7,13 +9,15 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScreenSize.init(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
           /// Top Curve Image
           SizedBox(
-            width: double.infinity,
+            width: ScreenSize.width,
             child: Image.asset(
               'assets/images/welcome_curve_img.png',
               fit: BoxFit.cover,
@@ -24,25 +28,23 @@ class WelcomeScreen extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 200),
+              SizedBox(height: ScreenSize.height * 0.25),
 
               /// Logo
-              Center(
-                child: Container(
-                  height: 80,
-                  width: 80,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Image.asset("assets/images/sa_logo.png"),
-                  ),
+              Container(
+                height: AppSizes.logoSize,
+                width: AppSizes.logoSize,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(ScreenSize.width * 0.03),
+                  child: Image.asset("assets/images/sa_logo.png"),
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: AppSizes.spaceSmall),
 
               /// Welcome Text
               const Text(
@@ -53,7 +55,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 6),
+              SizedBox(height: ScreenSize.height * 0.008),
 
               const Text(
                 "Please login to continue",
@@ -63,17 +65,22 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: AppSizes.spaceMedium),
 
               /// Login Button
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSizes.horizontalPadding),
                 child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
+                  width: ScreenSize.width,
+                  height: AppSizes.buttonHeight,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => LoginScreen()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const LoginScreen()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1F8FB5),
@@ -81,21 +88,32 @@ class WelcomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: Text("Login", style: TextStyle(color: Colors.white),),
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: AppSizes.spaceSmall),
 
               /// Sign Up Button
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSizes.horizontalPadding),
                 child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
+                  width: ScreenSize.width,
+                  height: AppSizes.buttonHeight,
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const SignUpScreen(),
+                        ),
+                      );
+                    },
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.black),
                       shape: RoundedRectangleBorder(
@@ -110,13 +128,14 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 25),
+              SizedBox(height: AppSizes.spaceLarge),
 
               /// OR Divider
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                child: Row(
-                  children: const [
+                padding: EdgeInsets.symmetric(
+                    horizontal: ScreenSize.width * 0.10),
+                child: const Row(
+                  children: [
                     Expanded(child: Divider()),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
@@ -127,21 +146,30 @@ class WelcomeScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: AppSizes.spaceMedium),
 
               /// Social Icons
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/icons/google_icon.png", height: 30),
-                  const SizedBox(width: 25),
-                  Image.asset("assets/icons/fb_icon.png", height: 30),
-                  const SizedBox(width: 25),
-                  Image.asset("assets/icons/apple_icon.png", height: 30),
+                  Image.asset(
+                    "assets/icons/google_icon.png",
+                    height: AppSizes.socialIcon,
+                  ),
+                  SizedBox(width: ScreenSize.width * 0.06),
+                  Image.asset(
+                    "assets/icons/fb_icon.png",
+                    height: AppSizes.socialIcon,
+                  ),
+                  SizedBox(width: ScreenSize.width * 0.06),
+                  Image.asset(
+                    "assets/icons/apple_icon.png",
+                    height: AppSizes.socialIcon,
+                  ),
                 ],
-              )
+              ),
             ],
-          )
+          ),
         ],
       ),
     );
