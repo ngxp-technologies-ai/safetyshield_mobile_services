@@ -1,56 +1,52 @@
 import 'package:flutter/material.dart';
+import '../utils/app_size.dart';
+import '../utils/screen_size.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    ScreenSize.init(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
+
           /// Background Image
           SizedBox(
-            width: double.infinity,
+            width: ScreenSize.width,
             child: Image.asset(
               "assets/images/sign_up_curve_img.png",
               fit: BoxFit.cover,
             ),
           ),
 
-          /// Back Button
-          Positioned(
-              top: 50,
-              left: 20,
-              child: GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Image.asset(
-                  'assets/icons/back_icon_blue.png',
-                  width: 40,
-                  height: 40,
-                ),
-              )),
-
           /// Logo
           Positioned(
-            top: 50,
-            right: 20,
+            top: ScreenSize.height * 0.06,
+            right: ScreenSize.width * 0.05,
             child: Image.asset(
-              "assets/images/sa_logo_white_bg.png",
-              height: 40,
+              "assets/icons/sa_logo_white_bg.png",
+              height: ScreenSize.height * 0.05,
             ),
           ),
 
           /// Form Section
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(top: 200),
+              padding: EdgeInsets.only(top: ScreenSize.height * 0.25),
               child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+                width: ScreenSize.width,
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSizes.horizontalPadding,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
                     /// Title
                     const Text(
                       "Signup",
@@ -60,95 +56,54 @@ class SignUpScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: AppSizes.spaceMedium),
 
                     /// Full Name
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: "Full name",
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
-                        suffixIcon: const Icon(Icons.person_outline),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                    _inputField(
+                      hint: "Full name",
+                      icon: Icons.person_outline,
                     ),
 
-                    const SizedBox(height: 15),
+                    SizedBox(height: AppSizes.spaceSmall),
 
                     /// Phone
-                    TextField(
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        hintText: "Phone",
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
-                        suffixIcon: const Icon(Icons.phone_android_outlined),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                    _inputField(
+                      hint: "Phone",
+                      icon: Icons.phone_android_outlined,
                     ),
 
-                    const SizedBox(height: 15),
+                    SizedBox(height: AppSizes.spaceSmall),
 
                     /// Email
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: "Email",
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
-                        suffixIcon: const Icon(Icons.email_outlined),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                    _inputField(
+                      hint: "Email",
+                      icon: Icons.email_outlined,
                     ),
 
-                    const SizedBox(height: 15),
+                    SizedBox(height: AppSizes.spaceSmall),
 
                     /// Password
-                    TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: "Password",
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
-                        suffixIcon: const Icon(Icons.visibility_outlined),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                    _inputField(
+                      hint: "Password",
+                      icon: Icons.visibility_outlined,
+                      isPassword: true,
                     ),
 
-                    const SizedBox(height: 15),
+                    SizedBox(height: AppSizes.spaceSmall),
 
                     /// Confirm Password
-                    TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: "Confirm password",
-                        filled: true,
-                        fillColor: Colors.grey.shade200,
-                        suffixIcon: const Icon(Icons.visibility_outlined),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                    _inputField(
+                      hint: "Confirm password",
+                      icon: Icons.visibility_outlined,
+                      isPassword: true,
                     ),
 
-                    const SizedBox(height: 25),
+                    SizedBox(height: AppSizes.spaceMedium),
 
-                    /// Button
+                    /// Register Button
                     SizedBox(
-                      width: double.infinity,
-                      height: 50,
+                      width: ScreenSize.width,
+                      height: AppSizes.buttonHeight,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF1F8FB5),
@@ -164,7 +119,7 @@ class SignUpScreen extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 25),
+                    SizedBox(height: AppSizes.spaceMedium),
 
                     /// OR Divider
                     Row(
@@ -178,21 +133,30 @@ class SignUpScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: AppSizes.spaceMedium),
 
                     /// Social Icons
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset("assets/icons/google_icon.png", height: 32),
-                        const SizedBox(width: 25),
-                        Image.asset("assets/icons/fb_icon.png", height: 32),
-                        const SizedBox(width: 25),
-                        Image.asset("assets/icons/apple_icon.png", height: 32),
+                        Image.asset(
+                          "assets/icons/google_icon.png",
+                          height: AppSizes.socialIcon,
+                        ),
+                        SizedBox(width: ScreenSize.width * 0.06),
+                        Image.asset(
+                          "assets/icons/fb_icon.png",
+                          height: AppSizes.socialIcon,
+                        ),
+                        SizedBox(width: ScreenSize.width * 0.06),
+                        Image.asset(
+                          "assets/icons/apple_icon.png",
+                          height: AppSizes.socialIcon,
+                        ),
                       ],
                     ),
 
-                    const SizedBox(height: 25),
+                    SizedBox(height: AppSizes.spaceMedium),
 
                     /// Bottom Text
                     Row(
@@ -214,13 +178,48 @@ class SignUpScreen extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 30),
+                    SizedBox(height: AppSizes.spaceLarge),
                   ],
                 ),
               ),
             ),
-          )
+          ),
+          /// Back Button
+          Positioned(
+            top: ScreenSize.height * 0.06,
+            left: ScreenSize.width * 0.05,
+            child: GestureDetector(
+              onTap: ()  {
+                print("BACK PRESSED");
+                Navigator.pop(context);},
+              child: Image.asset(
+                'assets/icons/back_icon_blue.png',
+                width: ScreenSize.width * 0.10,
+              ),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  /// Reusable Input Field
+  Widget _inputField({
+    required String hint,
+    required IconData icon,
+    bool isPassword = false,
+  }) {
+    return TextField(
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        hintText: hint,
+        filled: true,
+        fillColor: Colors.grey.shade200,
+        suffixIcon: Icon(icon),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }
