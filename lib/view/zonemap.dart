@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safety_management/utils/app_colors.dart';
 import 'package:safety_management/utils/app_styles.dart';
+import '../utils/app_size.dart';
 
 // ── Data models ──────────────────────────────────────────────
 class ZoneData {
@@ -134,7 +135,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
       children: [
         // ── Zone Filter Tabs ─────────────────────────────────
         Container(
-          height: 44,
+          height: AppSizes.h(44),
           decoration: const BoxDecoration(
             color: AppColors.white,
             border: Border(
@@ -143,15 +144,15 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
           ),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: EdgeInsets.symmetric(horizontal: AppSizes.w(12)),
             itemCount: _tabs.length,
             itemBuilder: (context, index) {
               final isSelected = _selectedTab == index;
               return GestureDetector(
                 onTap: () => setState(() => _selectedTab = index),
                 child: Container(
-                  margin: const EdgeInsets.only(right: 4),
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  margin: EdgeInsets.only(right: AppSizes.w(4)),
+                  padding: EdgeInsets.symmetric(horizontal: AppSizes.w(14)),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     border: isSelected
@@ -166,7 +167,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
                   child: Text(
                     _tabs[index],
                     style: AppStyles.poppins(
-                      fontSize: 13,
+                      fontSize: AppSizes.fs13,
                       fontWeight:
                       isSelected ? FontWeight.w700 : FontWeight.w400,
                       color:
@@ -182,39 +183,58 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
         // ── Scrollable content ───────────────────────────────
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(AppSizes.space14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ── 2x2 Zone Map Grid ────────────────────────
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 1.3,
-                  children: _zones.map((zone) => _ZoneMapBox(
-                    zone: zone,
-                    bgColor: _zoneBgColor(zone.status),
-                    borderColor: _zoneBorderColor(zone.status),
-                  )).toList(),
-                ),
+                // ── Map Section Container ──────────────────
+                Container(
+                  padding: EdgeInsets.all(AppSizes.space16),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.04),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      // ── 2x2 Zone Map Grid ────────────────────────
+                      GridView.count(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 2,
+                        crossAxisSpacing: AppSizes.space10,
+                        mainAxisSpacing: AppSizes.space10,
+                        childAspectRatio: 1.75, // REDUCED SIZE
+                        children: _zones.map((zone) => _ZoneMapBox(
+                          zone: zone,
+                          bgColor: _zoneBgColor(zone.status),
+                          borderColor: _zoneBorderColor(zone.status),
+                        )).toList(),
+                      ),
 
-                const SizedBox(height: 14),
+                      SizedBox(height: AppSizes.space16),
 
-                // ── Legend ───────────────────────────────────
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _LegendDot(color: const Color(0xFF2DB468), label: 'Safe'),
-                    const SizedBox(width: 16),
-                    _LegendDot(color: const Color(0xFFFFB300), label: 'Warning'),
-                    const SizedBox(width: 16),
-                    _LegendDot(color: AppColors.error, label: 'Critical'),
-                    const SizedBox(width: 16),
-                    _LegendDot(color: AppColors.primary, label: 'Worker'),
-                  ],
+                      // ── Legend ───────────────────────────────────
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _LegendDot(color: const Color(0xFF2DB468), label: 'Safe'),
+                          SizedBox(width: AppSizes.space16),
+                          _LegendDot(color: const Color(0xFFFFB300), label: 'Warning'),
+                          SizedBox(width: AppSizes.space16),
+                          _LegendDot(color: AppColors.error, label: 'Critical'),
+                          SizedBox(width: AppSizes.w(16)),
+                          _LegendDot(color: AppColors.primary, label: 'Worker'),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
 
                 const SizedBox(height: 20),
@@ -227,8 +247,8 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
                           ? 'All Zones'
                           : _tabs[_selectedTab],
                       style: AppStyles.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
+                        fontSize: AppSizes.fs14,
+                        fontWeight: FontWeight.w500,
                         color: AppColors.black,
                       ),
                     ),
@@ -236,7 +256,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
                     Text(
                       '${filtered.length} zones',
                       style: AppStyles.poppins(
-                        fontSize: 13,
+                        fontSize: AppSizes.fs13,
                         color: AppColors.grey,
                       ),
                     ),
@@ -293,6 +313,13 @@ class _ZoneMapBox extends StatelessWidget {
                 decoration: const BoxDecoration(
                   color: AppColors.primary,
                   shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 2,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -303,9 +330,9 @@ class _ZoneMapBox extends StatelessWidget {
             child: Text(
               zone.zoneId,
               style: AppStyles.poppins(
-                fontSize: 14,
+                fontSize: AppSizes.fs15,
                 fontWeight: FontWeight.w600,
-                color: AppColors.black.withOpacity(0.7),
+                color: AppColors.black.withOpacity(0.8),
               ),
             ),
           ),
@@ -327,14 +354,14 @@ class _LegendDot extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 8,
-          height: 8,
+          width: AppSizes.onlineDot,
+          height: AppSizes.onlineDot,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: AppSizes.space4),
         Text(
           label,
-          style: AppStyles.poppins(fontSize: 12, color: AppColors.grey),
+          style: AppStyles.poppins(fontSize: AppSizes.fs12, color: AppColors.grey),
         ),
       ],
     );
@@ -354,11 +381,12 @@ class _ZoneListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      margin: EdgeInsets.only(bottom: AppSizes.space10),
+      padding: EdgeInsets.symmetric(
+          horizontal: AppSizes.space14, vertical: AppSizes.space12),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSizes.radiusSmall),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
@@ -370,8 +398,12 @@ class _ZoneListItem extends StatelessWidget {
       child: Row(
         children: [
           // Location icon
-          const Icon(Icons.location_on_outlined,
-              size: 20, color: AppColors.grey),
+          Image.asset(
+            'assets/images/location_icon.png',
+            width: 30,
+            height: 20,
+            color: AppColors.grey900,
+          ),
           const SizedBox(width: 10),
 
           // Name + Zone
@@ -382,43 +414,43 @@ class _ZoneListItem extends StatelessWidget {
                 Text(
                   zone.name,
                   style: AppStyles.poppins(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    fontSize: AppSizes.fs14,
+                    fontWeight: FontWeight.w400,
                     color: AppColors.black,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: AppSizes.h(2)),
                 Text(
                   zone.zoneId,
                   style: AppStyles.poppins(
-                    fontSize: 12,
+                    fontSize: AppSizes.fs12,
                     color: AppColors.grey,
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: AppSizes.h(6)),
 
                 // Workers + Alerts
                 Row(
                   children: [
-                    const Icon(Icons.group_outlined,
-                        size: 14, color: AppColors.primary),
-                    const SizedBox(width: 4),
+                    Icon(Icons.group_outlined,
+                        size: AppSizes.space14, color: AppColors.primary),
+                    SizedBox(width: AppSizes.space4),
                     Text(
                       '${zone.workers}',
                       style: AppStyles.poppins(
-                        fontSize: 12,
+                        fontSize: AppSizes.fs12,
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: AppSizes.space14),
                     Icon(Icons.notifications_active_outlined,
-                        size: 14, color: AppColors.error),
-                    const SizedBox(width: 4),
+                        size: AppSizes.space14, color: AppColors.error),
+                    SizedBox(width: AppSizes.space4),
                     Text(
                       '${zone.alerts}',
                       style: AppStyles.poppins(
-                        fontSize: 12,
+                        fontSize: AppSizes.fs12,
                         color: AppColors.error,
                         fontWeight: FontWeight.w600,
                       ),
@@ -432,18 +464,18 @@ class _ZoneListItem extends StatelessWidget {
           // Status badge
           Container(
             padding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            EdgeInsets.symmetric(horizontal: AppSizes.cardPadding, vertical: AppSizes.h(5)),
             decoration: BoxDecoration(
               color: statusColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppSizes.radiusXLarge),
               border: Border.all(
                   color: statusColor.withOpacity(0.3), width: 1),
             ),
             child: Text(
               zone.status,
               style: AppStyles.poppins(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+                fontSize: AppSizes.fs12,
+                fontWeight: FontWeight.w400,
                 color: statusColor,
               ),
             ),

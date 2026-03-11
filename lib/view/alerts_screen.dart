@@ -128,7 +128,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
       children: [
         // ── Tab Bar ──────────────────────────────────────────
         Container(
-          height: 48,
+          height: AppSizes.h(48),
           decoration: const BoxDecoration(
             color: AppColors.white,
             border: Border(
@@ -138,13 +138,13 @@ class _AlertsScreenState extends State<AlertsScreen> {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: _tabs.length,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: AppSizes.pagePadding),
             itemBuilder: (context, index) {
               final isSelected = _selectedTabIndex == index;
               return GestureDetector(
                 onTap: () => setState(() => _selectedTabIndex = index),
                 child: Container(
-                  margin: const EdgeInsets.only(right: 24),
+                  margin: EdgeInsets.only(right: AppSizes.space24),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     border: isSelected
@@ -159,7 +159,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                   child: Text(
                     _tabs[index],
                     style: AppStyles.poppins(
-                      fontSize: 14,
+                      fontSize: AppSizes.fs14,
                       fontWeight:
                       isSelected ? FontWeight.w600 : FontWeight.w400,
                       color: isSelected ? AppColors.black : AppColors.grey,
@@ -181,12 +181,12 @@ class _AlertsScreenState extends State<AlertsScreen> {
             ),
           )
               : ListView.builder(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(AppSizes.pagePadding),
             itemCount: alerts.length,
             itemBuilder: (context, index) {
               final item = alerts[index];
               return Padding(
-                padding: const EdgeInsets.only(bottom: 16),
+                padding: EdgeInsets.only(bottom: AppSizes.space16),
                 child: AlertCard(
                   item: item,
                   onAcknowledge: () => _acknowledgeAlert(item),
@@ -220,7 +220,7 @@ class AlertCard extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(AppSizes.w(14)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),
@@ -235,24 +235,25 @@ class AlertCard extends StatelessWidget {
 
               // ── Header row ──────────────────────────────────
               Padding(
-                padding: const EdgeInsets.fromLTRB(14, 14, 70, 8),
+                padding: EdgeInsets.fromLTRB(
+                    AppSizes.w(14), AppSizes.h(14), AppSizes.w(70), AppSizes.h(8)),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
                     // ── Frame not.png icon box ───────────────
                     Container(
-                      width: 52,
-                      height: 52,
+                      width: AppSizes.w(52),
+                      height: AppSizes.w(52),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF2F4F7),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(AppSizes.w(10)),
                       ),
                       child: Center(
                         child: Image.asset(
                           'assets/icons/Frame not.png',
-                          width: 28,
-                          height: 28,
+                          width: AppSizes.w(28),
+                          height: AppSizes.w(28),
                           color: isCritical
                               ? AppColors.error
                               : AppColors.activeOrange,
@@ -281,7 +282,7 @@ class AlertCard extends StatelessWidget {
                                 child: Text(
                                   item.title,
                                   style: AppStyles.poppins(
-                                    fontSize: 15,
+                                    fontSize: AppSizes.fs15,
                                     fontWeight: FontWeight.w600,
                                     color: AppColors.black,
                                   ),
@@ -289,49 +290,49 @@ class AlertCard extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              const Icon(
+                              Icon(
                                 Icons.chevron_right,
-                                size: 18,
+                                size: AppSizes.w(18),
                                 color: AppColors.grey,
                               ),
                             ],
                           ),
-                          const SizedBox(height: 5),
+                          SizedBox(height: AppSizes.h(5)),
 
                           // Zone
                           Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.location_on_outlined,
-                                size: 13,
+                                size: AppSizes.w(13),
                                 color: AppColors.grey,
                               ),
-                              const SizedBox(width: 4),
+                              SizedBox(width: AppSizes.w(4)),
                               Text(
                                 item.zone,
                                 style: AppStyles.poppins(
                                   color: AppColors.grey,
-                                  fontSize: 12,
+                                  fontSize: AppSizes.fs12,
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 3),
+                          SizedBox(height: AppSizes.h(3)),
 
                           // Camera
                           Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.videocam_outlined,
-                                size: 13,
+                                size: AppSizes.w(13),
                                 color: AppColors.grey,
                               ),
-                              const SizedBox(width: 4),
+                              SizedBox(width: AppSizes.w(4)),
                               Text(
                                 item.camera,
                                 style: AppStyles.poppins(
                                   color: AppColors.grey,
-                                  fontSize: 12,
+                                  fontSize: AppSizes.fs12,
                                 ),
                               ),
                             ],
@@ -345,7 +346,7 @@ class AlertCard extends StatelessWidget {
 
               // ── Escalation + Time ────────────────────────
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                padding: EdgeInsets.symmetric(horizontal: AppSizes.w(14)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -353,22 +354,22 @@ class AlertCard extends StatelessWidget {
                       'Escalates in ${item.escalationTime}',
                       style: AppStyles.poppins(
                         color: AppColors.grey,
-                        fontSize: 13,
+                        fontSize: AppSizes.fs13,
                       ),
                     ),
                     Row(
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.access_time,
-                          size: 13,
+                          size: AppSizes.w(13),
                           color: AppColors.grey,
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: AppSizes.space4),
                         Text(
                           item.timeAgo,
                           style: AppStyles.poppins(
                             color: AppColors.grey,
-                            fontSize: 13,
+                            fontSize: AppSizes.fs13,
                           ),
                         ),
                       ],
@@ -389,12 +390,12 @@ class AlertCard extends StatelessWidget {
                     valueColor: AlwaysStoppedAnimation<Color>(
                       isCritical ? AppColors.error : AppColors.warning,
                     ),
-                    minHeight: 8,
+                    minHeight: AppSizes.space8,
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
+              SizedBox(height: AppSizes.space14),
 
               // ── Acknowledge Button ───────────────────────
               Padding(
@@ -407,7 +408,7 @@ class AlertCard extends StatelessWidget {
                       isAcknowledged
                           ? Icons.check_circle
                           : Icons.check_circle_outline,
-                      size: 20,
+                      size: AppSizes.fs20,
                     ),
                     label: Text(
                       isAcknowledged ? 'Acknowledged' : 'Acknowledge',
@@ -419,10 +420,10 @@ class AlertCard extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: EdgeInsets.symmetric(vertical: AppSizes.space8),
                       elevation: 0,
                       textStyle: AppStyles.poppins(
-                        fontSize: 15,
+                        fontSize: AppSizes.fs15,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -452,7 +453,7 @@ class AlertCard extends StatelessWidget {
               item.status,
               style: AppStyles.poppins(
                 color: isCritical ? AppColors.error : AppColors.warning,
-                fontSize: 12,
+                fontSize: AppSizes.fs12,
                 fontWeight: FontWeight.w600,
               ),
             ),
