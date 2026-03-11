@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safety_management/utils/app_colors.dart';
+import 'package:safety_management/utils/app_size.dart';
 import 'package:safety_management/utils/app_styles.dart';
 
 class SafetyShieldAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -40,8 +41,8 @@ class SafetyShieldAppBar extends StatelessWidget implements PreferredSizeWidget 
             padding: EdgeInsets.zero,
             icon: Image.asset(
               'assets/icons/icon-park_hamburger-button.png',
-              width: 36,
-              height: 36,
+              width: AppSizes.socialIcon,
+              height:  AppSizes.socialIcon,
               errorBuilder: (_, __, ___) => const Icon(
                 Icons.sort,
                 color: AppColors.black,
@@ -61,8 +62,8 @@ class SafetyShieldAppBar extends StatelessWidget implements PreferredSizeWidget 
           Text(
             title!,
             style: AppStyles.poppins(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+              fontSize: AppSizes.fs15,
+              fontWeight: FontWeight.w500,
               color: AppColors.black,
             ),
           ),

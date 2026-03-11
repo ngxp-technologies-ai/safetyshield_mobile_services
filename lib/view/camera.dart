@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safety_management/utils/app_colors.dart';
+import 'package:safety_management/utils/app_size.dart';
 import 'package:safety_management/utils/app_styles.dart';
 
 class CameraItem {
@@ -75,13 +76,13 @@ class _CameraScreenState extends State<CameraScreen> {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: _tabs.length,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: AppSizes.pagePadding),
             itemBuilder: (context, index) {
               final isSelected = _selectedTab == index;
               return GestureDetector(
                 onTap: () => setState(() => _selectedTab = index),
                 child: Container(
-                  margin: const EdgeInsets.only(right: 24),
+                  margin: EdgeInsets.only(right: AppSizes.horizontalPadding),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     border: isSelected
@@ -96,7 +97,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   child: Text(
                     _tabs[index],
                     style: AppStyles.poppins(
-                      fontSize: 14,
+                      fontSize: AppSizes.fs12,
                       fontWeight:
                       isSelected ? FontWeight.w600 : FontWeight.w400,
                       color: isSelected ? AppColors.black : AppColors.grey,
@@ -113,12 +114,12 @@ class _CameraScreenState extends State<CameraScreen> {
           child: cameras.isEmpty
               ? Center(
             child: Text(
-              'No cameras found',
+              'No Cameras found',
               style: AppStyles.poppins(color: AppColors.grey),
             ),
           )
               : GridView.builder(
-            padding: const EdgeInsets.all(14),
+            padding: EdgeInsets.all(AppSizes.cardPaddingLarge),
             gridDelegate:
             const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
@@ -149,14 +150,14 @@ class _CameraCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFF5F6FA),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppSizes.radiusSmall),
         border: Border.all(
           color: hasAlert ? AppColors.error : Colors.transparent,
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withOpacity(0.18),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -173,15 +174,15 @@ class _CameraCard extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   decoration: const BoxDecoration(
-                    color: Color(0xFFEEF0F3),
+                    color: AppColors.white,
                     borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(14),
+                      top: Radius.circular(10),
                     ),
                   ),
                   child: camera.thumbnailAsset != null
                       ? ClipRRect(
                     borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(14),
+                      top: Radius.circular(10),
                     ),
                     child: Image.asset(
                       camera.thumbnailAsset!,
@@ -213,9 +214,9 @@ class _CameraCard extends StatelessWidget {
                       child: Text(
                         '${camera.alertCount}',
                         style: AppStyles.poppins(
-                          fontSize: 11,
+                          fontSize: AppSizes.fs11,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                     ),
@@ -273,7 +274,7 @@ class _CameraCard extends StatelessWidget {
                 Text(
                   camera.id,
                   style: AppStyles.poppins(
-                    fontSize: 14,
+                    fontSize: AppSizes.fs12,
                     fontWeight: FontWeight.w600,
                     color: AppColors.black,
                   ),
@@ -282,10 +283,10 @@ class _CameraCard extends StatelessWidget {
                 Text(
                   camera.zone,
                   style: AppStyles.poppins(
-                    fontSize: 11,
+                    fontSize: AppSizes.fs10,
                     color: AppColors.grey,
                   ),
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],

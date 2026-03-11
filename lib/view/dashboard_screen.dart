@@ -64,14 +64,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 2:
         return [
           IconButton(
-            icon: const Icon(Icons.search, color: AppColors.black, size: 26),
+            icon: Icon(Icons.search, color: AppColors.black, size:  AppSizes.spaceMedium),
             onPressed: () {},
           ),
         ];
       case 3:
         return [
           IconButton(
-            icon: const Icon(Icons.filter_list, color: AppColors.black, size: 26),
+            icon: Icon(Icons.filter_list, color: AppColors.black, size: AppSizes.spaceMedium),
             onPressed: () {},
           ),
         ];
@@ -83,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               'Logout',
               style: AppStyles.poppins(
                 color: AppColors.error,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
