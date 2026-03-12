@@ -19,6 +19,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _currentIndex = 0;
   bool _hasAlerts = true;
 
@@ -70,9 +71,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ];
       case 3:
         return [
-          IconButton(
-            icon: Icon(Icons.filter_list, color: AppColors.black, size: AppSizes.spaceMedium),
-            onPressed: () {},
+          Image.asset(
+            'assets/icons/Filter.png',
+            width: AppSizes.w(50),
+            height: AppSizes.h(40),
+            color: AppColors.grey900,
           ),
         ];
       case 4:
@@ -108,13 +111,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ScreenSize.init(context);
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: const Color(0xFFF5F6FA),
+      drawer: const SafetyShieldDrawer(),
       appBar: SafetyShieldAppBar(
         title: _appBarTitle,
         subtitle: _appBarSubtitle,
         actions: _appBarActions,
         leading: _appBarLeading,
-        onMenuTap: () => Scaffold.of(context).openDrawer(),
+        onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
         onSearchTap: _currentIndex == 0 ? () {} : null,
       ),
       body: IndexedStack(index: _currentIndex, children: _pages),
@@ -506,7 +511,7 @@ class _ZoneCard extends StatelessWidget {
                 children: [
                   Image.asset("assets/images/crew_icon.png", height: 14),
                   const SizedBox(width: 4),
-                  Text("$crew", style: AppStyles.poppins(fontSize: AppSizes.fs12)),
+                  Text("$crew", style: AppStyles.poppins(fontSize: AppSizes.fs10)),
                 ],
               ),
               Row(

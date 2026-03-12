@@ -5,3 +5,4 @@
 
 export 'app_bar_widget.dart';
 export 'bottom_nav_bar_widget.dart';
+export 'drawer_widget.dart';
