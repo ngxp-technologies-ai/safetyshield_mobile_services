@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safety_management/utils/app_colors.dart';
 import 'package:safety_management/utils/app_styles.dart';
+import 'package:safety_management/view/my_crew_screen.dart';
 
 class SafetyShieldDrawer extends StatelessWidget {
   const SafetyShieldDrawer({super.key});
@@ -74,7 +75,9 @@ class SafetyShieldDrawer extends StatelessWidget {
                 _DrawerItem(
                   icon: Icons.group_outlined,
                   label: 'My crew',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => MyCrewScreen()));
+                  },
                 ),
                 _DrawerItem(
                   icon: Icons.sync,
