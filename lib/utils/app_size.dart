@@ -13,6 +13,7 @@ class AppSizes {
   static double get radiusMedium => w(14);
   static double get radiusLarge => w(18);
   static double get radiusXLarge => w(20);
+  static double get profileRadius => w(48);
 
   /// General spacing
   static double get space4 => h(4);
@@ -51,6 +52,7 @@ class AppSizes {
   static double get fs16 => w(16);
   static double get fs18 => w(18);
   static double get fs20 => w(20);
+  static double get fs26 => w(26);
 
   /// Existing sizes
   static double get logoSize => screenHeight * 0.1;

@@ -161,7 +161,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                     style: AppStyles.poppins(
                       fontSize: AppSizes.fs14,
                       fontWeight:
-                      isSelected ? FontWeight.w600 : FontWeight.w400,
+                      isSelected ? FontWeight.w400 : FontWeight.w400,
                       color: isSelected ? AppColors.black : AppColors.grey,
                     ),
                   ),
@@ -220,12 +220,12 @@ class AlertCard extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             color: AppColors.white,
-            borderRadius: BorderRadius.circular(AppSizes.w(14)),
+            borderRadius: BorderRadius.circular(AppSizes.w(12)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
               ),
             ],
           ),
@@ -236,24 +236,25 @@ class AlertCard extends StatelessWidget {
               // ── Header row ──────────────────────────────────
               Padding(
                 padding: EdgeInsets.fromLTRB(
-                    AppSizes.w(14), AppSizes.h(14), AppSizes.w(70), AppSizes.h(8)),
+                    AppSizes.w(16), AppSizes.h(16), AppSizes.w(76), AppSizes.h(10)),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    // ── Frame not.png icon box ───────────────
+                    // ── Icon box ─────────────────────────────
                     Container(
-                      width: AppSizes.w(52),
-                      height: AppSizes.w(52),
+                      width: AppSizes.w(46),
+                      height: AppSizes.w(46),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF2F4F7),
+                        color: (isCritical ? AppColors.error : AppColors.activeOrange)
+                            .withOpacity(0.08),
                         borderRadius: BorderRadius.circular(AppSizes.w(10)),
                       ),
                       child: Center(
                         child: Image.asset(
                           'assets/icons/Frame not.png',
-                          width: AppSizes.w(28),
-                          height: AppSizes.w(28),
+                          width: AppSizes.w(22),
+                          height: AppSizes.w(22),
                           color: isCritical
                               ? AppColors.error
                               : AppColors.activeOrange,
@@ -262,19 +263,20 @@ class AlertCard extends StatelessWidget {
                             color: isCritical
                                 ? AppColors.error
                                 : AppColors.activeOrange,
-                            size: 28,
+                            size: AppSizes.w(22),
                           ),
                         ),
                       ),
                     ),
 
-                    const SizedBox(width: 12),
+                    SizedBox(width: AppSizes.w(14)),
 
                     // ── Title + Zone + Camera ────────────────
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+
                           // Title with chevron
                           Row(
                             children: [
@@ -282,8 +284,8 @@ class AlertCard extends StatelessWidget {
                                 child: Text(
                                   item.title,
                                   style: AppStyles.poppins(
-                                    fontSize: AppSizes.fs15,
-                                    fontWeight: FontWeight.w600,
+                                    fontSize: AppSizes.fs14,
+                                    fontWeight: FontWeight.w500,
                                     color: AppColors.black,
                                   ),
                                   maxLines: 1,
@@ -292,7 +294,7 @@ class AlertCard extends StatelessWidget {
                               ),
                               Icon(
                                 Icons.chevron_right,
-                                size: AppSizes.w(18),
+                                size: AppSizes.w(16),
                                 color: AppColors.grey,
                               ),
                             ],
@@ -302,12 +304,18 @@ class AlertCard extends StatelessWidget {
                           // Zone
                           Row(
                             children: [
-                              Icon(
-                                Icons.location_on_outlined,
-                                size: AppSizes.w(13),
-                                color: AppColors.grey,
+                              Image.asset(
+                                'assets/images/location_icon.png',
+                                width: AppSizes.w(10),
+                                height: AppSizes.h(10),
+                                color: AppColors.grey900,
+                                errorBuilder: (_, __, ___) => Icon(
+                                  Icons.location_on_outlined,
+                                  size: AppSizes.w(12),
+                                  color: AppColors.black,
+                                ),
                               ),
-                              SizedBox(width: AppSizes.w(4)),
+                              SizedBox(width: AppSizes.w(5)),
                               Text(
                                 item.zone,
                                 style: AppStyles.poppins(
@@ -317,17 +325,17 @@ class AlertCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: AppSizes.h(3)),
+                          SizedBox(height: AppSizes.h(4)),
 
                           // Camera
                           Row(
                             children: [
                               Icon(
-                                Icons.videocam_outlined,
-                                size: AppSizes.w(13),
-                                color: AppColors.grey,
+                                Icons.camera_alt_outlined,
+                                size: AppSizes.w(11),
+                                color: AppColors.grey900,
                               ),
-                              SizedBox(width: AppSizes.w(4)),
+                              SizedBox(width: AppSizes.w(5)),
                               Text(
                                 item.camera,
                                 style: AppStyles.poppins(
@@ -346,30 +354,31 @@ class AlertCard extends StatelessWidget {
 
               // ── Escalation + Time ────────────────────────
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSizes.w(14)),
+                padding: EdgeInsets.symmetric(horizontal: AppSizes.w(16)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Escalates in ${item.escalationTime}',
                       style: AppStyles.poppins(
-                        color: AppColors.grey,
-                        fontSize: AppSizes.fs13,
+                        color: AppColors.grey900,
+                        fontSize: AppSizes.fs14,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     Row(
                       children: [
                         Icon(
                           Icons.access_time,
-                          size: AppSizes.w(13),
+                          size: AppSizes.w(24),
                           color: AppColors.grey,
                         ),
-                        SizedBox(width: AppSizes.space4),
+                        SizedBox(width: AppSizes.w(3)),
                         Text(
                           item.timeAgo,
                           style: AppStyles.poppins(
                             color: AppColors.grey,
-                            fontSize: AppSizes.fs13,
+                            fontSize: AppSizes.fs12,
                           ),
                         ),
                       ],
@@ -377,11 +386,11 @@ class AlertCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: AppSizes.h(10)),
 
-              // ── Progress Bar (thick oval) ─────────────────
+              // ── Progress Bar ─────────────────────────────
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                padding: EdgeInsets.symmetric(horizontal: AppSizes.w(16)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: LinearProgressIndicator(
@@ -390,25 +399,27 @@ class AlertCard extends StatelessWidget {
                     valueColor: AlwaysStoppedAnimation<Color>(
                       isCritical ? AppColors.error : AppColors.warning,
                     ),
-                    minHeight: AppSizes.space8,
+                    minHeight: AppSizes.h(7),
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),
               ),
-              SizedBox(height: AppSizes.space14),
+              SizedBox(height: AppSizes.h(14)),
 
               // ── Acknowledge Button ───────────────────────
               Padding(
-                padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+                padding: EdgeInsets.fromLTRB(
+                    AppSizes.w(16), 0, AppSizes.w(16), AppSizes.h(16)),
                 child: SizedBox(
                   width: double.infinity,
+                  height: AppSizes.h(44),
                   child: ElevatedButton.icon(
                     onPressed: isAcknowledged ? null : onAcknowledge,
                     icon: Icon(
                       isAcknowledged
                           ? Icons.check_circle
                           : Icons.check_circle_outline,
-                      size: AppSizes.fs20,
+                      size: AppSizes.fs16,
                     ),
                     label: Text(
                       isAcknowledged ? 'Acknowledged' : 'Acknowledge',
@@ -418,12 +429,12 @@ class AlertCard extends StatelessWidget {
                       isAcknowledged ? AppColors.grey : AppColors.primary,
                       foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      padding: EdgeInsets.symmetric(vertical: AppSizes.space8),
+                      padding: EdgeInsets.zero,
                       elevation: 0,
                       textStyle: AppStyles.poppins(
-                        fontSize: AppSizes.fs15,
+                        fontSize: AppSizes.fs14,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -434,18 +445,19 @@ class AlertCard extends StatelessWidget {
           ),
         ),
 
-        // ── Status Badge (Critical / Warning) ───────────────
+        // ── Status Badge ─────────────────────────────────────
         Positioned(
           top: 0,
           right: 0,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: EdgeInsets.symmetric(
+                horizontal: AppSizes.w(10), vertical: AppSizes.h(6)),
             decoration: BoxDecoration(
               color: isCritical
                   ? AppColors.error.withOpacity(0.1)
                   : AppColors.warning.withOpacity(0.1),
               borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(14),
+                topRight: Radius.circular(12),
                 bottomLeft: Radius.circular(8),
               ),
             ),

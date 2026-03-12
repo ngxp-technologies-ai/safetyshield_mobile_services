@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:safety_management/utils/app_colors.dart';
 import '../utils/app_size.dart';
+import '../utils/app_styles.dart';
 import '../utils/screen_size.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -7,14 +9,12 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     ScreenSize.init(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-
           /// Background Image
           SizedBox(
             width: ScreenSize.width,
@@ -46,12 +46,11 @@ class SignUpScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     /// Title
-                    const Text(
+                    Text(
                       "Signup",
-                      style: TextStyle(
-                        fontSize: 28,
+                      style: AppStyles.poppins(
+                        fontSize: AppSizes.fs26,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -59,10 +58,7 @@ class SignUpScreen extends StatelessWidget {
                     SizedBox(height: AppSizes.spaceMedium),
 
                     /// Full Name
-                    _inputField(
-                      hint: "Full name",
-                      icon: Icons.person_outline,
-                    ),
+                    _inputField(hint: "Full name", icon: Icons.person_outline),
 
                     SizedBox(height: AppSizes.spaceSmall),
 
@@ -75,10 +71,7 @@ class SignUpScreen extends StatelessWidget {
                     SizedBox(height: AppSizes.spaceSmall),
 
                     /// Email
-                    _inputField(
-                      hint: "Email",
-                      icon: Icons.email_outlined,
-                    ),
+                    _inputField(hint: "Email", icon: Icons.email_outlined),
 
                     SizedBox(height: AppSizes.spaceSmall),
 
@@ -112,9 +105,9 @@ class SignUpScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {},
-                        child: const Text(
+                        child: Text(
                           "Register",
-                          style: TextStyle(color: Colors.white),
+                          style: AppStyles.poppins(color: AppColors.white),
                         ),
                       ),
                     ),
@@ -162,19 +155,25 @@ class SignUpScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Already have an account? "),
+                        Text(
+                          "Already have an account? ",
+                          style: AppStyles.poppins(
+                            color: AppColors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                         GestureDetector(
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
+                          child: Text(
                             "Sign in",
-                            style: TextStyle(
+                            style: AppStyles.poppins(
                               color: Colors.blue,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
 
@@ -184,14 +183,16 @@ class SignUpScreen extends StatelessWidget {
               ),
             ),
           ),
+
           /// Back Button
           Positioned(
             top: ScreenSize.height * 0.06,
             left: ScreenSize.width * 0.05,
             child: GestureDetector(
-              onTap: ()  {
+              onTap: () {
                 print("BACK PRESSED");
-                Navigator.pop(context);},
+                Navigator.pop(context);
+              },
               child: Image.asset(
                 'assets/icons/back_icon_blue.png',
                 width: ScreenSize.width * 0.10,
@@ -221,6 +222,11 @@ class SignUpScreen extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
       ),
+      style: AppStyles.poppins(
+        fontSize: AppSizes.fs12,
+      color: AppColors.grey,
+      fontWeight: FontWeight.w400,
+    ),
     );
   }
 }

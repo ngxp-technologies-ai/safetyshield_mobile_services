@@ -169,7 +169,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
                     style: AppStyles.poppins(
                       fontSize: AppSizes.fs13,
                       fontWeight:
-                      isSelected ? FontWeight.w700 : FontWeight.w400,
+                      isSelected ? FontWeight.w400 : FontWeight.w400,
                       color:
                       isSelected ? AppColors.black : AppColors.grey,
                     ),

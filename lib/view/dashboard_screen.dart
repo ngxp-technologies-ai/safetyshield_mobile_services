@@ -65,15 +65,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 2:
         return [
           IconButton(
-            icon: const Icon(Icons.search, color: AppColors.black, size: 26),
+            icon: Icon(Icons.search, color: AppColors.black, size:  AppSizes.spaceMedium),
             onPressed: () {},
           ),
         ];
       case 3:
         return [
-          IconButton(
-            icon: const Icon(Icons.filter_list, color: AppColors.black, size: 26),
-            onPressed: () {},
+          Image.asset(
+            'assets/icons/Filter.png',
+            width: AppSizes.w(50),
+            height: AppSizes.h(40),
+            color: AppColors.grey900,
           ),
         ];
       case 4:
@@ -84,7 +86,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               'Logout',
               style: AppStyles.poppins(
                 color: AppColors.error,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -509,7 +511,7 @@ class _ZoneCard extends StatelessWidget {
                 children: [
                   Image.asset("assets/images/crew_icon.png", height: 14),
                   const SizedBox(width: 4),
-                  Text("$crew", style: AppStyles.poppins(fontSize: AppSizes.fs12)),
+                  Text("$crew", style: AppStyles.poppins(fontSize: AppSizes.fs10)),
                 ],
               ),
               Row(
