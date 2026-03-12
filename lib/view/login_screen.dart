@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:safety_management/utils/app_colors.dart';
+import 'package:safety_management/utils/app_styles.dart';
 import 'package:safety_management/view/dashboard_screen.dart';
 import 'package:safety_management/view/sign_up_screen.dart';
 import '../utils/app_size.dart';
@@ -9,14 +11,12 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     ScreenSize.init(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-
           /// Background Image
           SizedBox(
             width: ScreenSize.width,
@@ -31,7 +31,7 @@ class LoginScreen extends StatelessWidget {
             top: ScreenSize.height * 0.06,
             right: ScreenSize.width * 0.05,
             child: Image.asset(
-              "assets/images/sa_logo_white_bg.png",
+              "assets/icons/sa_logo_white_bg.png",
               height: ScreenSize.height * 0.05,
             ),
           ),
@@ -48,12 +48,11 @@ class LoginScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     /// Title
-                    const Text(
+                    Text(
                       "Login",
-                      style: TextStyle(
-                        fontSize: 28,
+                      style: AppStyles.poppins(
+                        fontSize: AppSizes.fs26,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -61,10 +60,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: AppSizes.spaceMedium),
 
                     /// Email
-                    _inputField(
-                      hint: "Email",
-                      icon: Icons.email_outlined,
-                    ),
+                    _inputField(hint: "Email", icon: Icons.email_outlined),
 
                     SizedBox(height: AppSizes.spaceSmall),
 
@@ -80,15 +76,18 @@ class LoginScreen extends StatelessWidget {
                     /// Remember + Forgot
                     Row(
                       children: [
-                        Checkbox(
-                          value: false,
-                          onChanged: (v) {},
-                        ),
-                        const Text("Remember Me"),
+                        Checkbox(value: false, onChanged: (v) {}),
+                        Text("Remember Me",   style: AppStyles.poppins(
+                          fontSize: AppSizes.fs12,
+                          color: AppColors.black,
+                          fontWeight: FontWeight.w400,)),
                         const Spacer(),
                         TextButton(
                           onPressed: () {},
-                          child: const Text("Forgot Password?"),
+                          child: Text("Forgot Password?",   style: AppStyles.poppins(
+                            fontSize: AppSizes.fs12,
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w400))
                         ),
                       ],
                     ),
@@ -107,11 +106,16 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => DashboardScreen()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => DashboardScreen(),
+                            ),
+                          );
                         },
-                        child: const Text(
+                        child: Text(
                           "Login",
-                          style: TextStyle(color: Colors.white),
+                          style: AppStyles.poppins(color: AppColors.white),
                         ),
                       ),
                     ),
@@ -159,7 +163,10 @@ class LoginScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("New here? "),
+                        Text("New here? ",  style: AppStyles.poppins(
+                          fontSize: AppSizes.fs12,
+                          color: AppColors.grey,
+                          fontWeight: FontWeight.w400)),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -169,9 +176,9 @@ class LoginScreen extends StatelessWidget {
                               ),
                             );
                           },
-                          child: const Text(
+                          child: Text(
                             "Create an Account",
-                            style: TextStyle(
+                            style: AppStyles.poppins(
                               color: Colors.blue,
                               fontWeight: FontWeight.w500,
                             ),
@@ -222,6 +229,10 @@ class LoginScreen extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
       ),
+    style: AppStyles.poppins(
+    fontSize: AppSizes.fs12,
+    color: AppColors.grey,
+    fontWeight: FontWeight.w400),
     );
   }
 }

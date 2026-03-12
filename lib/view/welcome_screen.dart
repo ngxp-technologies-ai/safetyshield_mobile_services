@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:safety_management/utils/app_colors.dart';
+import 'package:safety_management/utils/app_styles.dart';
 import 'package:safety_management/view/sign_up_screen.dart';
 import '../utils/app_size.dart';
 import '../utils/screen_size.dart';
@@ -12,7 +14,7 @@ class WelcomeScreen extends StatelessWidget {
     ScreenSize.init(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: Stack(
         children: [
           /// Top Curve Image
@@ -40,28 +42,28 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: EdgeInsets.all(ScreenSize.width * 0.03),
-                  child: Image.asset("assets/images/sa_logo.png"),
+                  child: Image.asset("assets/icons/sa_logo.png"),
                 ),
               ),
 
               SizedBox(height: AppSizes.spaceSmall),
 
               /// Welcome Text
-              const Text(
+              Text(
                 "Welcome",
-                style: TextStyle(
-                  fontSize: 28,
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs26,
                   fontWeight: FontWeight.w600,
                 ),
               ),
 
               SizedBox(height: ScreenSize.height * 0.008),
 
-              const Text(
+              Text(
                 "Please login to continue",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs14,
+                  color: AppColors.grey,
                 ),
               ),
 
@@ -88,9 +90,9 @@ class WelcomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Login",
-                      style: TextStyle(color: Colors.white),
+                      style: AppStyles.poppins(color: Colors.white),
                     ),
                   ),
                 ),
@@ -120,9 +122,9 @@ class WelcomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       "Sign Up",
-                      style: TextStyle(color: Colors.black),
+                      style: AppStyles.poppins(color: Colors.black),
                     ),
                   ),
                 ),
