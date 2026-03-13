@@ -1,95 +1,169 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:safety_management/controller/crew/my_crew_controller.dart';
+import 'package:safety_management/model/crew/my_crew_response_model.dart';
 import '../utils/app_colors.dart';
 import '../utils/app_size.dart';
 import '../utils/app_styles.dart';
 import '../utils/screen_size.dart';
 
-class MyCrewScreen extends StatelessWidget {
+class MyCrewScreen extends StatefulWidget {
   const MyCrewScreen({super.key});
+
+  @override
+  State<MyCrewScreen> createState() => _MyCrewScreenState();
+}
+
+class _MyCrewScreenState extends State<MyCrewScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<MyCrewController>().fetchMyCrew();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     ScreenSize.init(context);
 
-    final List<CrewMember> crewList = CrewMember.dummyData;
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        shadowColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        leadingWidth: AppSizes.w(55),
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          padding: EdgeInsets.zero,
-          splashRadius: AppSizes.w(20),
-          icon: Icon(
-            Icons.arrow_back,
-            color: AppColors.black,
-            size: AppSizes.w(22),
-          ),
-        ),
-        titleSpacing: 0,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "My Crew",
-              style: AppStyles.poppins(
-                fontSize: AppSizes.fs15,
-                fontWeight: FontWeight.w500,
+    return Consumer<MyCrewController>(
+      builder: (context, controller, child) {
+        return Scaffold(
+          backgroundColor: const Color(0xFFF5F5F5),
+          appBar: AppBar(
+            backgroundColor: AppColors.white,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            shadowColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            leadingWidth: AppSizes.w(55),
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              padding: EdgeInsets.zero,
+              splashRadius: AppSizes.w(20),
+              icon: Icon(
+                Icons.arrow_back,
                 color: AppColors.black,
+                size: AppSizes.w(22),
               ),
             ),
-            SizedBox(height: AppSizes.h(1)),
-            Text(
-              "${crewList.length} workers across assigned zones",
-              style: AppStyles.poppins(
-                fontSize: AppSizes.fs12,
-                fontWeight: FontWeight.w400,
-                color: AppColors.grey,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            splashRadius: AppSizes.w(20),
-            icon: Icon(
-              Icons.search,
-              color: AppColors.black,
-              size: AppSizes.w(22),
+            titleSpacing: 0,
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "My Crew",
+                  style: AppStyles.poppins(
+                    fontSize: AppSizes.fs15,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.black,
+                  ),
+                ),
+                SizedBox(height: AppSizes.h(1)),
+                Text(
+                  "${controller.total} workers across assigned zones",
+                  style: AppStyles.poppins(
+                    fontSize: AppSizes.fs12,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.grey,
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(width: AppSizes.w(4)),
-        ],
-      ),
-      body: ListView.separated(
-        padding: EdgeInsets.fromLTRB(
-          AppSizes.w(12),
-          AppSizes.h(6),
-          AppSizes.w(12),
-          AppSizes.h(16),
-        ),
-        itemCount: crewList.length,
-        separatorBuilder: (_, __) => SizedBox(height: AppSizes.h(10)),
-        itemBuilder: (context, index) {
-          final member = crewList[index];
-          return CrewMemberCard(
-            member: member,
-            onTap: () => _showCrewDetailsBottomSheet(context, member),
-          );
-        },
-      ),
+          body: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                  AppSizes.w(12),
+                  AppSizes.h(8),
+                  AppSizes.w(12),
+                  AppSizes.h(8),
+                ),
+                child: TextField(
+                  controller: controller.searchController,
+                  onChanged: controller.onSearchChanged,
+                  decoration: InputDecoration(
+                    hintText: "Search by employee ID or name",
+                    hintStyle: AppStyles.poppins(
+                      fontSize: AppSizes.fs12,
+                      color: AppColors.grey,
+                    ),
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: controller.searchController.text.isNotEmpty
+                        ? IconButton(
+                            onPressed: controller.clearSearch,
+                            icon: const Icon(Icons.close),
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: AppColors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: AppSizes.w(12),
+                      vertical: AppSizes.h(12),
+                    ),
+                  ),
+                ),
+              ),
+
+              Expanded(
+                child: controller.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : controller.workers.isEmpty
+                    ? Center(
+                        child: Text(
+                          "No crew members found",
+                          style: AppStyles.poppins(
+                            fontSize: AppSizes.fs13,
+                            color: AppColors.grey,
+                          ),
+                        ),
+                      )
+                    : RefreshIndicator(
+                        onRefresh: () => controller.fetchMyCrew(
+                          search:
+                              controller.searchController.text.trim().isEmpty
+                              ? null
+                              : controller.searchController.text.trim(),
+                        ),
+                        child: ListView.separated(
+                          padding: EdgeInsets.fromLTRB(
+                            AppSizes.w(12),
+                            AppSizes.h(6),
+                            AppSizes.w(12),
+                            AppSizes.h(16),
+                          ),
+                          itemCount: controller.workers.length,
+                          separatorBuilder: (_, __) =>
+                              SizedBox(height: AppSizes.h(10)),
+                          itemBuilder: (context, index) {
+                            final member = controller.workers[index];
+                            return CrewMemberCard(
+                              member: member,
+                              onTap: () =>
+                                  _showCrewDetailsBottomSheet(context, member),
+                            );
+                          },
+                        ),
+                      ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  void _showCrewDetailsBottomSheet(BuildContext context, CrewMember member) {
+  void _showCrewDetailsBottomSheet(
+    BuildContext context,
+    CrewWorkerModel member,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -100,20 +174,16 @@ class MyCrewScreen extends StatelessWidget {
 }
 
 class CrewMemberCard extends StatelessWidget {
-  final CrewMember member;
+  final CrewWorkerModel member;
   final VoidCallback onTap;
 
-  const CrewMemberCard({
-    super.key,
-    required this.member,
-    required this.onTap,
-  });
+  const CrewMemberCard({super.key, required this.member, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    final bool hasIssue = member.recentAlertText != null;
-    final Color statusBg = _statusBackground(member.shiftStatus);
-    final Color statusText = _statusTextColor(member.shiftStatus);
+    final bool hasIssue = member.recentAlerts.isNotEmpty;
+    final Color statusBg = _statusBackground(member.status);
+    final Color statusText = _statusTextColor(member.status);
 
     return Material(
       color: AppColors.white,
@@ -124,7 +194,6 @@ class CrewMemberCard extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.only(
             left: AppSizes.w(12),
-            // right: AppSizes.w(14), // <- your required right padding
             bottom: AppSizes.w(12),
           ),
           decoration: BoxDecoration(
@@ -133,18 +202,14 @@ class CrewMemberCard extends StatelessWidget {
           ),
           child: Stack(
             children: [
-
-              /// CONTENT ROW
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
                     padding: EdgeInsets.only(top: AppSizes.w(12)),
-                    child: _CrewAvatar(initials: member.initials),
+                    child: _CrewAvatar(initials: _getInitials(member.fullName)),
                   ),
-
                   SizedBox(width: AppSizes.w(12)),
-
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(top: AppSizes.w(8)),
@@ -155,7 +220,7 @@ class CrewMemberCard extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: Text(
-                                  member.name,
+                                  member.fullName,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppStyles.poppins(
@@ -168,20 +233,18 @@ class CrewMemberCard extends StatelessWidget {
                               Icon(Icons.chevron_right, size: AppSizes.w(15)),
                             ],
                           ),
-
                           SizedBox(height: AppSizes.h(2)),
-
                           Text(
-                            member.role,
+                            member.designation ??
+                                member.department ??
+                                "Not Available",
                             style: AppStyles.poppins(
                               fontSize: AppSizes.fs11,
                               fontWeight: FontWeight.w400,
                               color: AppColors.grey,
                             ),
                           ),
-
                           SizedBox(height: AppSizes.h(4)),
-
                           Padding(
                             padding: EdgeInsets.only(right: AppSizes.w(14)),
                             child: Wrap(
@@ -190,36 +253,34 @@ class CrewMemberCard extends StatelessWidget {
                               crossAxisAlignment: WrapCrossAlignment.center,
                               children: [
                                 _InfoItem(
-                                  icon: Icons.location_on_outlined,
-                                  text: member.zone,
+                                  icon: Icons.badge_outlined,
+                                  text: member.employeeId ?? "--",
                                 ),
                                 _InfoDivider(),
                                 _InfoItem(
-                                  icon: Icons.access_time,
-                                  text: member.timeText,
+                                  icon: Icons.work_outline,
+                                  text: member.currentTask ?? "No task",
                                 ),
                                 _InfoDivider(),
                                 _InfoItem(
                                   icon: Icons.health_and_safety_outlined,
-                                  text: member.ppeStatus,
-                                  textColor: member.isPpeOk
-                                      ? const Color(0xFF22C55E)
-                                      : const Color(0xFFFF4D4F),
-                                  iconColor: member.isPpeOk
-                                      ? const Color(0xFF22C55E)
-                                      : const Color(0xFFFF4D4F),
+                                  text: member.ppeCompliance ?? "Unknown",
+                                  textColor: _ppeTextColor(
+                                    member.ppeCompliance,
+                                  ),
+                                  iconColor: _ppeTextColor(
+                                    member.ppeCompliance,
+                                  ),
                                 ),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
                   ),
                 ],
               ),
-
-              /// STATUS BADGE
               Positioned(
                 right: 0,
                 top: 0,
@@ -236,7 +297,7 @@ class CrewMemberCard extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    member.shiftStatus.label,
+                    _statusLabel(member.status),
                     style: AppStyles.poppins(
                       fontSize: AppSizes.fs11,
                       fontWeight: FontWeight.w500,
@@ -245,6 +306,34 @@ class CrewMemberCard extends StatelessWidget {
                   ),
                 ),
               ),
+              if (hasIssue)
+                Positioned(
+                  left: AppSizes.w(56),
+                  bottom: 0,
+                  right: AppSizes.w(14),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.warning_amber_rounded,
+                        size: AppSizes.w(15),
+                        color: Colors.red,
+                      ),
+                      SizedBox(width: AppSizes.w(6)),
+                      Expanded(
+                        child: Text(
+                          member.recentAlerts.first,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppStyles.poppins(
+                            fontSize: AppSizes.fs12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
             ],
           ),
         ),
@@ -252,32 +341,64 @@ class CrewMemberCard extends StatelessWidget {
     );
   }
 
-  Color _statusBackground(ShiftStatus status) {
-    switch (status) {
-      case ShiftStatus.active:
-        return const Color(0xFFE5F7EA);
-      case ShiftStatus.breakTime:
-        return const Color(0xFFFFEAD8);
+  String _getInitials(String name) {
+    final parts = name.trim().split(' ');
+    if (parts.isEmpty) return '--';
+    if (parts.length == 1) return parts.first.substring(0, 1).toUpperCase();
+    return (parts.first.substring(0, 1) + parts.last.substring(0, 1))
+        .toUpperCase();
+  }
+
+  String _statusLabel(String status) {
+    switch (status.toLowerCase()) {
+      case 'active':
+        return 'Active';
+      case 'break':
+        return 'Break';
+      default:
+        return status;
     }
   }
 
-  Color _statusTextColor(ShiftStatus status) {
-    switch (status) {
-      case ShiftStatus.active:
-        return Colors.green;
-      case ShiftStatus.breakTime:
-        return const Color(0xFFFF8A00);
+  Color _statusBackground(String status) {
+    switch (status.toLowerCase()) {
+      case 'active':
+        return const Color(0xFFE5F7EA);
+      case 'break':
+        return const Color(0xFFFFEAD8);
+      default:
+        return const Color(0xFFEFF1F4);
     }
+  }
+
+  Color _statusTextColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'active':
+        return Colors.green;
+      case 'break':
+        return const Color(0xFFFF8A00);
+      default:
+        return AppColors.grey;
+    }
+  }
+
+  Color _ppeTextColor(String? ppe) {
+    if (ppe == null) return AppColors.grey;
+    final value = ppe.toLowerCase();
+    if (value.contains('ok') || value.contains('compliant')) {
+      return const Color(0xFF22C55E);
+    }
+    if (value.contains('missing') || value.contains('non')) {
+      return const Color(0xFFFF4D4F);
+    }
+    return AppColors.grey;
   }
 }
 
 class CrewDetailsBottomSheet extends StatelessWidget {
-  final CrewMember member;
+  final CrewWorkerModel member;
 
-  const CrewDetailsBottomSheet({
-    super.key,
-    required this.member,
-  });
+  const CrewDetailsBottomSheet({super.key, required this.member});
 
   @override
   Widget build(BuildContext context) {
@@ -333,7 +454,7 @@ class CrewDetailsBottomSheet extends StatelessWidget {
                     Row(
                       children: [
                         _CrewAvatar(
-                          initials: member.initials,
+                          initials: _getInitials(member.fullName),
                           size: AppSizes.w(40),
                           fontSize: AppSizes.fs14,
                         ),
@@ -343,7 +464,7 @@ class CrewDetailsBottomSheet extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                member.name,
+                                member.fullName,
                                 style: AppStyles.poppins(
                                   fontSize: AppSizes.fs14,
                                   fontWeight: FontWeight.w600,
@@ -352,7 +473,7 @@ class CrewDetailsBottomSheet extends StatelessWidget {
                               ),
                               SizedBox(height: AppSizes.h(2)),
                               Text(
-                                "${member.role} • ${member.zone}",
+                                "${member.designation ?? 'Not Available'} • ${member.department ?? 'Not Available'}",
                                 style: AppStyles.poppins(
                                   fontSize: AppSizes.fs11,
                                   fontWeight: FontWeight.w400,
@@ -369,9 +490,9 @@ class CrewDetailsBottomSheet extends StatelessWidget {
                       children: [
                         Expanded(
                           child: _DetailStatCard(
-                            value: member.shiftStatus.label,
+                            value: member.status,
                             label: "Status",
-                            valueColor: member.shiftStatus == ShiftStatus.active
+                            valueColor: member.status.toLowerCase() == 'active'
                                 ? const Color(0xFF22C55E)
                                 : const Color(0xFFFF8A00),
                           ),
@@ -379,42 +500,49 @@ class CrewDetailsBottomSheet extends StatelessWidget {
                         SizedBox(width: AppSizes.w(8)),
                         Expanded(
                           child: _DetailStatCard(
-                            value: member.ppeStatusSheet,
+                            value: member.ppeCompliance ?? "Unknown",
                             label: "PPE",
-                            valueColor: member.isPpeOk
-                                ? const Color(0xFF22C55E)
-                                : const Color(0xFFFF4D4F),
+                            valueColor: _ppeTextColor(member.ppeCompliance),
                           ),
                         ),
                         SizedBox(width: AppSizes.w(8)),
                         Expanded(
                           child: _DetailStatCard(
-                            value: member.shiftDuration,
-                            label: "Shift",
-                            valueColor: const Color(0xFF3A3A3A),
+                            value: member.isCertified ? "Yes" : "No",
+                            label: "Certified",
+                            valueColor: member.isCertified
+                                ? const Color(0xFF22C55E)
+                                : const Color(0xFFFF4D4F),
                           ),
                         ),
                       ],
                     ),
                     SizedBox(height: AppSizes.h(18)),
                     _SectionHeader(
-                      icon: Icons.workspace_premium_outlined,
-                      title: "Certificate",
+                      icon: Icons.work_outline,
+                      title: "Current Task",
                     ),
                     SizedBox(height: AppSizes.h(10)),
-                    Wrap(
-                      spacing: AppSizes.w(8),
-                      runSpacing: AppSizes.h(8),
-                      children: member.certificates
-                          .map((item) => _TagChip(text: item))
-                          .toList(),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.w(12),
+                        vertical: AppSizes.h(12),
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF7F7F7),
+                        borderRadius: BorderRadius.circular(AppSizes.w(10)),
+                      ),
+                      child: Text(
+                        member.currentTask ?? "No task assigned",
+                        style: AppStyles.poppins(
+                          fontSize: AppSizes.fs12,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.black,
+                        ),
+                      ),
                     ),
                     SizedBox(height: AppSizes.h(18)),
-                    Divider(
-                      color: const Color(0xFFEAEAEA),
-                      height: AppSizes.h(1),
-                    ),
-                    SizedBox(height: AppSizes.h(16)),
                     _SectionHeader(
                       icon: Icons.shield_outlined,
                       title: "Recent Alerts",
@@ -427,7 +555,7 @@ class CrewDetailsBottomSheet extends StatelessWidget {
                         vertical: AppSizes.h(12),
                       ),
                       decoration: BoxDecoration(
-                        color: member.recentAlertText == null
+                        color: member.recentAlerts.isEmpty
                             ? const Color(0xFFE7F7EC)
                             : const Color(0xFFFFF1F0),
                         borderRadius: BorderRadius.circular(AppSizes.w(10)),
@@ -436,24 +564,26 @@ class CrewDetailsBottomSheet extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              member.recentAlertText ?? "No recent violations",
+                              member.recentAlerts.isEmpty
+                                  ? "No recent violations"
+                                  : member.recentAlerts.first,
                               style: AppStyles.poppins(
                                 fontSize: AppSizes.fs12,
                                 fontWeight: FontWeight.w500,
-                                color: member.recentAlertText == null
+                                color: member.recentAlerts.isEmpty
                                     ? const Color(0xFF22C55E)
-                                    : member.alertColor,
+                                    : Colors.red,
                               ),
                             ),
                           ),
                           Icon(
-                            member.recentAlertText == null
+                            member.recentAlerts.isEmpty
                                 ? Icons.check
                                 : Icons.warning_amber_rounded,
                             size: AppSizes.w(16),
-                            color: member.recentAlertText == null
+                            color: member.recentAlerts.isEmpty
                                 ? const Color(0xFF22C55E)
-                                : member.alertColor,
+                                : Colors.red,
                           ),
                         ],
                       ),
@@ -466,6 +596,26 @@ class CrewDetailsBottomSheet extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getInitials(String name) {
+    final parts = name.trim().split(' ');
+    if (parts.isEmpty) return '--';
+    if (parts.length == 1) return parts.first.substring(0, 1).toUpperCase();
+    return (parts.first.substring(0, 1) + parts.last.substring(0, 1))
+        .toUpperCase();
+  }
+
+  Color _ppeTextColor(String? ppe) {
+    if (ppe == null) return AppColors.grey;
+    final value = ppe.toLowerCase();
+    if (value.contains('ok') || value.contains('compliant')) {
+      return const Color(0xFF22C55E);
+    }
+    if (value.contains('missing') || value.contains('non')) {
+      return const Color(0xFFFF4D4F);
+    }
+    return AppColors.grey;
   }
 }
 
@@ -522,20 +672,13 @@ class _SectionHeader extends StatelessWidget {
   final IconData icon;
   final String title;
 
-  const _SectionHeader({
-    required this.icon,
-    required this.title,
-  });
+  const _SectionHeader({required this.icon, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          icon,
-          size: AppSizes.w(15),
-          color: const Color(0xFF7B7B7B),
-        ),
+        Icon(icon, size: AppSizes.w(15), color: const Color(0xFF7B7B7B)),
         SizedBox(width: AppSizes.w(6)),
         Text(
           title,
@@ -550,46 +693,12 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _TagChip extends StatelessWidget {
-  final String text;
-
-  const _TagChip({
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSizes.w(12),
-        vertical: AppSizes.h(6),
-      ),
-      decoration: BoxDecoration(
-        color: const Color(0xFFDDF2FD),
-        borderRadius: BorderRadius.circular(AppSizes.w(16)),
-      ),
-      child: Text(
-        text,
-        style: AppStyles.poppins(
-          fontSize: AppSizes.fs11,
-          fontWeight: FontWeight.w500,
-          color: const Color(0xFF2196F3),
-        ),
-      ),
-    );
-  }
-}
-
 class _CrewAvatar extends StatelessWidget {
   final String initials;
   final double? size;
   final double? fontSize;
 
-  const _CrewAvatar({
-    required this.initials,
-    this.size,
-    this.fontSize,
-  });
+  const _CrewAvatar({required this.initials, this.size, this.fontSize});
 
   @override
   Widget build(BuildContext context) {
@@ -639,11 +748,13 @@ class _InfoItem extends StatelessWidget {
           color: iconColor ?? const Color(0xFF7C7C80),
         ),
         SizedBox(width: AppSizes.w(4)),
-        Text(
-          text,
-          style: AppStyles.poppins(
-            fontSize: AppSizes.fs12,
-            color: textColor ?? const Color(0xFF8E8E93),
+        Flexible(
+          child: Text(
+            text,
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs12,
+              color: textColor ?? const Color(0xFF8E8E93),
+            ),
           ),
         ),
       ],
@@ -652,6 +763,8 @@ class _InfoItem extends StatelessWidget {
 }
 
 class _InfoDivider extends StatelessWidget {
+  const _InfoDivider();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -660,153 +773,4 @@ class _InfoDivider extends StatelessWidget {
       color: const Color(0xFFD9D9D9),
     );
   }
-}
-
-enum ShiftStatus {
-  active,
-  breakTime,
-}
-
-extension ShiftStatusX on ShiftStatus {
-  String get label {
-    switch (this) {
-      case ShiftStatus.active:
-        return "Active";
-      case ShiftStatus.breakTime:
-        return "Break";
-    }
-  }
-}
-
-class CrewMember {
-  final String id;
-  final String name;
-  final String initials;
-  final String role;
-  final String zone;
-  final String timeText;
-  final String ppeStatus;
-  final String ppeStatusSheet;
-  final bool isPpeOk;
-  final ShiftStatus shiftStatus;
-  final String? recentAlertText;
-  final Color alertColor;
-  final String shiftDuration;
-  final List<String> certificates;
-
-  const CrewMember({
-    required this.id,
-    required this.name,
-    required this.initials,
-    required this.role,
-    required this.zone,
-    required this.timeText,
-    required this.ppeStatus,
-    required this.ppeStatusSheet,
-    required this.isPpeOk,
-    required this.shiftStatus,
-    required this.recentAlertText,
-    required this.alertColor,
-    required this.shiftDuration,
-    required this.certificates,
-  });
-
-  static List<CrewMember> get dummyData => const [
-    CrewMember(
-      id: "1",
-      name: "Anil Sharma",
-      initials: "AS",
-      role: "Rigger",
-      zone: "Zone C",
-      timeText: "2m ago",
-      ppeStatus: "PPK OK",
-      ppeStatusSheet: "Compliant",
-      isPpeOk: true,
-      shiftStatus: ShiftStatus.active,
-      recentAlertText: null,
-      alertColor: Color(0xFFFF4D4F),
-      shiftDuration: "6h 12m",
-      certificates: ["Rigging Level 2", "First Aid"],
-    ),
-    CrewMember(
-      id: "2",
-      name: "Priya Desai",
-      initials: "PD",
-      role: "Electrician",
-      zone: "Zone B",
-      timeText: "8m ago",
-      ppeStatus: "PPE Missing",
-      ppeStatusSheet: "Missing",
-      isPpeOk: false,
-      shiftStatus: ShiftStatus.active,
-      recentAlertText: "PPE Missing",
-      alertColor: Color(0xFFFF4D4F),
-      shiftDuration: "5h 03m",
-      certificates: ["Electrical Safety", "First Aid"],
-    ),
-    CrewMember(
-      id: "3",
-      name: "Suresh Patil",
-      initials: "SP",
-      role: "Mason",
-      zone: "Zone A",
-      timeText: "Now",
-      ppeStatus: "PPK OK",
-      ppeStatusSheet: "Compliant",
-      isPpeOk: true,
-      shiftStatus: ShiftStatus.breakTime,
-      recentAlertText: null,
-      alertColor: Color(0xFFFF8A00),
-      shiftDuration: "4h 28m",
-      certificates: ["Masonry", "Tool Handling"],
-    ),
-    CrewMember(
-      id: "4",
-      name: "Kavita Nair",
-      initials: "KN",
-      role: "Safety Officer",
-      zone: "Zone B",
-      timeText: "Now",
-      ppeStatus: "PPK OK",
-      ppeStatusSheet: "Compliant",
-      isPpeOk: true,
-      shiftStatus: ShiftStatus.active,
-      recentAlertText: null,
-      alertColor: Color(0xFFFF4D4F),
-      shiftDuration: "7h 02m",
-      certificates: ["Safety Audit", "Emergency Response"],
-    ),
-    CrewMember(
-      id: "5",
-      name: "Raj Thakur",
-      initials: "RT",
-      role: "Crane Operator",
-      zone: "Zone C",
-      timeText: "1m ago",
-      ppeStatus: "PPK OK",
-      ppeStatusSheet: "Compliant",
-      isPpeOk: true,
-      shiftStatus: ShiftStatus.active,
-      recentAlertText: "Fatigue",
-      alertColor: Color(0xFFFF4D4F),
-      shiftDuration: "8h 10m",
-      certificates: ["Crane License", "First Aid"],
-    ),
-    CrewMember(
-      id: "6",
-      name: "Mohit Verma",
-      initials: "MV",
-      role: "Supervisor",
-      zone: "Zone D",
-      timeText: "5m ago",
-      ppeStatus: "PPK OK",
-      ppeStatusSheet: "Compliant",
-      isPpeOk: true,
-      shiftStatus: ShiftStatus.active,
-      recentAlertText: null,
-      alertColor: Color(0xFFFF4D4F),
-      shiftDuration: "6h 45m",
-      certificates: ["Site Supervision", "First Aid"],
-    ),
-  ];
 }

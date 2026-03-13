@@ -1,15 +1,18 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:safety_management/common_widgets/common_widgets.dart';
 // ← ADD THIS IMPORT
 import 'package:safety_management/utils/app_colors.dart';
 import 'package:safety_management/view/camera.dart';
 import 'package:safety_management/view/profile.dart';
 import 'package:safety_management/view/zonemap.dart';
+import '../controller/auth/auth_controller.dart';
 import '../utils/app_size.dart';
 import '../utils/app_styles.dart';
 import '../utils/screen_size.dart';
 import 'alerts_screen.dart';
+import 'login_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -81,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 4:
         return [
           TextButton(
-            onPressed: () {},
+            onPressed: () => _showLogoutDialog(),
             child: Text(
               'Logout',
               style: AppStyles.poppins(
@@ -96,6 +99,74 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+  Future<void> _showLogoutDialog() async {
+    final shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Text(
+            'Logout',
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs15,
+              fontWeight: FontWeight.w600,
+              color: AppColors.black,
+            ),
+          ),
+          content: Text(
+            'Are you sure you want to logout?',
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs12,
+              color: AppColors.grey,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(
+                'Cancel',
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs12,
+                  color: AppColors.grey,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              child: Text(
+                'Logout',
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs12,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.error,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldLogout == true && mounted) {
+      await _handleLogout();
+    }
+  }
+
+  Future<void> _handleLogout() async {
+    final authController = context.read<AuthController>();
+
+    await authController.logout();
+
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+          (route) => false,
+    );
+  }
   Widget? get _appBarLeading {
     if (_currentIndex == 4) {
       return IconButton(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:safety_management/model/auth/login_request_model.dart';
 import 'package:safety_management/model/auth/login_response_model.dart';
+import 'package:safety_management/model/auth/refresh_token_request_model.dart';
 import 'package:safety_management/repository/auth/auth_repository.dart';
 import 'package:safety_management/utils/notify_snackbar.dart';
-
-import '../utils/secure_storage.dart';
+import '../../utils/secure_storage.dart';
 
 class AuthController extends ChangeNotifier {
   final AuthRepository _repo = AuthRepository();
@@ -32,8 +32,8 @@ class AuthController extends ChangeNotifier {
 
   bool get isLoginButtonEnabled =>
       emailController.text.trim().isNotEmpty &&
-          passwordController.text.isNotEmpty &&
-          !isLoading;
+      passwordController.text.isNotEmpty &&
+      !isLoading;
 
   void onFieldsChanged() {
     notifyListeners();
@@ -76,6 +76,56 @@ class AuthController extends ChangeNotifier {
     }
   }
 
+  Future<bool> restoreSession() async {
+    try {
+      final accessToken = await SecureStorage.getAccessToken();
+      final refreshToken = await SecureStorage.getRefreshToken();
+
+      if (accessToken != null && accessToken.isNotEmpty) {
+        return true;
+      }
+
+      if (refreshToken != null && refreshToken.isNotEmpty) {
+        return await refreshSession(showMessage: false);
+      }
+
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> refreshSession({bool showMessage = false}) async {
+    try {
+      final refreshToken = await SecureStorage.getRefreshToken();
+
+      if (refreshToken == null || refreshToken.isEmpty) {
+        await logout();
+        return false;
+      }
+
+      final request = RefreshTokenRequestModel(refreshToken: refreshToken);
+
+      final response = await _repo.refreshAccessToken(request);
+
+      await SecureStorage.storeAccessToken(response.accessToken);
+
+      if (showMessage) {
+        NotifySnackBar.show("Session refreshed", SnackBarType.Success);
+      }
+
+      return true;
+    } catch (e) {
+      await logout();
+
+      if (showMessage) {
+        NotifySnackBar.show(_readableErrorMessage(e), SnackBarType.Fail);
+      }
+
+      return false;
+    }
+  }
+
   String _readableErrorMessage(Object error) {
     final message = error.toString();
 
@@ -87,13 +137,23 @@ class AuthController extends ChangeNotifier {
   }
 
   Future<bool> checkSession() async {
-    final token = await SecureStorage.getAccessToken();
-    return token != null && token.isNotEmpty;
+    return await restoreSession();
   }
 
   Future<void> logout() async {
     await SecureStorage.clearSession();
+
     session = null;
+    rememberMe = false;
+    obscurePassword = true;
+    autoValidate = false;
+    isLoading = false;
+
+    emailController.clear();
+    passwordController.clear();
+
+    NotifySnackBar.show("Logged out successfully", SnackBarType.Success);
+
     notifyListeners();
   }
 
