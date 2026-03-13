@@ -152,64 +152,48 @@ class ApiProvider {
       final refreshToken = await SecureStorage.getRefreshToken();
 
       if (refreshToken == null || refreshToken.isEmpty) {
-        log("❌ No refresh token available");
+        log("No refresh token available");
         await _handleTokenRefreshFailure();
         return false;
       }
 
-      if (kDebugMode) log("🔄 Attempting to refresh access token...");
-      if (kDebugMode) log("Refresh token: ${refreshToken.substring(0, 20)}...");
-
       final response = await _dio.post(
         ApiEndpoint.refreshToken,
-        data: {'refreshToken': refreshToken},
+        data: {
+          "refresh_token": refreshToken,
+        },
         options: Options(
           headers: {'Content-Type': 'application/json'},
           validateStatus: (status) => true,
         ),
       );
 
-      log("Refresh token response status: ${response.statusCode}");
+      log("Refresh response status: ${response.statusCode}");
 
       if (response.statusCode == 200 && response.data != null) {
-        final newAccessToken = response.data['accessToken'];
-        final newRefreshToken = response.data['refreshToken'];
+        final newAccessToken = response.data['access_token'];
 
-        if (newAccessToken != null) {
+        if (newAccessToken != null && newAccessToken.toString().isNotEmpty) {
           await SecureStorage.storeAccessToken(newAccessToken);
-          log("✅ New access token stored");
-
-          if (newRefreshToken != null) {
-            await SecureStorage.storeRefreshToken(newRefreshToken);
-            log("✅ New refresh token stored");
-          }
-
-          log("✅ Access token refreshed successfully");
+          log("Access token refreshed successfully");
           return true;
-        } else {
-          log("❌ No access token in refresh response");
         }
-      } else if (response.statusCode == 401 || response.statusCode == 403) {
-        // Refresh token is genuinely expired/invalid - must logout
-        log("❌ Refresh token expired (status: ${response.statusCode})");
+
+        log("No access token found in refresh response");
         await _handleTokenRefreshFailure();
-        return false;
-      } else {
-        // Server error (500, 503, etc.) - don't clear tokens, just fail gracefully
-        log("❌ Token refresh server error. Status: ${response.statusCode}");
-        log("Response data: ${response.data}");
-        log("Not clearing tokens - server may be temporarily unavailable");
         return false;
       }
 
-      // No access token in 200 response (unexpected) - don't force logout
-      log("❌ Unexpected refresh response format - not clearing tokens");
+      if (response.statusCode == 401 || response.statusCode == 403) {
+        log("Refresh token expired or invalid");
+        await _handleTokenRefreshFailure();
+        return false;
+      }
+
+      log("Refresh failed with status: ${response.statusCode}");
       return false;
-    } catch (e, stacktrace) {
-      // Network error (timeout, no internet, DNS failure) - don't clear tokens!
-      log('❌ Token refresh network error: $e');
-      log('Stacktrace: $stacktrace');
-      log('Not clearing tokens - network may be temporarily unavailable');
+    } catch (e) {
+      log("Refresh token error: $e");
       return false;
     }
   }

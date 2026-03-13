@@ -5,7 +5,7 @@ import 'package:safety_management/utils/app_styles.dart';
 import 'package:safety_management/utils/validators.dart';
 import 'package:safety_management/view/dashboard_screen.dart';
 import 'package:safety_management/view/sign_up_screen.dart';
-import '../controller/login_controller.dart';
+import '../controller/auth/auth_controller.dart';
 import '../utils/app_size.dart';
 import '../utils/screen_size.dart';
 
