@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
 
+
         scaffoldMessengerKey: NotifySnackBar.scaffoldMessengerKey,
 
         home: const SplashScreen(),
