@@ -7,16 +7,17 @@ enum SnackBarType { Success, Fail }
 
 class NotifySnackBar {
   static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
-      GlobalKey<ScaffoldMessengerState>();
+  GlobalKey<ScaffoldMessengerState>();
 
   static void show(String message, [SnackBarType? type = SnackBarType.Fail]) {
+    scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
     scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
-        backgroundColor: type == SnackBarType.Success
-            ? Colors.green
-            : Colors.red,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor:
+        type == SnackBarType.Success ? Colors.green : Colors.red,
         content: AnimatedSnackBarText(message: message, type: type),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -26,10 +27,14 @@ class AnimatedSnackBarText extends StatefulWidget {
   final String message;
   final SnackBarType? type;
 
-  const AnimatedSnackBarText({super.key, required this.message, this.type});
+  const AnimatedSnackBarText({
+    super.key,
+    required this.message,
+    this.type,
+  });
 
   @override
-  _AnimatedSnackBarTextState createState() => _AnimatedSnackBarTextState();
+  State<AnimatedSnackBarText> createState() => _AnimatedSnackBarTextState();
 }
 
 class _AnimatedSnackBarTextState extends State<AnimatedSnackBarText>
@@ -74,25 +79,26 @@ class _AnimatedSnackBarTextState extends State<AnimatedSnackBarText>
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    final icon = widget.type == SnackBarType.Success
+        ? Icons.check_circle_outline
+        : Icons.error_outline;
+
     return SlideTransition(
       position: _slideAnimation,
       child: SizedBox(
         width: double.infinity,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: width * 0.001,
           children: [
-            if (widget.type == SnackBarType.Fail)
-              FadeTransition(
-                opacity: _iconFadeAnimation,
-                child: Icon(
-                  Icons.error_outline,
-                  color: AppColors.white,
-                  size: 20,
-                ),
+            FadeTransition(
+              opacity: _iconFadeAnimation,
+              child: Icon(
+                icon,
+                color: AppColors.white,
+                size: 20,
               ),
-            if (widget.type == SnackBarType.Fail) const SizedBox(width: 5),
+            ),
+            const SizedBox(width: 6),
             Expanded(
               child: FadeTransition(
                 opacity: _textFadeAnimation,
@@ -103,8 +109,6 @@ class _AnimatedSnackBarTextState extends State<AnimatedSnackBarText>
                     fontWeight: FontWeight.w500,
                     color: AppColors.white,
                   ),
-                  maxLines: null,
-                  overflow: TextOverflow.visible,
                 ),
               ),
             ),
