@@ -15,8 +15,6 @@ class ProfileScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: AppSizes.space18),
-      
-            // ── Profile Header ───────────────────────────────
             Center(
               child: Column(
                 children: [
@@ -152,8 +150,7 @@ class ProfileScreen extends StatelessWidget {
             ),
       
             SizedBox(height: AppSizes.space20),
-      
-            // ── Account Section ──────────────────────────────
+
             _SectionHeader(label: 'Account'),
             _MenuCard(
               items: [
@@ -177,8 +174,7 @@ class ProfileScreen extends StatelessWidget {
             ),
       
             const SizedBox(height: 20),
-      
-            // ── Preferences Section ──────────────────────────
+
             _SectionHeader(label: 'Preferences'),
             _MenuCard(
               items: [
@@ -212,7 +208,6 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-// ── Section header label ─────────────────────────────────────
 class _SectionHeader extends StatelessWidget {
   final String label;
   const _SectionHeader({required this.label});
@@ -233,7 +228,6 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-// ── White card containing menu rows ─────────────────────────
 class _MenuCard extends StatelessWidget {
   final List<_MenuItem> items;
   const _MenuCard({required this.items});
@@ -258,7 +252,6 @@ class _MenuCard extends StatelessWidget {
   }
 }
 
-// ── Individual menu row ──────────────────────────────────────
 class _MenuItem extends StatelessWidget {
   final IconData icon;
   final String label;

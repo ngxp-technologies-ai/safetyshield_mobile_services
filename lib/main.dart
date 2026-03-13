@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:safety_management/utils/notify_snackbar.dart';
 import 'package:safety_management/view/splash_screen.dart';
+
+import 'controller/login_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,8 +14,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AuthController())],
+
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SplashScreen());
+
+        scaffoldMessengerKey: NotifySnackBar.scaffoldMessengerKey,
+
+        home: const SplashScreen(),
+      ),
+    );
   }
 }
