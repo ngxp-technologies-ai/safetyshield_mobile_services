@@ -94,9 +94,9 @@ class _MyCrewScreenState extends State<MyCrewScreen> {
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: controller.searchController.text.isNotEmpty
                         ? IconButton(
-                      onPressed: controller.clearSearch,
-                      icon: const Icon(Icons.close),
-                    )
+                            onPressed: controller.clearSearch,
+                            icon: const Icon(Icons.close),
+                          )
                         : null,
                     filled: true,
                     fillColor: AppColors.white,
@@ -117,42 +117,41 @@ class _MyCrewScreenState extends State<MyCrewScreen> {
                     ? const Center(child: CircularProgressIndicator())
                     : controller.workers.isEmpty
                     ? Center(
-                  child: Text(
-                    "No crew members found",
-                    style: AppStyles.poppins(
-                      fontSize: AppSizes.fs13,
-                      color: AppColors.grey,
-                    ),
-                  ),
-                )
-                    : RefreshIndicator(
-                  onRefresh: () => controller.fetchMyCrew(
-                    search: controller.searchController.text.trim().isEmpty
-                        ? null
-                        : controller.searchController.text.trim(),
-                  ),
-                  child: ListView.separated(
-                    padding: EdgeInsets.fromLTRB(
-                      AppSizes.w(12),
-                      AppSizes.h(6),
-                      AppSizes.w(12),
-                      AppSizes.h(16),
-                    ),
-                    itemCount: controller.workers.length,
-                    separatorBuilder: (_, __) =>
-                        SizedBox(height: AppSizes.h(10)),
-                    itemBuilder: (context, index) {
-                      final member = controller.workers[index];
-                      return CrewMemberCard(
-                        member: member,
-                        onTap: () => _showCrewDetailsBottomSheet(
-                          context,
-                          member,
+                        child: Text(
+                          "No crew members found",
+                          style: AppStyles.poppins(
+                            fontSize: AppSizes.fs13,
+                            color: AppColors.grey,
+                          ),
                         ),
-                      );
-                    },
-                  ),
-                ),
+                      )
+                    : RefreshIndicator(
+                        onRefresh: () => controller.fetchMyCrew(
+                          search:
+                              controller.searchController.text.trim().isEmpty
+                              ? null
+                              : controller.searchController.text.trim(),
+                        ),
+                        child: ListView.separated(
+                          padding: EdgeInsets.fromLTRB(
+                            AppSizes.w(12),
+                            AppSizes.h(6),
+                            AppSizes.w(12),
+                            AppSizes.h(16),
+                          ),
+                          itemCount: controller.workers.length,
+                          separatorBuilder: (_, __) =>
+                              SizedBox(height: AppSizes.h(10)),
+                          itemBuilder: (context, index) {
+                            final member = controller.workers[index];
+                            return CrewMemberCard(
+                              member: member,
+                              onTap: () =>
+                                  _showCrewDetailsBottomSheet(context, member),
+                            );
+                          },
+                        ),
+                      ),
               ),
             ],
           ),
@@ -162,9 +161,9 @@ class _MyCrewScreenState extends State<MyCrewScreen> {
   }
 
   void _showCrewDetailsBottomSheet(
-      BuildContext context,
-      CrewWorkerModel member,
-      ) {
+    BuildContext context,
+    CrewWorkerModel member,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -178,11 +177,7 @@ class CrewMemberCard extends StatelessWidget {
   final CrewWorkerModel member;
   final VoidCallback onTap;
 
-  const CrewMemberCard({
-    super.key,
-    required this.member,
-    required this.onTap,
-  });
+  const CrewMemberCard({super.key, required this.member, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -270,8 +265,12 @@ class CrewMemberCard extends StatelessWidget {
                                 _InfoItem(
                                   icon: Icons.health_and_safety_outlined,
                                   text: member.ppeCompliance ?? "Unknown",
-                                  textColor: _ppeTextColor(member.ppeCompliance),
-                                  iconColor: _ppeTextColor(member.ppeCompliance),
+                                  textColor: _ppeTextColor(
+                                    member.ppeCompliance,
+                                  ),
+                                  iconColor: _ppeTextColor(
+                                    member.ppeCompliance,
+                                  ),
                                 ),
                               ],
                             ),
@@ -399,10 +398,7 @@ class CrewMemberCard extends StatelessWidget {
 class CrewDetailsBottomSheet extends StatelessWidget {
   final CrewWorkerModel member;
 
-  const CrewDetailsBottomSheet({
-    super.key,
-    required this.member,
-  });
+  const CrewDetailsBottomSheet({super.key, required this.member});
 
   @override
   Widget build(BuildContext context) {
@@ -676,20 +672,13 @@ class _SectionHeader extends StatelessWidget {
   final IconData icon;
   final String title;
 
-  const _SectionHeader({
-    required this.icon,
-    required this.title,
-  });
+  const _SectionHeader({required this.icon, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          icon,
-          size: AppSizes.w(15),
-          color: const Color(0xFF7B7B7B),
-        ),
+        Icon(icon, size: AppSizes.w(15), color: const Color(0xFF7B7B7B)),
         SizedBox(width: AppSizes.w(6)),
         Text(
           title,
@@ -709,11 +698,7 @@ class _CrewAvatar extends StatelessWidget {
   final double? size;
   final double? fontSize;
 
-  const _CrewAvatar({
-    required this.initials,
-    this.size,
-    this.fontSize,
-  });
+  const _CrewAvatar({required this.initials, this.size, this.fontSize});
 
   @override
   Widget build(BuildContext context) {
