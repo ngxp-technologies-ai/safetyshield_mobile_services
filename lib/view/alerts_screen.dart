@@ -116,7 +116,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                           child: Text(
                             tabs[index],
                             style: AppStyles.poppins(
-                              fontSize: AppSizes.fs14,
+                              fontSize: AppSizes.fs12,
                               fontWeight: isSelected
                                   ? FontWeight.w400
                                   : FontWeight.w400,
@@ -207,8 +207,8 @@ class AlertCard extends StatelessWidget {
                   children: [
                     //  Icon box 
                     Container(
-                      width: AppSizes.w(46),
-                      height: AppSizes.w(46),
+                      width: AppSizes.w(40),
+                      height: AppSizes.w(40),
                       decoration: BoxDecoration(
                         color:
                             (isCritical
@@ -220,8 +220,8 @@ class AlertCard extends StatelessWidget {
                       child: Center(
                         child: Image.asset(
                           'assets/icons/Frame not.png',
-                          width: AppSizes.w(22),
-                          height: AppSizes.w(22),
+                          width: AppSizes.w(20),
+                          height: AppSizes.w(20),
                           color: isCritical
                               ? AppColors.error
                               : AppColors.activeOrange,
@@ -248,17 +248,15 @@ class AlertCard extends StatelessWidget {
                           // Title with chevron
                           Row(
                             children: [
-                              Expanded(
-                                child: Text(
-                                  item.violationTitle,
-                                  style: AppStyles.poppins(
-                                    fontSize: AppSizes.fs14,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColors.black,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                              Text(
+                                item.violationTitle,
+                                style: AppStyles.poppins(
+                                  fontSize: AppSizes.fs12,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppColors.black,
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Icon(
                                 Icons.chevron_right,
@@ -384,7 +382,7 @@ class AlertCard extends StatelessWidget {
                 ),
                 child: SizedBox(
                   width: double.infinity,
-                  height: AppSizes.h(44),
+                  height: AppSizes.h(40),
                   child: ElevatedButton.icon(
                     onPressed: isAcknowledged ? null : onAcknowledge,
                     icon: Icon(
