@@ -54,8 +54,8 @@ class AuthRepository {
   }
 
   Future<RefreshTokenResponseModel> refreshAccessToken(
-      RefreshTokenRequestModel request,
-      ) async {
+    RefreshTokenRequestModel request,
+  ) async {
     try {
       final response = await _apiProvider.post(
         ApiEndpoint.refreshToken,

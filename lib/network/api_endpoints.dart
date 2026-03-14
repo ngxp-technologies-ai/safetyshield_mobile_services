@@ -5,4 +5,8 @@ class ApiEndpoint {
   static const String login = "/api/auth/login";
 
   static const String getMyCrew = "/api/supervisor/my-crew";
+  static const String alertStats = "/api/alerts/stats";
+  static const String activeAlerts = "/api/alerts/active";
+  static const String acknowledgedAlerts = "/api/alerts/acknowledged";
+  static String acknowledgeAlert(int id) => "/api/alerts/$id/acknowledge";
 }

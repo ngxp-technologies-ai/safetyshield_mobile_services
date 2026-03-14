@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       context,
       MaterialPageRoute(
         builder: (_) =>
-        isLoggedIn ? const DashboardScreen() : const WelcomeScreen(),
+            isLoggedIn ? const DashboardScreen() : const WelcomeScreen(),
       ),
     );
   }
@@ -39,12 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: Image.asset(
-          'assets/icons/sa_logo.png',
-          height: 120,
-        ),
-      ),
+      body: Center(child: Image.asset('assets/icons/sa_logo.png', height: 120)),
     );
   }
 }

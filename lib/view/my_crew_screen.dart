@@ -473,7 +473,7 @@ class CrewDetailsBottomSheet extends StatelessWidget {
                               ),
                               SizedBox(height: AppSizes.h(2)),
                               Text(
-                                "${member.designation ?? 'Not Available'} • ${member.department ?? 'Not Available'}",
+                                "${member.designation ?? 'Not Available'}  ${member.department ?? 'Not Available'}",
                                 style: AppStyles.poppins(
                                   fontSize: AppSizes.fs11,
                                   fontWeight: FontWeight.w400,

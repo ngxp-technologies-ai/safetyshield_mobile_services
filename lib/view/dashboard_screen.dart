@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safety_management/common_widgets/common_widgets.dart';
-// ← ADD THIS IMPORT
+//  ADD THIS IMPORT
 import 'package:safety_management/utils/app_colors.dart';
 import 'package:safety_management/view/camera.dart';
 import 'package:safety_management/view/profile.dart';
@@ -13,6 +13,9 @@ import '../utils/app_styles.dart';
 import '../utils/screen_size.dart';
 import 'alerts_screen.dart';
 import 'login_screen.dart';
+import '../controller/alert/alert_controller.dart';
+import '../controller/alert/alert_stats_controller.dart';
+import '../controller/crew/my_crew_controller.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -26,10 +29,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
   bool _hasAlerts = true;
 
-  // ── Pages mapped to each tab ────────────────────────────────
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AlertStatsController>().fetchAlertStats();
+      context.read<MyCrewController>().fetchMyCrew();
+    });
+  }
+
+  //  Pages mapped to each tab 
   List<Widget> get _pages => [
     const _HomeTab(),
-    const AlertsScreen(),                          // ← REAL ALERTS SCREEN
+    const AlertsScreen(), //  REAL ALERTS SCREEN
     const CameraScreen(),
     const ZoneMapScreen(),
     const ProfileScreen(),
@@ -50,14 +62,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  String? get _appBarSubtitle {
+  String? _appBarSubtitle(BuildContext context) {
+    final alertStats = context.read<AlertStatsController>().stats;
     switch (_currentIndex) {
       case 1:
-        return '14 Today • 5 Active';
+        return '${alertStats.activeAlerts} Active  ${alertStats.criticalCount} Critical';
       case 2:
-        return '8 cameras • 4 with alerts';
+        return '8 cameras  4 with alerts';
       case 3:
-        return 'Metro line 3 • Station B4';
+        return 'Metro line 3  Station B4';
       default:
         return null;
     }
@@ -68,7 +81,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 2:
         return [
           IconButton(
-            icon: Icon(Icons.search, color: AppColors.black, size:  AppSizes.spaceMedium),
+            icon: Icon(
+              Icons.search,
+              color: AppColors.black,
+              size: AppSizes.spaceMedium,
+            ),
             onPressed: () {},
           ),
         ];
@@ -164,9 +181,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (_) => const LoginScreen()),
-          (route) => false,
+      (route) => false,
     );
   }
+
   Widget? get _appBarLeading {
     if (_currentIndex == 4) {
       return IconButton(
@@ -187,7 +205,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       drawer: const SafetyShieldDrawer(),
       appBar: SafetyShieldAppBar(
         title: _appBarTitle,
-        subtitle: _appBarSubtitle,
+        subtitle: _appBarSubtitle(context),
         actions: _appBarActions,
         leading: _appBarLeading,
         onMenuTap: () => _scaffoldKey.currentState?.openDrawer(),
@@ -200,7 +218,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         onTabChanged: (index) {
           setState(() {
             _currentIndex = index;
-            if (index == 2) _hasAlerts = false;
+            if (index == 1) {
+              // Alerts tab
+              _hasAlerts = false;
+              context.read<AlertController>().fetchActiveAlerts();
+              context.read<AlertStatsController>().fetchAlertStats();
+            }
           });
         },
       ),
@@ -208,7 +231,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-// ── Rest of your existing widgets below (unchanged) ─────────────
+//  Rest of your existing widgets below (unchanged) 
 
 class _GoodMorningSection extends StatelessWidget {
   const _GoodMorningSection();
@@ -237,7 +260,7 @@ class _GoodMorningSection extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: AppSizes.space6),
-                  Text("☀️", style: TextStyle(fontSize: AppSizes.fs16)),
+                  Text("", style: TextStyle(fontSize: AppSizes.fs16)),
                 ],
               ),
               Container(
@@ -272,11 +295,18 @@ class _GoodMorningSection extends StatelessWidget {
           SizedBox(height: AppSizes.space6),
           Row(
             children: [
-              Icon(Icons.person_outline, size: AppSizes.w(14), color: Colors.grey),
+              Icon(
+                Icons.person_outline,
+                size: AppSizes.w(14),
+                color: Colors.grey,
+              ),
               SizedBox(width: AppSizes.space6),
               Text(
                 "Jacob Santos",
-                style: AppStyles.poppins(fontSize: AppSizes.fs12, color: Colors.grey),
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs12,
+                  color: Colors.grey,
+                ),
               ),
             ],
           ),
@@ -297,7 +327,10 @@ class _GoodMorningSection extends StatelessWidget {
                   children: [
                     Text(
                       "Assigned Site",
-                      style: AppStyles.poppins(fontSize: AppSizes.fs11, color: Colors.grey),
+                      style: AppStyles.poppins(
+                        fontSize: AppSizes.fs11,
+                        color: Colors.grey,
+                      ),
                     ),
                     SizedBox(height: AppSizes.space4),
                     Text(
@@ -320,7 +353,10 @@ class _GoodMorningSection extends StatelessWidget {
                   ),
                   child: Text(
                     "online since: 07:00",
-                    style: AppStyles.poppins(fontSize: AppSizes.fs11, color: Colors.grey),
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs11,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ],
@@ -337,29 +373,37 @@ class _StatsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: const [
-        _StatCard(icon: "assets/images/crew_icon.png", title: "Crew", value: "29"),
-        _StatCard(
-          icon: "assets/images/alert_icon.png",
-          title: "Alert",
-          value: "5",
-          iconColor: Colors.red,
-        ),
-        _StatCard(
-          icon: "assets/images/camera_icon.png",
-          title: "Camera",
-          value: "4",
-          showGreenDot: true,
-        ),
-        _StatCard(
-          icon: "assets/images/warning_icon.png",
-          title: "Escalation",
-          value: "1",
-          iconColor: Colors.orange,
-        ),
-      ],
+    return Consumer2<MyCrewController, AlertStatsController>(
+      builder: (context, crewController, alertStatsController, _) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _StatCard(
+              icon: "assets/images/crew_icon.png",
+              title: "Crew",
+              value: "${crewController.total}",
+            ),
+            _StatCard(
+              icon: "assets/images/alert_icon.png",
+              title: "Alert",
+              value: "${alertStatsController.stats.activeAlerts}",
+              iconColor: Colors.red,
+            ),
+            _StatCard(
+              icon: "assets/images/camera_icon.png",
+              title: "Camera",
+              value: "4",
+              showGreenDot: true,
+            ),
+            _StatCard(
+              icon: "assets/images/warning_icon.png",
+              title: "Critical",
+              value: "${alertStatsController.stats.criticalCount}",
+              iconColor: Colors.orange,
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -412,11 +456,17 @@ class _StatCard extends StatelessWidget {
           ),
           Text(
             title,
-            style: AppStyles.poppins(fontSize: AppSizes.fs11, color: Colors.black45),
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs11,
+              color: Colors.black45,
+            ),
           ),
           Text(
             value,
-            style: AppStyles.poppins(fontSize: AppSizes.fs14, fontWeight: FontWeight.w600),
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs14,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ],
       ),
@@ -453,7 +503,10 @@ class _HomeTab extends StatelessWidget {
                   SizedBox(width: AppSizes.space6),
                   Text(
                     "4 zones",
-                    style: AppStyles.poppins(fontSize: AppSizes.fs12, color: Colors.grey),
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs12,
+                      color: Colors.grey,
+                    ),
                   ),
                 ],
               ),
@@ -555,7 +608,10 @@ class _ZoneCard extends StatelessWidget {
             children: [
               Image.asset("assets/images/location_icon.png", height: 22),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: statusColor,
                   borderRadius: BorderRadius.circular(20),
@@ -572,8 +628,14 @@ class _ZoneCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          Text(title, style: AppStyles.poppins(fontWeight: FontWeight.w500, fontSize: 14)),
-          Text(zone, style: AppStyles.poppins(color: Colors.grey, fontSize: 12)),
+          Text(
+            title,
+            style: AppStyles.poppins(fontWeight: FontWeight.w500, fontSize: 14),
+          ),
+          Text(
+            zone,
+            style: AppStyles.poppins(color: Colors.grey, fontSize: 12),
+          ),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -582,14 +644,20 @@ class _ZoneCard extends StatelessWidget {
                 children: [
                   Image.asset("assets/images/crew_icon.png", height: 14),
                   const SizedBox(width: 4),
-                  Text("$crew", style: AppStyles.poppins(fontSize: AppSizes.fs10)),
+                  Text(
+                    "$crew",
+                    style: AppStyles.poppins(fontSize: AppSizes.fs10),
+                  ),
                 ],
               ),
               Row(
                 children: [
                   Image.asset("assets/images/alert_icon.png", height: 14),
                   const SizedBox(width: 4),
-                  Text("$alerts", style: AppStyles.poppins(fontSize: AppSizes.fs12)),
+                  Text(
+                    "$alerts",
+                    style: AppStyles.poppins(fontSize: AppSizes.fs12),
+                  ),
                 ],
               ),
             ],
@@ -629,7 +697,10 @@ class _TotalMetricsHeader extends StatelessWidget {
       children: [
         Text(
           "Total Metrics",
-          style: AppStyles.poppins(fontSize: AppSizes.fs14, fontWeight: FontWeight.w600),
+          style: AppStyles.poppins(
+            fontSize: AppSizes.fs14,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         Text(
           "View All",
@@ -675,7 +746,7 @@ class _MetricsCardsRow extends StatelessWidget {
                   icon: Icons.access_time_rounded,
                   value: '2m 34s',
                   label: 'Avg Ack time',
-                  footer: '↓ 18%',
+                  footer: ' 18%',
                   footerColor: Color(0xFF2DB468),
                 ),
               ),
@@ -695,44 +766,49 @@ class _MetricsCardsRow extends StatelessWidget {
       );
     }
 
-    return const Row(
-      children: [
-        Expanded(
-          child: _MetricCard(
-            iconBg: Color(0xFFFFE5E8),
-            iconColor: Color(0xFFFF6B6B),
-            icon: Icons.notifications_none_rounded,
-            value: '14',
-            label: 'Total Alerts',
-            footer: '3 Critical',
-            footerColor: Color(0xFFE53935),
-          ),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: _MetricCard(
-            iconBg: Color(0xFFE3F7EA),
-            iconColor: Color(0xFF39C67A),
-            icon: Icons.access_time_rounded,
-            value: '2m 34s',
-            label: 'Avg Ack time',
-            footer: '↓ 18%',
-            footerColor: Color(0xFF2DB468),
-          ),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: _MetricCard(
-            iconBg: Color(0xFFFFF3D8),
-            iconColor: Color(0xFFE0B100),
-            icon: Icons.warning_amber_rounded,
-            value: '1',
-            label: 'Escalation',
-            footer: '5 Prevented',
-            footerColor: Color(0xFF13A8E8),
-          ),
-        ),
-      ],
+    return Consumer<AlertStatsController>(
+      builder: (context, alertStatsController, _) {
+        final stats = alertStatsController.stats;
+        return Row(
+          children: [
+            Expanded(
+              child: _MetricCard(
+                iconBg: const Color(0xFFFFE5E8),
+                iconColor: const Color(0xFFFF6B6B),
+                icon: Icons.notifications_none_rounded,
+                value: "${stats.activeAlerts}",
+                label: 'Total Alerts',
+                footer: '${stats.criticalCount} Critical',
+                footerColor: const Color(0xFFE53935),
+              ),
+            ),
+            const SizedBox(width: 10),
+            const Expanded(
+              child: _MetricCard(
+                iconBg: Color(0xFFE3F7EA),
+                iconColor: Color(0xFF39C67A),
+                icon: Icons.access_time_rounded,
+                value: '2m 34s',
+                label: 'Avg Ack time',
+                footer: ' 18%',
+                footerColor: Color(0xFF2DB468),
+              ),
+            ),
+            const SizedBox(width: 10),
+            const Expanded(
+              child: _MetricCard(
+                iconBg: Color(0xFFFFF3D8),
+                iconColor: Color(0xFFE0B100),
+                icon: Icons.warning_amber_rounded,
+                value: '1',
+                label: 'Critical',
+                footer: '5 Prevented',
+                footerColor: Color(0xFF13A8E8),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -796,7 +872,10 @@ class _MetricCard extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppStyles.poppins(fontSize: AppSizes.fs11, color: AppColors.grey),
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs11,
+              color: AppColors.grey,
+            ),
           ),
           Text(
             footer,
@@ -874,7 +953,10 @@ class _LegendDot extends StatelessWidget {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 6),
-        Text(label, style: const TextStyle(fontSize: 12.5, color: Color(0xFF666666))),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 12.5, color: Color(0xFF666666)),
+        ),
       ],
     );
   }
@@ -936,31 +1018,48 @@ class _TrendChartPainter extends CustomPainter {
     final redValues = [4.0, 5.8, 5.5, 7.1, 8.0, 4.2, 6.1, 7.8, 7.0];
 
     final bluePath = _smoothPath(
-      values: blueValues, width: chartWidth, height: chartHeight,
-      leftPad: leftPad, topPad: topPad, maxValue: 16,
+      values: blueValues,
+      width: chartWidth,
+      height: chartHeight,
+      leftPad: leftPad,
+      topPad: topPad,
+      maxValue: 16,
     );
     final redPath = _smoothPath(
-      values: redValues, width: chartWidth, height: chartHeight,
-      leftPad: leftPad, topPad: topPad, maxValue: 16,
+      values: redValues,
+      width: chartWidth,
+      height: chartHeight,
+      leftPad: leftPad,
+      topPad: topPad,
+      maxValue: 16,
     );
 
-    canvas.drawPath(bluePath, Paint()
-      ..color = const Color(0xFF109DE6)
-      ..strokeWidth = 2.2
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round);
+    canvas.drawPath(
+      bluePath,
+      Paint()
+        ..color = const Color(0xFF109DE6)
+        ..strokeWidth = 2.2
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round,
+    );
 
-    canvas.drawPath(redPath, Paint()
-      ..color = const Color(0xFFFF5D5D)
-      ..strokeWidth = 2.2
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round);
+    canvas.drawPath(
+      redPath,
+      Paint()
+        ..color = const Color(0xFFFF5D5D)
+        ..strokeWidth = 2.2
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round,
+    );
   }
 
   Path _smoothPath({
     required List<double> values,
-    required double width, required double height,
-    required double leftPad, required double topPad, required double maxValue,
+    required double width,
+    required double height,
+    required double leftPad,
+    required double topPad,
+    required double maxValue,
   }) {
     final path = Path();
     final points = <Offset>[];
@@ -1008,7 +1107,11 @@ class _AiInsightCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.auto_awesome, size: 16, color: Color(0xFF0EA5E9)),
+                  const Icon(
+                    Icons.auto_awesome,
+                    size: 16,
+                    color: Color(0xFF0EA5E9),
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     'AI Insight',
@@ -1029,7 +1132,9 @@ class _AiInsightCard extends StatelessWidget {
                     color: const Color(0xFF5B5B5B),
                   ),
                   children: [
-                    const TextSpan(text: 'High PPE non-compliance trend detected near '),
+                    const TextSpan(
+                      text: 'High PPE non-compliance trend detected near ',
+                    ),
                     TextSpan(
                       text: 'Scaffolding Zone',
                       style: AppStyles.poppins(
@@ -1040,7 +1145,8 @@ class _AiInsightCard extends StatelessWidget {
                       ),
                     ),
                     const TextSpan(
-                      text: '. 3 helmet violations in the last 45 minutes. Consider a toolbox talk.',
+                      text:
+                          '. 3 helmet violations in the last 45 minutes. Consider a toolbox talk.',
                     ),
                   ],
                 ),
@@ -1048,7 +1154,10 @@ class _AiInsightCard extends StatelessWidget {
               const SizedBox(height: 14),
               const Row(
                 children: [
-                  _InsightTag(text: 'PPE Compliance', bgColor: Color(0xFF6CC3E8)),
+                  _InsightTag(
+                    text: 'PPE Compliance',
+                    bgColor: Color(0xFF6CC3E8),
+                  ),
                   SizedBox(width: 8),
                   _InsightTag(text: 'Zone B', bgColor: Color(0xFFF7A53A)),
                 ],
@@ -1071,10 +1180,17 @@ class _InsightTag extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-      decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(18)),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(18),
+      ),
       child: Text(
         text,
-        style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
@@ -1089,11 +1205,21 @@ class _SparklePatternPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final points = <Offset>[
-      const Offset(20, 18), const Offset(72, 22), const Offset(128, 18),
-      const Offset(184, 20), const Offset(240, 18), const Offset(35, 64),
-      const Offset(95, 72), const Offset(154, 68), const Offset(214, 72),
-      const Offset(268, 66), const Offset(18, 112), const Offset(78, 118),
-      const Offset(136, 112), const Offset(198, 118), const Offset(254, 110),
+      const Offset(20, 18),
+      const Offset(72, 22),
+      const Offset(128, 18),
+      const Offset(184, 20),
+      const Offset(240, 18),
+      const Offset(35, 64),
+      const Offset(95, 72),
+      const Offset(154, 68),
+      const Offset(214, 72),
+      const Offset(268, 66),
+      const Offset(18, 112),
+      const Offset(78, 118),
+      const Offset(136, 112),
+      const Offset(198, 118),
+      const Offset(254, 110),
     ];
 
     for (final p in points) {
@@ -1104,22 +1230,18 @@ class _SparklePatternPainter extends CustomPainter {
   void _drawSparkle(Canvas canvas, Offset c, Paint paint) {
     canvas.drawLine(Offset(c.dx - 5, c.dy), Offset(c.dx + 5, c.dy), paint);
     canvas.drawLine(Offset(c.dx, c.dy - 5), Offset(c.dx, c.dy + 5), paint);
-    canvas.drawLine(Offset(c.dx - 3.5, c.dy - 3.5), Offset(c.dx + 3.5, c.dy + 3.5), paint);
-    canvas.drawLine(Offset(c.dx - 3.5, c.dy + 3.5), Offset(c.dx + 3.5, c.dy - 3.5), paint);
+    canvas.drawLine(
+      Offset(c.dx - 3.5, c.dy - 3.5),
+      Offset(c.dx + 3.5, c.dy + 3.5),
+      paint,
+    );
+    canvas.drawLine(
+      Offset(c.dx - 3.5, c.dy + 3.5),
+      Offset(c.dx + 3.5, c.dy - 3.5),
+      paint,
+    );
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-class _PlaceholderTab extends StatelessWidget {
-  final String label;
-  const _PlaceholderTab({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(label, style: const TextStyle(fontSize: 20, color: Colors.grey)),
-    );
-  }
 }

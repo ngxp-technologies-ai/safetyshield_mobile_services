@@ -6,7 +6,8 @@ class AppSizes {
   static double get screenHeight => ScreenSize.height;
 
   static double w(double value) => screenWidth * (value / 375); // design width
-  static double h(double value) => screenHeight * (value / 812); // design height
+  static double h(double value) =>
+      screenHeight * (value / 812); // design height
 
   /// Radius
   static double get radiusSmall => w(10);

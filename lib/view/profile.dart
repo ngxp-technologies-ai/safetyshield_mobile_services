@@ -37,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-      
+
                   // Name
                   Text(
                     'Jacob Santos',
@@ -48,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: AppSizes.space4),
-      
+
                   // Role + Zones
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +80,7 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: AppSizes.space12),
-      
+
                   // On Shift + Edit profile row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -88,7 +88,9 @@ class ProfileScreen extends StatelessWidget {
                       // On Shift badge
                       Container(
                         padding: EdgeInsets.symmetric(
-                            horizontal: AppSizes.cardPadding, vertical: 6),
+                          horizontal: AppSizes.cardPadding,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xFFDFF6E9),
                           borderRadius: BorderRadius.circular(20),
@@ -114,18 +116,22 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: AppSizes.space10),
-      
+
                       // Edit profile button
                       GestureDetector(
                         onTap: () {},
                         child: Container(
                           padding: EdgeInsets.symmetric(
-                              horizontal: AppSizes.cardPadding, vertical: 6),
+                            horizontal: AppSizes.cardPadding,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.greyLight,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                                color: AppColors.greyLight, width: 1),
+                              color: AppColors.greyLight,
+                              width: 1,
+                            ),
                           ),
                           child: Row(
                             children: [
@@ -137,8 +143,11 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(width: AppSizes.space4),
-                              const Icon(Icons.edit_outlined,
-                                  size: 14, color: AppColors.grey),
+                              const Icon(
+                                Icons.edit_outlined,
+                                size: 14,
+                                color: AppColors.grey,
+                              ),
                             ],
                           ),
                         ),
@@ -148,7 +157,7 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-      
+
             SizedBox(height: AppSizes.space20),
 
             _SectionHeader(label: 'Account'),
@@ -172,7 +181,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ],
             ),
-      
+
             const SizedBox(height: 20),
 
             _SectionHeader(label: 'Preferences'),
@@ -199,7 +208,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ],
             ),
-      
+
             const SizedBox(height: 32),
           ],
         ),
@@ -215,7 +224,10 @@ class _SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppSizes.pagePadding, vertical: 6),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSizes.pagePadding,
+        vertical: 6,
+      ),
       child: Text(
         label,
         style: AppStyles.poppins(
@@ -275,7 +287,10 @@ class _MenuItem extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(14),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppSizes.pagePadding, vertical: 14),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSizes.pagePadding,
+              vertical: 14,
+            ),
             child: Row(
               children: [
                 // Icon box
@@ -286,7 +301,11 @@ class _MenuItem extends StatelessWidget {
                     color: const Color(0xFFF2F4F7),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(icon, size: AppSizes.smallIconBox, color: AppColors.black),
+                  child: Icon(
+                    icon,
+                    size: AppSizes.smallIconBox,
+                    color: AppColors.black,
+                  ),
                 ),
                 SizedBox(width: AppSizes.space12),
 
@@ -312,8 +331,11 @@ class _MenuItem extends StatelessWidget {
                     ),
                   ),
                 ],
-                Icon(Icons.chevron_right,
-                    size: AppSizes.smallIconBox, color: AppColors.grey),
+                Icon(
+                  Icons.chevron_right,
+                  size: AppSizes.smallIconBox,
+                  color: AppColors.grey,
+                ),
               ],
             ),
           ),

@@ -1,29 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:safety_management/utils/app_colors.dart';
 import 'package:safety_management/utils/app_styles.dart';
+import '../utils/notify_snackbar.dart';
 import '../utils/app_size.dart';
+import '../controller/alert/alert_stats_controller.dart';
 
-class AlertItem {
-  final String title;
-  final String zone;
-  final String camera;
-  final String status;
-  String state;
-  final String escalationTime;
-  final String timeAgo;
-  final double progress;
-
-  AlertItem({
-    required this.title,
-    required this.zone,
-    required this.camera,
-    required this.status,
-    required this.state,
-    required this.escalationTime,
-    required this.timeAgo,
-    required this.progress,
-  });
-}
+import '../model/alert/alert_model.dart';
+import '../controller/alert/alert_controller.dart';
 
 class AlertsScreen extends StatefulWidget {
   const AlertsScreen({super.key});
@@ -35,185 +19,163 @@ class AlertsScreen extends StatefulWidget {
 class _AlertsScreenState extends State<AlertsScreen> {
   int _selectedTabIndex = 0;
 
-  final List<AlertItem> _allAlerts = [
-    AlertItem(
-      title: 'No Helmet Detected',
-      zone: 'Zone B — Scaffolding',
-      camera: 'CAM-B2',
-      status: 'Critical',
-      state: 'Active',
-      escalationTime: '48s',
-      timeAgo: '2m ago',
-      progress: 0.3,
-    ),
-    AlertItem(
-      title: 'Unauthorized Entry',
-      zone: 'Zone C — Crane Ops',
-      camera: 'CAM-C1',
-      status: 'Critical',
-      state: 'Active',
-      escalationTime: '2m 12s',
-      timeAgo: '6m ago',
-      progress: 0.6,
-    ),
-    AlertItem(
-      title: 'Missing Safety Harness',
-      zone: 'Zone C — Crane Ops',
-      camera: 'CAM-C1',
-      status: 'Warning',
-      state: 'Active',
-      escalationTime: '4m 12s',
-      timeAgo: '6m ago',
-      progress: 0.8,
-    ),
-    AlertItem(
-      title: 'Fire Smoke Detected',
-      zone: 'Zone A — Storage',
-      camera: 'CAM-A1',
-      status: 'Critical',
-      state: 'Active',
-      escalationTime: '0s',
-      timeAgo: '1m ago',
-      progress: 1.0,
-    ),
-    AlertItem(
-      title: 'Restricted Area Access',
-      zone: 'Zone D — Electrical',
-      camera: 'CAM-D4',
-      status: 'Critical',
-      state: 'Active',
-      escalationTime: '10s',
-      timeAgo: '30s ago',
-      progress: 0.9,
-    ),
-  ];
-
-  List<AlertItem> get _filteredAlerts {
-    final stateFilter = _tabs[_selectedTabIndex].split('(')[0];
-    return _allAlerts.where((a) => a.state == stateFilter).toList();
+  @override
+  void initState() {
+    super.initState();
   }
 
-  List<String> get _tabs {
-    int activeCount = _allAlerts.where((a) => a.state == 'Active').length;
-    int ackCount = _allAlerts.where((a) => a.state == 'Acknowledged').length;
+  List<AlertModel> _getFilteredAlerts(AlertController controller) {
+    if (_selectedTabIndex == 0) {
+      return controller.activeAlerts;
+    } else if (_selectedTabIndex == 1) {
+      return controller.activeAlerts
+          .where((a) => a.severity.toLowerCase() == 'critical')
+          .toList();
+    } else if (_selectedTabIndex == 2) {
+      return controller.acknowledgedAlerts;
+    }
+    return [];
+  }
+
+  List<String> _getTabs(int activeCount, int ackCount, int criticalCount) {
     return [
       'Active($activeCount)',
+      'Critical($criticalCount)',
       'Acknowledged($ackCount)',
-      'Escalated',
-      'Resolved',
     ];
   }
 
-  void _acknowledgeAlert(AlertItem item) {
-    setState(() {
-      item.state = 'Acknowledged';
-      _selectedTabIndex = 1;
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${item.title} acknowledged'),
-        backgroundColor: AppColors.primary,
-        duration: const Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
+  void _onTabTapped(int index, AlertController alertController) {
+    setState(() => _selectedTabIndex = index);
+    if (index == 2) {
+      alertController.fetchAcknowledgedAlerts();
+    } else {
+      alertController.fetchActiveAlerts(showLoader: false);
+    }
+  }
+
+  void _acknowledgeAlert(AlertModel item, AlertController alertController) async {
+    await alertController.acknowledgeAlert(item.id);
+    NotifySnackBar.show(
+      'Alert acknowledged successfully',
+      SnackBarType.Success,
     );
+    // Refresh stats to update tab counts and app bar subtitle
+    if (mounted) {
+      context.read<AlertStatsController>().fetchAlertStats();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final alerts = _filteredAlerts;
+    return Consumer<AlertController>(
+      builder: (context, alertController, _) {
+        final alerts = _getFilteredAlerts(alertController);
 
-    return Column(
-      children: [
-        // ── Tab Bar ──────────────────────────────────────────
-        Container(
-          height: AppSizes.h(48),
-          decoration: const BoxDecoration(
-            color: AppColors.white,
-            border: Border(
-              bottom: BorderSide(color: AppColors.greyLight, width: 1),
-            ),
-          ),
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: _tabs.length,
-            padding: EdgeInsets.symmetric(horizontal: AppSizes.pagePadding),
-            itemBuilder: (context, index) {
-              final isSelected = _selectedTabIndex == index;
-              return GestureDetector(
-                onTap: () => setState(() => _selectedTabIndex = index),
-                child: Container(
-                  margin: EdgeInsets.only(right: AppSizes.space24),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: isSelected
-                        ? const Border(
-                      bottom: BorderSide(
-                        color: AppColors.primary,
-                        width: 2,
-                      ),
-                    )
-                        : null,
-                  ),
-                  child: Text(
-                    _tabs[index],
-                    style: AppStyles.poppins(
-                      fontSize: AppSizes.fs14,
-                      fontWeight:
-                      isSelected ? FontWeight.w400 : FontWeight.w400,
-                      color: isSelected ? AppColors.black : AppColors.grey,
+        return Column(
+          children: [
+            //  Tab Bar 
+            Consumer<AlertStatsController>(
+              builder: (context, alertStats, _) {
+                final tabs = _getTabs(
+                  alertStats.stats.activeAlerts,
+                  alertStats.stats.acknowledgedToday,
+                  alertStats.stats.criticalCount,
+                );
+                return Container(
+                  height: AppSizes.h(48),
+                  decoration: const BoxDecoration(
+                    color: AppColors.white,
+                    border: Border(
+                      bottom: BorderSide(color: AppColors.greyLight, width: 1),
                     ),
                   ),
-                ),
-              );
-            },
-          ),
-        ),
-
-        // ── Alert List ───────────────────────────────────────
-        Expanded(
-          child: alerts.isEmpty
-              ? Center(
-            child: Text(
-              'No alerts in this category',
-              style: AppStyles.poppins(color: AppColors.grey),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: tabs.length,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppSizes.pagePadding,
+                    ),
+                    itemBuilder: (context, index) {
+                      final isSelected = _selectedTabIndex == index;
+                      return GestureDetector(
+                        onTap: () => _onTabTapped(index, alertController),
+                        child: Container(
+                          margin: EdgeInsets.only(right: AppSizes.space24),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: isSelected
+                                ? const Border(
+                                    bottom: BorderSide(
+                                      color: AppColors.primary,
+                                      width: 2,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          child: Text(
+                            tabs[index],
+                            style: AppStyles.poppins(
+                              fontSize: AppSizes.fs14,
+                              fontWeight: isSelected
+                                  ? FontWeight.w400
+                                  : FontWeight.w400,
+                              color: isSelected
+                                  ? AppColors.black
+                                  : AppColors.grey,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
             ),
-          )
-              : ListView.builder(
-            padding: EdgeInsets.all(AppSizes.pagePadding),
-            itemCount: alerts.length,
-            itemBuilder: (context, index) {
-              final item = alerts[index];
-              return Padding(
-                padding: EdgeInsets.only(bottom: AppSizes.space16),
-                child: AlertCard(
-                  item: item,
-                  onAcknowledge: () => _acknowledgeAlert(item),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+
+            //  Alert List 
+            Expanded(
+              child: alertController.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : alerts.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No alerts in this category',
+                        style: AppStyles.poppins(color: AppColors.grey),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: EdgeInsets.all(AppSizes.pagePadding),
+                      itemCount: alerts.length,
+                      itemBuilder: (context, index) {
+                        final item = alerts[index];
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: AppSizes.space16),
+                          child: AlertCard(
+                            item: item,
+                            onAcknowledge: () => _acknowledgeAlert(item, alertController),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
 class AlertCard extends StatelessWidget {
-  final AlertItem item;
+  final AlertModel item;
   final VoidCallback onAcknowledge;
 
-  const AlertCard({
-    super.key,
-    required this.item,
-    required this.onAcknowledge,
-  });
+  const AlertCard({super.key, required this.item, required this.onAcknowledge});
 
   @override
   Widget build(BuildContext context) {
-    final isCritical = item.status.toLowerCase() == 'critical';
-    final isAcknowledged = item.state == 'Acknowledged';
+    final isCritical = item.severity.toLowerCase() == 'critical';
+    final isAcknowledged = item.isAcknowledged;
 
     return Stack(
       children: [
@@ -232,22 +194,27 @@ class AlertCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              // ── Header row ──────────────────────────────────
+              //  Header row 
               Padding(
                 padding: EdgeInsets.fromLTRB(
-                    AppSizes.w(16), AppSizes.h(16), AppSizes.w(76), AppSizes.h(10)),
+                  AppSizes.w(16),
+                  AppSizes.h(16),
+                  AppSizes.w(76),
+                  AppSizes.h(10),
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
-                    // ── Icon box ─────────────────────────────
+                    //  Icon box 
                     Container(
                       width: AppSizes.w(46),
                       height: AppSizes.w(46),
                       decoration: BoxDecoration(
-                        color: (isCritical ? AppColors.error : AppColors.activeOrange)
-                            .withOpacity(0.08),
+                        color:
+                            (isCritical
+                                    ? AppColors.error
+                                    : AppColors.activeOrange)
+                                .withOpacity(0.08),
                         borderRadius: BorderRadius.circular(AppSizes.w(10)),
                       ),
                       child: Center(
@@ -259,7 +226,9 @@ class AlertCard extends StatelessWidget {
                               ? AppColors.error
                               : AppColors.activeOrange,
                           errorBuilder: (_, __, ___) => Icon(
-                            Icons.notifications_none,
+                            item.severity.toLowerCase() == 'critical'
+                                ? Icons.notifications_none
+                                : Icons.warning_amber_rounded,
                             color: isCritical
                                 ? AppColors.error
                                 : AppColors.activeOrange,
@@ -271,18 +240,17 @@ class AlertCard extends StatelessWidget {
 
                     SizedBox(width: AppSizes.w(14)),
 
-                    // ── Title + Zone + Camera ────────────────
+                    //  Title + Zone + Camera 
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
                           // Title with chevron
                           Row(
                             children: [
                               Expanded(
                                 child: Text(
-                                  item.title,
+                                  item.violationTitle,
                                   style: AppStyles.poppins(
                                     fontSize: AppSizes.fs14,
                                     fontWeight: FontWeight.w500,
@@ -301,7 +269,7 @@ class AlertCard extends StatelessWidget {
                           ),
                           SizedBox(height: AppSizes.h(5)),
 
-                          // Zone
+                          // Zone (Using camera_id as fallback)
                           Row(
                             children: [
                               Image.asset(
@@ -317,7 +285,7 @@ class AlertCard extends StatelessWidget {
                               ),
                               SizedBox(width: AppSizes.w(5)),
                               Text(
-                                item.zone,
+                                "Site 1", // Assuming Site 1 for now
                                 style: AppStyles.poppins(
                                   color: AppColors.grey,
                                   fontSize: AppSizes.fs12,
@@ -337,7 +305,7 @@ class AlertCard extends StatelessWidget {
                               ),
                               SizedBox(width: AppSizes.w(5)),
                               Text(
-                                item.camera,
+                                item.cameraId,
                                 style: AppStyles.poppins(
                                   color: AppColors.grey,
                                   fontSize: AppSizes.fs12,
@@ -352,14 +320,14 @@ class AlertCard extends StatelessWidget {
                 ),
               ),
 
-              // ── Escalation + Time ────────────────────────
+              //  Escalation + Time 
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSizes.w(16)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Escalates in ${item.escalationTime}',
+                      'Confidence: ${(item.confidence * 100).toStringAsFixed(1)}%',
                       style: AppStyles.poppins(
                         color: AppColors.grey900,
                         fontSize: AppSizes.fs14,
@@ -375,7 +343,7 @@ class AlertCard extends StatelessWidget {
                         ),
                         SizedBox(width: AppSizes.w(3)),
                         Text(
-                          item.timeAgo,
+                          item.timestamp.split('T').last.substring(0, 5),
                           style: AppStyles.poppins(
                             color: AppColors.grey,
                             fontSize: AppSizes.fs12,
@@ -388,13 +356,13 @@ class AlertCard extends StatelessWidget {
               ),
               SizedBox(height: AppSizes.h(10)),
 
-              // ── Progress Bar ─────────────────────────────
+              //  Progress Bar 
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSizes.w(16)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: LinearProgressIndicator(
-                    value: item.progress,
+                    value: item.confidence,
                     backgroundColor: const Color(0xFFE8EDF2),
                     valueColor: AlwaysStoppedAnimation<Color>(
                       isCritical ? AppColors.error : AppColors.warning,
@@ -406,10 +374,14 @@ class AlertCard extends StatelessWidget {
               ),
               SizedBox(height: AppSizes.h(14)),
 
-              // ── Acknowledge Button ───────────────────────
+              //  Acknowledge Button 
               Padding(
                 padding: EdgeInsets.fromLTRB(
-                    AppSizes.w(16), 0, AppSizes.w(16), AppSizes.h(16)),
+                  AppSizes.w(16),
+                  0,
+                  AppSizes.w(16),
+                  AppSizes.h(16),
+                ),
                 child: SizedBox(
                   width: double.infinity,
                   height: AppSizes.h(44),
@@ -425,8 +397,9 @@ class AlertCard extends StatelessWidget {
                       isAcknowledged ? 'Acknowledged' : 'Acknowledge',
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                      isAcknowledged ? AppColors.grey : AppColors.primary,
+                      backgroundColor: isAcknowledged
+                          ? AppColors.grey
+                          : AppColors.primary,
                       foregroundColor: AppColors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -445,13 +418,15 @@ class AlertCard extends StatelessWidget {
           ),
         ),
 
-        // ── Status Badge ─────────────────────────────────────
+        //  Status Badge 
         Positioned(
           top: 0,
           right: 0,
           child: Container(
             padding: EdgeInsets.symmetric(
-                horizontal: AppSizes.w(10), vertical: AppSizes.h(6)),
+              horizontal: AppSizes.w(10),
+              vertical: AppSizes.h(6),
+            ),
             decoration: BoxDecoration(
               color: isCritical
                   ? AppColors.error.withOpacity(0.1)
@@ -462,7 +437,7 @@ class AlertCard extends StatelessWidget {
               ),
             ),
             child: Text(
-              item.status,
+              item.severity.toUpperCase(),
               style: AppStyles.poppins(
                 color: isCritical ? AppColors.error : AppColors.warning,
                 fontSize: AppSizes.fs12,

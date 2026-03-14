@@ -30,18 +30,78 @@ class _CameraScreenState extends State<CameraScreen> {
   int _selectedTab = 0;
 
   final List<CameraItem> _allCameras = const [
-    CameraItem(id: 'CAM-A1', zone: 'Zone A — Foundation', isLive: true,  alertCount: 0),
-    CameraItem(id: 'CAM-A2', zone: 'Zone A — Foundation', isLive: true,  alertCount: 0),
-    CameraItem(id: 'CAM-A3', zone: 'Zone A — Foundation', isLive: true,  alertCount: 2),
-    CameraItem(id: 'CAM-A4', zone: 'Zone A — Foundation', isLive: true,  alertCount: 1),
-    CameraItem(id: 'CAM-B1', zone: 'Zone B — Scaffolding', isLive: true, alertCount: 1),
-    CameraItem(id: 'CAM-B2', zone: 'Zone B — Scaffolding', isLive: true, alertCount: 0),
-    CameraItem(id: 'CAM-C1', zone: 'Zone C — Crane Ops',  isLive: true,  alertCount: 0),
-    CameraItem(id: 'CAM-C2', zone: 'Zone C — Crane Ops',  isLive: false, alertCount: 0),
-    CameraItem(id: 'CAM-D1', zone: 'Zone D — Storage',    isLive: true,  alertCount: 0),
-    CameraItem(id: 'CAM-D2', zone: 'Zone D — Storage',    isLive: true,  alertCount: 0),
-    CameraItem(id: 'CAM-D3', zone: 'Zone D — Storage',    isLive: true,  alertCount: 0),
-    CameraItem(id: 'CAM-D4', zone: 'Zone D — Electrical', isLive: true,  alertCount: 1),
+    CameraItem(
+      id: 'CAM-A1',
+      zone: 'Zone A  Foundation',
+      isLive: true,
+      alertCount: 0,
+    ),
+    CameraItem(
+      id: 'CAM-A2',
+      zone: 'Zone A  Foundation',
+      isLive: true,
+      alertCount: 0,
+    ),
+    CameraItem(
+      id: 'CAM-A3',
+      zone: 'Zone A  Foundation',
+      isLive: true,
+      alertCount: 2,
+    ),
+    CameraItem(
+      id: 'CAM-A4',
+      zone: 'Zone A  Foundation',
+      isLive: true,
+      alertCount: 1,
+    ),
+    CameraItem(
+      id: 'CAM-B1',
+      zone: 'Zone B  Scaffolding',
+      isLive: true,
+      alertCount: 1,
+    ),
+    CameraItem(
+      id: 'CAM-B2',
+      zone: 'Zone B  Scaffolding',
+      isLive: true,
+      alertCount: 0,
+    ),
+    CameraItem(
+      id: 'CAM-C1',
+      zone: 'Zone C  Crane Ops',
+      isLive: true,
+      alertCount: 0,
+    ),
+    CameraItem(
+      id: 'CAM-C2',
+      zone: 'Zone C  Crane Ops',
+      isLive: false,
+      alertCount: 0,
+    ),
+    CameraItem(
+      id: 'CAM-D1',
+      zone: 'Zone D  Storage',
+      isLive: true,
+      alertCount: 0,
+    ),
+    CameraItem(
+      id: 'CAM-D2',
+      zone: 'Zone D  Storage',
+      isLive: true,
+      alertCount: 0,
+    ),
+    CameraItem(
+      id: 'CAM-D3',
+      zone: 'Zone D  Storage',
+      isLive: true,
+      alertCount: 0,
+    ),
+    CameraItem(
+      id: 'CAM-D4',
+      zone: 'Zone D  Electrical',
+      isLive: true,
+      alertCount: 1,
+    ),
   ];
 
   List<CameraItem> get _activeCameras =>
@@ -64,7 +124,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
     return Column(
       children: [
-        // ── Tab Bar ──────────────────────────────────────────
+        //  Tab Bar 
         Container(
           height: 48,
           decoration: const BoxDecoration(
@@ -87,19 +147,20 @@ class _CameraScreenState extends State<CameraScreen> {
                   decoration: BoxDecoration(
                     border: isSelected
                         ? const Border(
-                      bottom: BorderSide(
-                        color: AppColors.primary,
-                        width: 2,
-                      ),
-                    )
+                            bottom: BorderSide(
+                              color: AppColors.primary,
+                              width: 2,
+                            ),
+                          )
                         : null,
                   ),
                   child: Text(
                     _tabs[index],
                     style: AppStyles.poppins(
                       fontSize: AppSizes.fs12,
-                      fontWeight:
-                      isSelected ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w400,
                       color: isSelected ? AppColors.black : AppColors.grey,
                     ),
                   ),
@@ -109,29 +170,28 @@ class _CameraScreenState extends State<CameraScreen> {
           ),
         ),
 
-        // ── Camera Grid ──────────────────────────────────────
+        //  Camera Grid 
         Expanded(
           child: cameras.isEmpty
               ? Center(
-            child: Text(
-              'No Cameras found',
-              style: AppStyles.poppins(color: AppColors.grey),
-            ),
-          )
+                  child: Text(
+                    'No Cameras found',
+                    style: AppStyles.poppins(color: AppColors.grey),
+                  ),
+                )
               : GridView.builder(
-            padding: EdgeInsets.all(AppSizes.cardPaddingLarge),
-            gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.85,
-            ),
-            itemCount: cameras.length,
-            itemBuilder: (context, index) {
-              return _CameraCard(camera: cameras[index]);
-            },
-          ),
+                  padding: EdgeInsets.all(AppSizes.cardPaddingLarge),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 0.85,
+                  ),
+                  itemCount: cameras.length,
+                  itemBuilder: (context, index) {
+                    return _CameraCard(camera: cameras[index]);
+                  },
+                ),
         ),
       ],
     );
@@ -166,7 +226,7 @@ class _CameraCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Thumbnail area ─────────────────────────────────
+          //  Thumbnail area 
           Expanded(
             child: Stack(
               children: [
@@ -181,21 +241,21 @@ class _CameraCard extends StatelessWidget {
                   ),
                   child: camera.thumbnailAsset != null
                       ? ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(10),
-                    ),
-                    child: Image.asset(
-                      camera.thumbnailAsset!,
-                      fit: BoxFit.cover,
-                    ),
-                  )
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(10),
+                          ),
+                          child: Image.asset(
+                            camera.thumbnailAsset!,
+                            fit: BoxFit.cover,
+                          ),
+                        )
                       : const Center(
-                    child: Icon(
-                      Icons.camera_alt_outlined,
-                      size: 36,
-                      color: Color(0xFFB0B7C3),
-                    ),
-                  ),
+                          child: Icon(
+                            Icons.camera_alt_outlined,
+                            size: 36,
+                            color: Color(0xFFB0B7C3),
+                          ),
+                        ),
                 ),
 
                 // Alert count badge (top-left)
@@ -265,7 +325,7 @@ class _CameraCard extends StatelessWidget {
             ),
           ),
 
-          // ── Camera info ────────────────────────────────────
+          //  Camera info 
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
             child: Column(

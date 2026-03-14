@@ -72,7 +72,8 @@ class WelcomeScreen extends StatelessWidget {
               /// Login Button
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: AppSizes.horizontalPadding),
+                  horizontal: AppSizes.horizontalPadding,
+                ),
                 child: SizedBox(
                   width: ScreenSize.width,
                   height: AppSizes.buttonHeight,
@@ -80,8 +81,7 @@ class WelcomeScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (_) => const LoginScreen()),
+                        MaterialPageRoute(builder: (_) => const LoginScreen()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -103,7 +103,8 @@ class WelcomeScreen extends StatelessWidget {
               /// Sign Up Button
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: AppSizes.horizontalPadding),
+                  horizontal: AppSizes.horizontalPadding,
+                ),
                 child: SizedBox(
                   width: ScreenSize.width,
                   height: AppSizes.buttonHeight,
@@ -111,9 +112,7 @@ class WelcomeScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => const SignUpScreen(),
-                        ),
+                        MaterialPageRoute(builder: (_) => const SignUpScreen()),
                       );
                     },
                     style: OutlinedButton.styleFrom(
@@ -135,7 +134,8 @@ class WelcomeScreen extends StatelessWidget {
               /// OR Divider
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: ScreenSize.width * 0.10),
+                  horizontal: ScreenSize.width * 0.10,
+                ),
                 child: const Row(
                   children: [
                     Expanded(child: Divider()),

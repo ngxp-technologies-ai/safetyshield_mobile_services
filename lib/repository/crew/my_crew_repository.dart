@@ -11,13 +11,11 @@ class MyCrewRepository {
       String endpoint = ApiEndpoint.getMyCrew;
 
       if (search != null && search.trim().isNotEmpty) {
-        endpoint = '$endpoint?search=${Uri.encodeQueryComponent(search.trim())}';
+        endpoint =
+            '$endpoint?search=${Uri.encodeQueryComponent(search.trim())}';
       }
 
-      final response = await _apiProvider.get(
-        endpoint,
-        requiresAuth: true,
-      );
+      final response = await _apiProvider.get(endpoint, requiresAuth: true);
 
       if (response == null) {
         throw Exception("No response from server");

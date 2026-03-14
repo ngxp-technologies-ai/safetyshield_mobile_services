@@ -1,5 +1,4 @@
 class AuthSessionModel {
-
   final String accessToken;
   final String refreshToken;
   final String role;
@@ -11,5 +10,4 @@ class AuthSessionModel {
     required this.role,
     required this.fullName,
   });
-
 }

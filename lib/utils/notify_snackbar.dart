@@ -7,15 +7,16 @@ enum SnackBarType { Success, Fail }
 
 class NotifySnackBar {
   static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
-  GlobalKey<ScaffoldMessengerState>();
+      GlobalKey<ScaffoldMessengerState>();
 
   static void show(String message, [SnackBarType? type = SnackBarType.Fail]) {
     scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
     scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        backgroundColor:
-        type == SnackBarType.Success ? Colors.green : Colors.red,
+        backgroundColor: type == SnackBarType.Success
+            ? Colors.green
+            : Colors.red,
         content: AnimatedSnackBarText(message: message, type: type),
         duration: const Duration(seconds: 2),
       ),
@@ -27,11 +28,7 @@ class AnimatedSnackBarText extends StatefulWidget {
   final String message;
   final SnackBarType? type;
 
-  const AnimatedSnackBarText({
-    super.key,
-    required this.message,
-    this.type,
-  });
+  const AnimatedSnackBarText({super.key, required this.message, this.type});
 
   @override
   State<AnimatedSnackBarText> createState() => _AnimatedSnackBarTextState();
@@ -92,11 +89,7 @@ class _AnimatedSnackBarTextState extends State<AnimatedSnackBarText>
           children: [
             FadeTransition(
               opacity: _iconFadeAnimation,
-              child: Icon(
-                icon,
-                color: AppColors.white,
-                size: 20,
-              ),
+              child: Icon(icon, color: AppColors.white, size: 20),
             ),
             const SizedBox(width: 6),
             Expanded(

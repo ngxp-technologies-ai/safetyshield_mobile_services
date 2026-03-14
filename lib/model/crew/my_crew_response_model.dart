@@ -2,10 +2,7 @@ class MyCrewResponseModel {
   final int total;
   final List<CrewWorkerModel> workers;
 
-  const MyCrewResponseModel({
-    required this.total,
-    required this.workers,
-  });
+  const MyCrewResponseModel({required this.total, required this.workers});
 
   factory MyCrewResponseModel.fromJson(Map<String, dynamic> json) {
     return MyCrewResponseModel(

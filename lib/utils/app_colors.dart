@@ -13,10 +13,10 @@ class AppColors {
   static const Color success = Color(0xFF2DB468); // Green
   static const Color warning = Color(0xFFF39C12); // Yellow / Orange
   static const Color activeOrange = Color(0xFFE67E22); // Orange
-  static const Color error = Color(0xFFE53935);// Red
-  static const Color errorLight = Color(0xFFFFCDD2);//light red
+  static const Color error = Color(0xFFE53935); // Red
+  static const Color errorLight = Color(0xFFFFCDD2); //light red
   static const Color errorMMLight = Color(0xFFFFEBEE);
-  static const Color errorMLight = Color(0xFFEF9A9A);//medium red
+  static const Color errorMLight = Color(0xFFEF9A9A); //medium red
   static const Color info = Color(0xFF4FC3F7); // Blue (light)
 
   /// Neutral / Greyscale

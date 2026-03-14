@@ -38,16 +38,10 @@ class UserSite {
   final int id;
   final String name;
 
-  const UserSite({
-    required this.id,
-    required this.name,
-  });
+  const UserSite({required this.id, required this.name});
 
   factory UserSite.fromJson(Map<String, dynamic> json) {
-    return UserSite(
-      id: json["id"] ?? 0,
-      name: json["name"] ?? "",
-    );
+    return UserSite(id: json["id"] ?? 0, name: json["name"] ?? "");
   }
 }
 
@@ -55,15 +49,9 @@ class UserZone {
   final int id;
   final String name;
 
-  const UserZone({
-    required this.id,
-    required this.name,
-  });
+  const UserZone({required this.id, required this.name});
 
   factory UserZone.fromJson(Map<String, dynamic> json) {
-    return UserZone(
-      id: json["id"] ?? 0,
-      name: json["name"] ?? "",
-    );
+    return UserZone(id: json["id"] ?? 0, name: json["name"] ?? "");
   }
 }

@@ -3,7 +3,8 @@ import 'package:safety_management/utils/app_colors.dart';
 import 'package:safety_management/utils/app_size.dart';
 import 'package:safety_management/utils/app_styles.dart';
 
-class SafetyShieldAppBar extends StatelessWidget implements PreferredSizeWidget {
+class SafetyShieldAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final String? title;
   final String? subtitle;
   final Widget? leading;
@@ -34,86 +35,89 @@ class SafetyShieldAppBar extends StatelessWidget implements PreferredSizeWidget 
       shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
 
-      // ── Leading: hamburger icon + Group.png avatar ──────────
+      //  Leading: hamburger icon + Group.png avatar 
       leadingWidth: 80,
-      leading: leading ??
+      leading:
+          leading ??
           IconButton(
             padding: EdgeInsets.zero,
             icon: Image.asset(
               'assets/icons/icon-park_hamburger-button.png',
               width: AppSizes.socialIcon,
-              height:  AppSizes.socialIcon,
-              errorBuilder: (_, __, ___) => const Icon(
-                Icons.sort,
-                color: AppColors.black,
-                size: 26,
-              ),
+              height: AppSizes.socialIcon,
+              errorBuilder: (_, __, ___) =>
+                  const Icon(Icons.sort, color: AppColors.black, size: 26),
             ),
             onPressed: onMenuTap ?? () => Scaffold.of(context).openDrawer(),
             tooltip: 'Menu',
           ),
 
-      // ── Title ───────────────────────────────────────────────
+      //  Title 
       title: title != null
           ? Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            title!,
-            style: AppStyles.poppins(
-              fontSize: AppSizes.fs15,
-              fontWeight: FontWeight.w500,
-              color: AppColors.black,
-            ),
-          ),
-          if (subtitle != null) ...[
-            const SizedBox(height: 1),
-            Text(
-              subtitle!,
-              style: AppStyles.poppins(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: AppColors.grey,
-              ),
-            ),
-          ],
-        ],
-      )
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title!,
+                  style: AppStyles.poppins(
+                    fontSize: AppSizes.fs15,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.black,
+                  ),
+                ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 1),
+                  Text(
+                    subtitle!,
+                    style: AppStyles.poppins(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.grey,
+                    ),
+                  ),
+                ],
+              ],
+            )
           : Image.asset(
-        'assets/icons/safety_appbar_logo.png',
-        height: 30,
-        fit: BoxFit.contain,
-      ),
+              'assets/icons/safety_appbar_logo.png',
+              height: 30,
+              fit: BoxFit.contain,
+            ),
 
       centerTitle: title == null,
       titleSpacing: 0,
 
-      // ── Actions ─────────────────────────────────────────────
-      actions: actions ??
+      //  Actions 
+      actions:
+          actions ??
           (onSearchTap != null
               ? [
-            IconButton(
-              icon: const Icon(Icons.search, color: AppColors.black, size: 26),
-              onPressed: onSearchTap,
-              tooltip: 'Search',
-            ),
-          ]
+                  IconButton(
+                    icon: const Icon(
+                      Icons.search,
+                      color: AppColors.black,
+                      size: 26,
+                    ),
+                    onPressed: onSearchTap,
+                    tooltip: 'Search',
+                  ),
+                ]
               : [const SizedBox(width: 8)]),
     );
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Helper — returns the correct AppBar for each tab index
-// ─────────────────────────────────────────────────────────────
+// 
+// Helper  returns the correct AppBar for each tab index
+// 
 
 SafetyShieldAppBar appBarForTab(
-    int index, {
-      VoidCallback? onSearchTap,
-      VoidCallback? onMenuTap,
-      VoidCallback? onProfileTap,
-    }) {
+  int index, {
+  VoidCallback? onSearchTap,
+  VoidCallback? onMenuTap,
+  VoidCallback? onProfileTap,
+}) {
   switch (index) {
     case 0:
       return SafetyShieldAppBar(
@@ -124,7 +128,7 @@ SafetyShieldAppBar appBarForTab(
     case 1:
       return SafetyShieldAppBar(
         title: 'Alerts',
-        subtitle: '14 Today • 5 Active',
+        subtitle: '14 Today  5 Active',
         onMenuTap: onMenuTap,
         onProfileTap: onProfileTap,
       );

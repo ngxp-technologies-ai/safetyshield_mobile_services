@@ -83,7 +83,8 @@ class LoginScreen extends StatelessWidget {
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined,
                             isPassword: authController.obscurePassword,
-                            onSuffixTap: authController.togglePasswordVisibility,
+                            onSuffixTap:
+                                authController.togglePasswordVisibility,
                             validator: Validators.validatePassword,
                             autoValidate: authController.autoValidate,
                             onChanged: (_) => authController.onFieldsChanged(),
@@ -128,44 +129,45 @@ class LoginScreen extends StatelessWidget {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF1F8FB5),
-                                disabledBackgroundColor:
-                                const Color(0xFF1F8FB5).withOpacity(0.5),
+                                disabledBackgroundColor: const Color(
+                                  0xFF1F8FB5,
+                                ).withOpacity(0.5),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
                               onPressed: authController.isLoginButtonEnabled
                                   ? () async {
-                                final success =
-                                await authController.login();
+                                      final success = await authController
+                                          .login();
 
-                                if (success && context.mounted) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                      const DashboardScreen(),
-                                    ),
-                                  );
-                                }
-                              }
+                                      if (success && context.mounted) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                const DashboardScreen(),
+                                          ),
+                                        );
+                                      }
+                                    }
                                   : null,
                               child: authController.isLoading
                                   ? const SizedBox(
-                                height: 22,
-                                width: 22,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  color: Colors.white,
-                                ),
-                              )
+                                      height: 22,
+                                      width: 22,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        color: Colors.white,
+                                      ),
+                                    )
                                   : Text(
-                                "Login",
-                                style: AppStyles.poppins(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                                      "Login",
+                                      style: AppStyles.poppins(
+                                        color: AppColors.white,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                             ),
                           ),
 
@@ -296,9 +298,9 @@ class LoginScreen extends StatelessWidget {
         prefixIcon: Icon(prefixIcon, color: AppColors.grey),
         suffixIcon: suffixIcon != null
             ? IconButton(
-          onPressed: onSuffixTap,
-          icon: Icon(suffixIcon, color: AppColors.grey),
-        )
+                onPressed: onSuffixTap,
+                icon: Icon(suffixIcon, color: AppColors.grey),
+              )
             : null,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),

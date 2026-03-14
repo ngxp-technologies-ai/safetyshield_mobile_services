@@ -18,7 +18,7 @@ class SafetyShieldDrawer extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // ── Header Section ──────────────────────────────────
+          //  Header Section 
           SafeArea(
             bottom: false,
             child: Padding(
@@ -56,13 +56,16 @@ class SafetyShieldDrawer extends StatelessWidget {
           ),
           const Divider(height: 1, color: AppColors.greyLight),
 
-          // ── Main Menu Section ───────────────────────────────
+          //  Main Menu Section 
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 20),
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
                   child: Text(
                     'Main Menu',
                     style: AppStyles.poppins(
@@ -76,7 +79,10 @@ class SafetyShieldDrawer extends StatelessWidget {
                   icon: Icons.group_outlined,
                   label: 'My crew',
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => MyCrewScreen()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => MyCrewScreen()),
+                    );
                   },
                 ),
                 _DrawerItem(
@@ -108,7 +114,7 @@ class SafetyShieldDrawer extends StatelessWidget {
             ),
           ),
 
-          // ── Footer Section ──────────────────────────────────
+          //  Footer Section 
           Padding(
             padding: const EdgeInsets.only(bottom: 30),
             child: TextButton(
@@ -144,11 +150,7 @@ class _DrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-      leading: Icon(
-        icon,
-        color: AppColors.black,
-        size: 24,
-      ),
+      leading: Icon(icon, color: AppColors.black, size: 24),
       title: Text(
         label,
         style: AppStyles.poppins(

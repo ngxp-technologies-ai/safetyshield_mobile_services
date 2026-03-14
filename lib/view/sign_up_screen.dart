@@ -224,9 +224,9 @@ class SignUpScreen extends StatelessWidget {
       ),
       style: AppStyles.poppins(
         fontSize: AppSizes.fs12,
-      color: AppColors.grey,
-      fontWeight: FontWeight.w400,
-    ),
+        color: AppColors.grey,
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 }

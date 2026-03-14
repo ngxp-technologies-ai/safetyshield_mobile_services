@@ -62,8 +62,6 @@ class SafetyShieldBottomNavBar extends StatelessWidget {
                 onTap: () => onTabChanged(3),
               ),
 
-
-
               _NavItem(
                 iconAsset: 'assets/icons/user_outlined.png',
                 isActive: currentIndex == 4,
@@ -131,27 +129,56 @@ class _NavItem extends StatelessWidget {
         child: SizedBox(
           width: iconSize,
           height: iconSize,
-          child: Image.asset(
-            iconAsset,
-            fit: BoxFit.contain,
-          ),
+          child: Image.asset(iconAsset, fit: BoxFit.contain),
         ),
       ),
     );
   }
 
   static const List<double> _blueMatrix = [
-    0,0,0,0,31,
-    0,0,0,0,143,
-    0,0,0,0,181,
-    0,0,0,1,0,
+    0,
+    0,
+    0,
+    0,
+    31,
+    0,
+    0,
+    0,
+    0,
+    143,
+    0,
+    0,
+    0,
+    0,
+    181,
+    0,
+    0,
+    0,
+    1,
+    0,
   ];
 
   static const List<double> _greyMatrix = [
-    0,0,0,0,170,
-    0,0,0,0,170,
-    0,0,0,0,170,
-    0,0,0,1,0,
+    0,
+    0,
+    0,
+    0,
+    170,
+    0,
+    0,
+    0,
+    0,
+    170,
+    0,
+    0,
+    0,
+    0,
+    170,
+    0,
+    0,
+    0,
+    1,
+    0,
   ];
 }
 

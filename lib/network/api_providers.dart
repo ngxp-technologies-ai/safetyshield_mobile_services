@@ -12,7 +12,8 @@ import '../view/login_screen.dart';
 class ApiProvider {
   static final ApiProvider _instance = ApiProvider._internal();
   late Dio _dio;
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   // Token refresh lock to prevent concurrent refresh attempts
   bool _isRefreshing = false;
@@ -97,7 +98,8 @@ class ApiProvider {
 
               if (token != null && token.isNotEmpty) {
                 options.headers['Authorization'] = 'Bearer $token';
-                options.headers[_retryKey] = true; // Mark as retried to prevent loops
+                options.headers[_retryKey] =
+                    true; // Mark as retried to prevent loops
 
                 try {
                   final response = await _dio.fetch(options);
@@ -159,9 +161,7 @@ class ApiProvider {
 
       final response = await _dio.post(
         ApiEndpoint.refreshToken,
-        data: {
-          "refresh_token": refreshToken,
-        },
+        data: {"refresh_token": refreshToken},
         options: Options(
           headers: {'Content-Type': 'application/json'},
           validateStatus: (status) => true,
@@ -235,7 +235,7 @@ class ApiProvider {
     if (navigatorKey.currentState != null) {
       navigatorKey.currentState!.pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => LoginScreen()),
-            (route) => false,
+        (route) => false,
       );
     }
 
@@ -247,10 +247,10 @@ class ApiProvider {
 
   /// Perform a PUT request
   Future<dynamic> put(
-      String apiEndpoint, {
-        required dynamic body,
-        bool requiresAuth = false,
-      }) async {
+    String apiEndpoint, {
+    required dynamic body,
+    bool requiresAuth = false,
+  }) async {
     if (!await isConnectedToInternet()) {
       log("No internet connection");
       return null;
@@ -280,12 +280,16 @@ class ApiProvider {
     } on DioException catch (e) {
       // Handle 401 errors - they should be caught by interceptor
       if (e.response?.statusCode == 401) {
-        log('401 error caught in PUT - should have been handled by interceptor');
+        log(
+          '401 error caught in PUT - should have been handled by interceptor',
+        );
         throw e;
       }
       // Rethrow client errors (4xx) so callers can extract the error message
-      if (e.response != null && e.response!.statusCode != null &&
-          e.response!.statusCode! >= 400 && e.response!.statusCode! < 500) {
+      if (e.response != null &&
+          e.response!.statusCode != null &&
+          e.response!.statusCode! >= 400 &&
+          e.response!.statusCode! < 500) {
         log('PUT client error ${e.response!.statusCode}: ${e.response!.data}');
         rethrow;
       }
@@ -301,10 +305,10 @@ class ApiProvider {
 
   /// Perform a GET request
   Future<dynamic> get(
-      String apiEndpoint, {
-        bool requiresAuth = false,
-        Duration? receiveTimeout,
-      }) async {
+    String apiEndpoint, {
+    bool requiresAuth = false,
+    Duration? receiveTimeout,
+  }) async {
     if (!await isConnectedToInternet()) {
       log("No internet connection");
       return null;
@@ -332,7 +336,9 @@ class ApiProvider {
     } on DioException catch (e) {
       // Handle 401 errors - they should be caught by interceptor
       if (e.response?.statusCode == 401) {
-        log('401 error caught in GET - should have been handled by interceptor');
+        log(
+          '401 error caught in GET - should have been handled by interceptor',
+        );
         throw e;
       }
       log('GET request failed: $e');
@@ -347,12 +353,12 @@ class ApiProvider {
 
   /// Perform a POST request
   Future<dynamic> post(
-      String apiEndpoint, {
-        required dynamic body,
-        bool requiresAuth = false,
-        Duration? sendTimeout,
-        Duration? receiveTimeout,
-      }) async {
+    String apiEndpoint, {
+    required dynamic body,
+    bool requiresAuth = false,
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
+  }) async {
     if (!await isConnectedToInternet()) {
       log("No internet connection");
       return null;
@@ -382,14 +388,20 @@ class ApiProvider {
     } on DioException catch (e) {
       // Handle 401 errors - they should be caught by interceptor
       if (e.response?.statusCode == 401) {
-        log('401 error caught in POST - should have been handled by interceptor');
+        log(
+          '401 error caught in POST - should have been handled by interceptor',
+        );
         throw e;
       }
       // Return 400/409 response data so callers can extract error messages
-      if (e.response != null && e.response!.statusCode != null &&
-          e.response!.statusCode! >= 400 && e.response!.statusCode! < 500 &&
+      if (e.response != null &&
+          e.response!.statusCode != null &&
+          e.response!.statusCode! >= 400 &&
+          e.response!.statusCode! < 500 &&
           e.response!.data != null) {
-        log('${e.response!.statusCode} Response from DioException: ${e.response!.data}');
+        log(
+          '${e.response!.statusCode} Response from DioException: ${e.response!.data}',
+        );
         return e.response!.data;
       }
       log('POST request failed: $e');
@@ -404,14 +416,14 @@ class ApiProvider {
 
   /// Perform a POST request with FormData (multipart)
   Future<dynamic> postFormData(
-      String apiEndpoint, {
-        required FormData formData,
-        bool requiresAuth = false,
-        void Function(int, int)? onSendProgress,
-        void Function(int, int)? onReceiveProgress,
-        Duration? sendTimeout,
-        Duration? receiveTimeout,
-      }) async {
+    String apiEndpoint, {
+    required FormData formData,
+    bool requiresAuth = false,
+    void Function(int, int)? onSendProgress,
+    void Function(int, int)? onReceiveProgress,
+    Duration? sendTimeout,
+    Duration? receiveTimeout,
+  }) async {
     if (!await isConnectedToInternet()) {
       log("No internet connection");
       return null;
@@ -457,10 +469,10 @@ class ApiProvider {
 
   /// Perform a PUT request with FormData (multipart)
   Future<dynamic> putFormData(
-      String apiEndpoint, {
-        required FormData formData,
-        bool requiresAuth = false,
-      }) async {
+    String apiEndpoint, {
+    required FormData formData,
+    bool requiresAuth = false,
+  }) async {
     if (!await isConnectedToInternet()) {
       log("No internet connection");
       return null;
@@ -476,10 +488,13 @@ class ApiProvider {
         options: Options(headers: headers, validateStatus: (status) => true),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 204) {
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
         return response.data ?? {};
       } else if (response.statusCode != null &&
-          response.statusCode! >= 400 && response.statusCode! < 500) {
+          response.statusCode! >= 400 &&
+          response.statusCode! < 500) {
         log("${response.statusCode} Response: ${response.data}");
         throw DioException(
           requestOptions: response.requestOptions,
@@ -502,9 +517,9 @@ class ApiProvider {
 
   /// Perform a DELETE request
   Future<dynamic> delete(
-      String apiEndpoint, {
-        bool requiresAuth = false,
-      }) async {
+    String apiEndpoint, {
+    bool requiresAuth = false,
+  }) async {
     if (!await isConnectedToInternet()) {
       log("No internet connection");
       return null;
@@ -531,14 +546,20 @@ class ApiProvider {
     } on DioException catch (e) {
       // Handle 401 errors - they should be caught by interceptor
       if (e.response?.statusCode == 401) {
-        log('401 error caught in DELETE - should have been handled by interceptor');
+        log(
+          '401 error caught in DELETE - should have been handled by interceptor',
+        );
         throw e;
       }
       // Return 400/409 response data so callers can extract error messages
-      if (e.response != null && e.response!.statusCode != null &&
-          e.response!.statusCode! >= 400 && e.response!.statusCode! < 500 &&
+      if (e.response != null &&
+          e.response!.statusCode != null &&
+          e.response!.statusCode! >= 400 &&
+          e.response!.statusCode! < 500 &&
           e.response!.data != null) {
-        log('${e.response!.statusCode} Response from DioException: ${e.response!.data}');
+        log(
+          '${e.response!.statusCode} Response from DioException: ${e.response!.data}',
+        );
         return e.response!.data;
       }
       log('DELETE request failed: $e');
