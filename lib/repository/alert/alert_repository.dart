@@ -6,7 +6,7 @@ import 'package:safety_management/network/api_providers.dart';
 
 class AlertRepository {
   final ApiProvider _apiProvider = ApiProvider();
-//get alert stats count of active and acknowledged alerts
+  //get alert stats count of active and acknowledged alerts
   Future<AlertStatsModel> getAlertStats() async {
     try {
       final response = await _apiProvider.get(
@@ -31,7 +31,8 @@ class AlertRepository {
       throw Exception("Unable to fetch alert stats");
     }
   }
-//get list of active alerts and acknowledged alerts with pagination
+
+  //get list of active alerts and acknowledged alerts with pagination
   Future<List<AlertModel>> getActiveAlerts({
     int skip = 0,
     int limit = 50,
@@ -61,7 +62,8 @@ class AlertRepository {
       throw Exception("Unable to fetch active alerts");
     }
   }
-//get list of acknowledged alerts with pagination
+
+  //get list of acknowledged alerts with pagination
   Future<List<AlertModel>> getAcknowledgedAlerts({
     int skip = 0,
     int limit = 50,
@@ -92,7 +94,7 @@ class AlertRepository {
     }
   }
 
-//acknowledge an alert by id
+  //acknowledge an alert by id
 
   Future<void> acknowledgeAlert(int id) async {
     try {

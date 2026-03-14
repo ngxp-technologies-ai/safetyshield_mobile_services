@@ -124,7 +124,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
     return Column(
       children: [
-        //  Tab Bar 
+        //  Tab Bar
         Container(
           height: 48,
           decoration: const BoxDecoration(
@@ -170,7 +170,7 @@ class _CameraScreenState extends State<CameraScreen> {
           ),
         ),
 
-        //  Camera Grid 
+        //  Camera Grid
         Expanded(
           child: cameras.isEmpty
               ? Center(
@@ -226,7 +226,7 @@ class _CameraCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //  Thumbnail area 
+          //  Thumbnail area
           Expanded(
             child: Stack(
               children: [
@@ -325,7 +325,7 @@ class _CameraCard extends StatelessWidget {
             ),
           ),
 
-          //  Camera info 
+          //  Camera info
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
             child: Column(

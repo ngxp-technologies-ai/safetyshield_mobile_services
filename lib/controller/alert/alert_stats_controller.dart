@@ -8,7 +8,7 @@ class AlertStatsController extends ChangeNotifier {
 
   bool isLoading = false;
   AlertStatsModel stats = AlertStatsModel.empty();
-//
+  //
   Future<void> fetchAlertStats({bool showLoader = true}) async {
     try {
       if (showLoader) {

@@ -19,7 +19,7 @@ class SafetyShieldDrawer extends StatelessWidget {
       ),
       child: Column(
         children: [
-          //  Header Section 
+          //  Header Section
           SafeArea(
             bottom: false,
             child: Padding(
@@ -57,7 +57,7 @@ class SafetyShieldDrawer extends StatelessWidget {
           ),
           const Divider(height: 1, color: AppColors.greyLight),
 
-          //  Main Menu Section 
+          //  Main Menu Section
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 20),
@@ -120,7 +120,7 @@ class SafetyShieldDrawer extends StatelessWidget {
             ),
           ),
 
-          //  Footer Section 
+          //  Footer Section
           Padding(
             padding: const EdgeInsets.only(bottom: 30),
             child: TextButton(

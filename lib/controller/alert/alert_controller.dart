@@ -9,7 +9,7 @@ class AlertController extends ChangeNotifier {
   bool isLoading = false;
   List<AlertModel> activeAlerts = [];
   List<AlertModel> acknowledgedAlerts = [];
-// Fetch the list of active alerts and update the state
+  // Fetch the list of active alerts and update the state
   Future<void> fetchActiveAlerts({bool showLoader = true}) async {
     try {
       if (showLoader) {
@@ -29,7 +29,8 @@ class AlertController extends ChangeNotifier {
       notifyListeners();
     }
   }
-// Fetch the list of acknowledged alerts and update the state
+
+  // Fetch the list of acknowledged alerts and update the state
   Future<void> fetchAcknowledgedAlerts({bool showLoader = true}) async {
     try {
       if (showLoader) {
@@ -49,7 +50,8 @@ class AlertController extends ChangeNotifier {
       notifyListeners();
     }
   }
-// Acknowledge an alert by its ID and refresh the active alerts list
+
+  // Acknowledge an alert by its ID and refresh the active alerts list
   Future<void> acknowledgeAlert(int id) async {
     try {
       await _repository.acknowledgeAlert(id);

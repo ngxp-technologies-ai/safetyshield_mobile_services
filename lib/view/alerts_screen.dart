@@ -54,7 +54,10 @@ class _AlertsScreenState extends State<AlertsScreen> {
     }
   }
 
-  void _acknowledgeAlert(AlertModel item, AlertController alertController) async {
+  void _acknowledgeAlert(
+    AlertModel item,
+    AlertController alertController,
+  ) async {
     await alertController.acknowledgeAlert(item.id);
     NotifySnackBar.show(
       'Alert acknowledged successfully',
@@ -74,7 +77,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
 
         return Column(
           children: [
-            //  Tab Bar 
+            //  Tab Bar
             Consumer<AlertStatsController>(
               builder: (context, alertStats, _) {
                 final tabs = _getTabs(
@@ -133,7 +136,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
               },
             ),
 
-            //  Alert List 
+            //  Alert List
             Expanded(
               child: alertController.isLoading
                   ? const Center(child: CircularProgressIndicator())
@@ -153,7 +156,8 @@ class _AlertsScreenState extends State<AlertsScreen> {
                           padding: EdgeInsets.only(bottom: AppSizes.space16),
                           child: AlertCard(
                             item: item,
-                            onAcknowledge: () => _acknowledgeAlert(item, alertController),
+                            onAcknowledge: () =>
+                                _acknowledgeAlert(item, alertController),
                           ),
                         );
                       },
@@ -194,7 +198,7 @@ class AlertCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //  Header row 
+              //  Header row
               Padding(
                 padding: EdgeInsets.fromLTRB(
                   AppSizes.w(16),
@@ -205,7 +209,7 @@ class AlertCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //  Icon box 
+                    //  Icon box
                     Container(
                       width: AppSizes.w(40),
                       height: AppSizes.w(40),
@@ -240,7 +244,7 @@ class AlertCard extends StatelessWidget {
 
                     SizedBox(width: AppSizes.w(14)),
 
-                    //  Title + Zone + Camera 
+                    //  Title + Zone + Camera
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,7 +322,7 @@ class AlertCard extends StatelessWidget {
                 ),
               ),
 
-              //  Escalation + Time 
+              //  Escalation + Time
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSizes.w(16)),
                 child: Row(
@@ -354,7 +358,7 @@ class AlertCard extends StatelessWidget {
               ),
               SizedBox(height: AppSizes.h(10)),
 
-              //  Progress Bar 
+              //  Progress Bar
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: AppSizes.w(16)),
                 child: ClipRRect(
@@ -372,7 +376,7 @@ class AlertCard extends StatelessWidget {
               ),
               SizedBox(height: AppSizes.h(14)),
 
-              //  Acknowledge Button 
+              //  Acknowledge Button
               Padding(
                 padding: EdgeInsets.fromLTRB(
                   AppSizes.w(16),
@@ -416,7 +420,7 @@ class AlertCard extends StatelessWidget {
           ),
         ),
 
-        //  Status Badge 
+        //  Status Badge
         Positioned(
           top: 0,
           right: 0,

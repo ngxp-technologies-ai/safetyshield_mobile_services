@@ -35,7 +35,7 @@ class SafetyShieldAppBar extends StatelessWidget
       shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
 
-      //  Leading: hamburger icon + Group.png avatar 
+      //  Leading: hamburger icon + ai_assistant.png avatar
       leadingWidth: 80,
       leading:
           leading ??
@@ -52,7 +52,7 @@ class SafetyShieldAppBar extends StatelessWidget
             tooltip: 'Menu',
           ),
 
-      //  Title 
+      //  Title
       title: title != null
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +88,7 @@ class SafetyShieldAppBar extends StatelessWidget
       centerTitle: title == null,
       titleSpacing: 0,
 
-      //  Actions 
+      //  Actions
       actions:
           actions ??
           (onSearchTap != null
@@ -108,9 +108,9 @@ class SafetyShieldAppBar extends StatelessWidget
   }
 }
 
-// 
+//
 // Helper  returns the correct AppBar for each tab index
-// 
+//
 
 SafetyShieldAppBar appBarForTab(
   int index, {

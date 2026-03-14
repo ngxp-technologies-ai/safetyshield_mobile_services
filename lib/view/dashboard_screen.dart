@@ -12,6 +12,7 @@ import '../utils/app_size.dart';
 import '../utils/app_styles.dart';
 import '../utils/screen_size.dart';
 import 'alerts_screen.dart';
+import 'ai_assistant_screen.dart';
 import 'login_screen.dart';
 import '../controller/alert/alert_controller.dart';
 import '../controller/alert/alert_stats_controller.dart';
@@ -38,7 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  //  Pages mapped to each tab 
+  //  Pages mapped to each tab
   List<Widget> get _pages => [
     const _HomeTab(),
     const AlertsScreen(), //  REAL ALERTS SCREEN
@@ -231,139 +232,186 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 }
 
-//  Rest of your existing widgets below (unchanged) 
+//  Rest of your existing widgets below (unchanged)
 
 class _GoodMorningSection extends StatelessWidget {
   const _GoodMorningSection();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(AppSizes.cardPaddingLarge),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(AppSizes.radiusLarge),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Stack(
+      children: [
+        Container(
+          padding: EdgeInsets.all(AppSizes.cardPaddingLarge),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(AppSizes.radiusLarge),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Good Morning",
-                    style: AppStyles.poppins(
-                      fontSize: AppSizes.fs16,
-                      fontWeight: FontWeight.w700,
+                  Row(
+                    children: [
+                      Text(
+                        "Good Morning",
+                        style: AppStyles.poppins(
+                          fontSize: AppSizes.fs16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(width: AppSizes.space6),
+                      Text("", style: TextStyle(fontSize: AppSizes.fs16)),
+                    ],
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppSizes.space12,
+                      vertical: AppSizes.space6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffDFF4E8),
+                      borderRadius: BorderRadius.circular(
+                        AppSizes.radiusXLarge,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: AppSizes.w(4),
+                          backgroundColor: const Color(0xff2DB468),
+                        ),
+                        SizedBox(width: AppSizes.space6),
+                        Text(
+                          "On Shift",
+                          style: AppStyles.poppins(
+                            color: const Color(0xff2DB468),
+                            fontSize: AppSizes.fs10,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(width: AppSizes.space6),
-                  Text("", style: TextStyle(fontSize: AppSizes.fs16)),
                 ],
               ),
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSizes.space12,
-                  vertical: AppSizes.space6,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xffDFF4E8),
-                  borderRadius: BorderRadius.circular(AppSizes.radiusXLarge),
-                ),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: AppSizes.w(4),
-                      backgroundColor: const Color(0xff2DB468),
-                    ),
-                    SizedBox(width: AppSizes.space6),
-                    Text(
-                      "On Shift",
-                      style: AppStyles.poppins(
-                        color: const Color(0xff2DB468),
-                        fontSize: AppSizes.fs10,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: AppSizes.space6),
-          Row(
-            children: [
-              Icon(
-                Icons.person_outline,
-                size: AppSizes.w(14),
-                color: Colors.grey,
-              ),
-              SizedBox(width: AppSizes.space6),
-              Text(
-                "Jacob Santos",
-                style: AppStyles.poppins(
-                  fontSize: AppSizes.fs12,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: AppSizes.space8),
-          const Divider(),
-          SizedBox(height: AppSizes.space8),
-          Container(
-            padding: EdgeInsets.all(AppSizes.cardPadding),
-            decoration: BoxDecoration(
-              color: AppColors.greyLight,
-              borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Assigned Site",
-                      style: AppStyles.poppins(
-                        fontSize: AppSizes.fs11,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    SizedBox(height: AppSizes.space4),
-                    Text(
-                      "Metro Line 3",
-                      style: AppStyles.poppins(
-                        fontSize: AppSizes.fs13,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppSizes.space12,
-                    vertical: AppSizes.space6,
+              SizedBox(height: AppSizes.space6),
+              Row(
+                children: [
+                  Icon(
+                    Icons.person_outline,
+                    size: AppSizes.w(14),
+                    color: Colors.grey,
                   ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(AppSizes.radiusXLarge),
-                  ),
-                  child: Text(
-                    "online since: 07:00",
+                  SizedBox(width: AppSizes.space6),
+                  Text(
+                    "Jacob Santos",
                     style: AppStyles.poppins(
-                      fontSize: AppSizes.fs11,
+                      fontSize: AppSizes.fs12,
                       color: Colors.grey,
                     ),
                   ),
+                ],
+              ),
+              SizedBox(height: AppSizes.space8),
+              const Divider(),
+              SizedBox(height: AppSizes.space8),
+              Container(
+                padding: EdgeInsets.all(AppSizes.cardPadding),
+                decoration: BoxDecoration(
+                  color: AppColors.greyLight,
+                  borderRadius: BorderRadius.circular(AppSizes.radiusMedium),
                 ),
-              ],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Assigned Site",
+                          style: AppStyles.poppins(
+                            fontSize: AppSizes.fs11,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        SizedBox(height: AppSizes.space4),
+                        Text(
+                          "Metro Line 3",
+                          style: AppStyles.poppins(
+                            fontSize: AppSizes.fs13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.space12,
+                        vertical: AppSizes.space6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(
+                          AppSizes.radiusXLarge,
+                        ),
+                      ),
+                      child: Text(
+                        "online since: 07:00",
+                        style: AppStyles.poppins(
+                          fontSize: AppSizes.fs11,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          right: AppSizes.space16,
+          top: AppSizes.h(68),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AiAssistantScreen(),
+                ),
+              );
+            },
+            child: Container(
+              width: AppSizes.w(40),
+              height: AppSizes.w(40),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xff1A8FB5).withOpacity(0.3),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  'assets/images/ai_assistant.png', // ✅ your image path here
+                  width: AppSizes.w(20),
+                  height: AppSizes.w(20),
+
+                  // ✅ removes if your image already has color
+                ),
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -1087,84 +1135,92 @@ class _AiInsightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.08,
-              child: CustomPaint(painter: _SparklePatternPainter()),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(
-                    Icons.auto_awesome,
-                    size: 16,
-                    color: Color(0xFF0EA5E9),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    'AI Insight',
-                    style: AppStyles.poppins(
-                      color: const Color(0xFF0EA5E9),
-                      fontWeight: FontWeight.w700,
-                      fontSize: AppSizes.fs15,
-                    ),
-                  ),
-                ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AiAssistantScreen()),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Opacity(
+                opacity: 0.08,
+                child: CustomPaint(painter: _SparklePatternPainter()),
               ),
-              const SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  style: AppStyles.poppins(
-                    fontSize: AppSizes.fs13,
-                    height: 1.45,
-                    color: const Color(0xFF5B5B5B),
-                  ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    const TextSpan(
-                      text: 'High PPE non-compliance trend detected near ',
+                    const Icon(
+                      Icons.auto_awesome,
+                      size: 16,
+                      color: Color(0xFF0EA5E9),
                     ),
-                    TextSpan(
-                      text: 'Scaffolding Zone',
+                    const SizedBox(width: 6),
+                    Text(
+                      'AI Insight',
                       style: AppStyles.poppins(
-                        fontSize: AppSizes.fs13,
-                        color: const Color(0xFFFF8A00),
-                        fontWeight: FontWeight.w600,
-                        height: 1.45,
+                        color: const Color(0xFF0EA5E9),
+                        fontWeight: FontWeight.w700,
+                        fontSize: AppSizes.fs15,
                       ),
-                    ),
-                    const TextSpan(
-                      text:
-                          '. 3 helmet violations in the last 45 minutes. Consider a toolbox talk.',
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 14),
-              const Row(
-                children: [
-                  _InsightTag(
-                    text: 'PPE Compliance',
-                    bgColor: Color(0xFF6CC3E8),
+                const SizedBox(height: 10),
+                RichText(
+                  text: TextSpan(
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs13,
+                      height: 1.45,
+                      color: const Color(0xFF5B5B5B),
+                    ),
+                    children: [
+                      const TextSpan(
+                        text: 'High PPE non-compliance trend detected near ',
+                      ),
+                      TextSpan(
+                        text: 'Scaffolding Zone',
+                        style: AppStyles.poppins(
+                          fontSize: AppSizes.fs13,
+                          color: const Color(0xFFFF8A00),
+                          fontWeight: FontWeight.w600,
+                          height: 1.45,
+                        ),
+                      ),
+                      const TextSpan(
+                        text:
+                            '. 3 helmet violations in the last 45 minutes. Consider a toolbox talk.',
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 8),
-                  _InsightTag(text: 'Zone B', bgColor: Color(0xFFF7A53A)),
-                ],
-              ),
-            ],
-          ),
-        ],
+                ),
+                const SizedBox(height: 14),
+                const Row(
+                  children: [
+                    _InsightTag(
+                      text: 'PPE Compliance',
+                      bgColor: Color(0xFF6CC3E8),
+                    ),
+                    SizedBox(width: 8),
+                    _InsightTag(text: 'Zone B', bgColor: Color(0xFFF7A53A)),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -3,7 +3,7 @@ import 'package:safety_management/utils/app_colors.dart';
 import 'package:safety_management/utils/app_styles.dart';
 import '../utils/app_size.dart';
 
-//  Data models 
+//  Data models
 class ZoneData {
   final String name;
   final String zoneId;
@@ -22,7 +22,7 @@ class ZoneData {
   });
 }
 
-//  Zone Map Screen 
+//  Zone Map Screen
 class ZoneMapScreen extends StatefulWidget {
   const ZoneMapScreen({super.key});
 
@@ -125,7 +125,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
 
     return Column(
       children: [
-        //  Zone Filter Tabs 
+        //  Zone Filter Tabs
         Container(
           height: AppSizes.h(44),
           decoration: const BoxDecoration(
@@ -172,14 +172,14 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
           ),
         ),
 
-        //  Scrollable content 
+        //  Scrollable content
         Expanded(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(AppSizes.space14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //  Map Section Container 
+                //  Map Section Container
                 Container(
                   padding: EdgeInsets.all(AppSizes.space16),
                   decoration: BoxDecoration(
@@ -195,7 +195,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
                   ),
                   child: Column(
                     children: [
-                      //  2x2 Zone Map Grid 
+                      //  2x2 Zone Map Grid
                       GridView.count(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -216,7 +216,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
 
                       SizedBox(height: AppSizes.space16),
 
-                      //  Legend 
+                      //  Legend
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -241,7 +241,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
 
                 const SizedBox(height: 20),
 
-                //  Zone List header 
+                //  Zone List header
                 Row(
                   children: [
                     Text(
@@ -265,7 +265,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
 
                 const SizedBox(height: 12),
 
-                //  Zone List 
+                //  Zone List
                 ...filtered.map(
                   (zone) => _ZoneListItem(
                     zone: zone,
@@ -281,7 +281,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
   }
 }
 
-//  Zone box in the map grid 
+//  Zone box in the map grid
 class _ZoneMapBox extends StatelessWidget {
   final ZoneData zone;
   final Color bgColor;
@@ -346,7 +346,7 @@ class _ZoneMapBox extends StatelessWidget {
   }
 }
 
-//  Legend dot 
+//  Legend dot
 class _LegendDot extends StatelessWidget {
   final Color color;
   final String label;
@@ -375,7 +375,7 @@ class _LegendDot extends StatelessWidget {
   }
 }
 
-//  Zone list item 
+//  Zone list item
 class _ZoneListItem extends StatelessWidget {
   final ZoneData zone;
   final Color statusColor;

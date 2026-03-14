@@ -68,9 +68,7 @@ class ShiftHandoverScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(AppSizes.w(14)),
-                    border: Border.all(
-                      color: const Color(0xFFECECEC),
-                    ),
+                    border: Border.all(color: const Color(0xFFECECEC)),
                   ),
                   child: SingleChildScrollView(
                     child: Column(
@@ -115,20 +113,11 @@ class ShiftHandoverScreen extends StatelessWidget {
                         ),
                         SizedBox(height: AppSizes.h(10)),
 
-                        const _InfoRow(
-                          label: 'Total Workers',
-                          value: '29',
-                        ),
+                        const _InfoRow(label: 'Total Workers', value: '29'),
                         const _DividerLine(),
-                        const _InfoRow(
-                          label: 'Contractors',
-                          value: '10',
-                        ),
+                        const _InfoRow(label: 'Contractors', value: '10'),
                         const _DividerLine(),
-                        const _InfoRow(
-                          label: 'Absent',
-                          value: '3',
-                        ),
+                        const _InfoRow(label: 'Absent', value: '3'),
                         const _DividerLine(),
                         const _InfoRow(
                           label: 'Supervisor',
@@ -145,36 +134,22 @@ class ShiftHandoverScreen extends StatelessWidget {
                         ),
                         SizedBox(height: AppSizes.h(10)),
 
-                        const _InfoRow(
-                          label: 'Incidents',
-                          value: '1',
-                        ),
+                        const _InfoRow(label: 'Incidents', value: '1'),
                         SizedBox(height: AppSizes.h(6)),
                         const _SubAlertText(
                           text: 'Minor slip near scaffolding',
                         ),
                         const _DividerLine(),
 
-                        const _InfoRow(
-                          label: 'Safety Violations',
-                          value: '1',
-                        ),
+                        const _InfoRow(label: 'Safety Violations', value: '1'),
                         SizedBox(height: AppSizes.h(6)),
-                        const _SubAlertText(
-                          text: 'Helmet violation',
-                        ),
+                        const _SubAlertText(text: 'Helmet violation'),
                         const _DividerLine(),
 
-                        const _InfoRow(
-                          label: 'Near Miss',
-                          value: '2',
-                        ),
+                        const _InfoRow(label: 'Near Miss', value: '2'),
                         const _DividerLine(),
 
-                        const _InfoRow(
-                          label: 'Active Permits',
-                          value: '5',
-                        ),
+                        const _InfoRow(label: 'Active Permits', value: '5'),
 
                         SizedBox(height: AppSizes.h(18)),
 
@@ -248,9 +223,7 @@ class _TopMetricCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(AppSizes.w(10)),
-        border: Border.all(
-          color: const Color(0xFFEAEAEA),
-        ),
+        border: Border.all(color: const Color(0xFFEAEAEA)),
       ),
       child: Column(
         children: [
@@ -299,11 +272,7 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          icon,
-          color: iconColor,
-          size: AppSizes.w(18),
-        ),
+        Icon(icon, color: iconColor, size: AppSizes.w(18)),
         SizedBox(width: AppSizes.w(8)),
         Text(
           title,
@@ -362,9 +331,7 @@ class _InfoRow extends StatelessWidget {
 class _SubAlertText extends StatelessWidget {
   final String text;
 
-  const _SubAlertText({
-    required this.text,
-  });
+  const _SubAlertText({required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -399,9 +366,6 @@ class _DividerLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 1,
-      color: const Color(0xFFF0F0F0),
-    );
+    return Container(height: 1, color: const Color(0xFFF0F0F0));
   }
 }

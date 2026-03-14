@@ -24,7 +24,7 @@ class ProfileScreen extends StatelessWidget {
                     backgroundColor: AppColors.greyLight,
                     child: ClipOval(
                       child: Image.asset(
-                        'assets/images/Group.png',
+                        'assets/images/ai_assistant.png',
                         width: 96,
                         height: 96,
                         fit: BoxFit.cover,
