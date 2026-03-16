@@ -42,7 +42,7 @@ class ShiftHandoverScreen extends StatelessWidget {
           IconButton(
             onPressed: () {},
             icon: Icon(
-              Icons.edit_outlined,
+              Icons.search,
               color: AppColors.black,
               size: AppSizes.w(20),
             ),
