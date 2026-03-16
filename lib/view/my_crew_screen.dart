@@ -6,6 +6,7 @@ import '../utils/app_colors.dart';
 import '../utils/app_size.dart';
 import '../utils/app_styles.dart';
 import '../utils/screen_size.dart';
+import '../common_widgets/bottom_sheet_widget.dart';
 
 class MyCrewScreen extends StatefulWidget {
   const MyCrewScreen({super.key});
@@ -402,197 +403,205 @@ class CrewDetailsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-
-    return Container(
-      padding: EdgeInsets.only(top: AppSizes.h(8), bottom: bottomInset),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppSizes.w(22)),
-        ),
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(
-            AppSizes.w(8),
-            0,
-            AppSizes.w(8),
-            AppSizes.h(10),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(AppSizes.w(12)),
-                bottom: Radius.circular(AppSizes.w(12)),
+    return SafetyShieldBottomSheet(
+      padding: EdgeInsets.zero,
+      footer: Row(
+        children: [
+          Expanded(
+            child: OutlinedButton(
+              onPressed: () => Navigator.pop(context),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Color(0xFFD1D1D1)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.symmetric(vertical: AppSizes.h(14)),
+              ),
+              child: Text(
+                "Close",
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs13,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.black,
+                ),
               ),
             ),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                  AppSizes.w(16),
-                  AppSizes.h(8),
-                  AppSizes.w(16),
-                  AppSizes.h(16),
+          ),
+          SizedBox(width: AppSizes.w(12)),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                // Navigate to alerts or handle jump
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Container(
-                        width: AppSizes.w(52),
-                        height: AppSizes.h(5),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFD9D9D9),
-                          borderRadius: BorderRadius.circular(AppSizes.w(10)),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: AppSizes.h(16)),
-                    Row(
-                      children: [
-                        _CrewAvatar(
-                          initials: _getInitials(member.fullName),
-                          size: AppSizes.w(40),
-                          fontSize: AppSizes.fs14,
-                        ),
-                        SizedBox(width: AppSizes.w(12)),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                member.fullName,
-                                style: AppStyles.poppins(
-                                  fontSize: AppSizes.fs14,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.black,
-                                ),
-                              ),
-                              SizedBox(height: AppSizes.h(2)),
-                              Text(
-                                "${member.designation ?? 'Not Available'}  ${member.department ?? 'Not Available'}",
-                                style: AppStyles.poppins(
-                                  fontSize: AppSizes.fs11,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: AppSizes.h(14)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _DetailStatCard(
-                            value: member.status,
-                            label: "Status",
-                            valueColor: member.status.toLowerCase() == 'active'
-                                ? const Color(0xFF22C55E)
-                                : const Color(0xFFFF8A00),
-                          ),
-                        ),
-                        SizedBox(width: AppSizes.w(8)),
-                        Expanded(
-                          child: _DetailStatCard(
-                            value: member.ppeCompliance ?? "Unknown",
-                            label: "PPE",
-                            valueColor: _ppeTextColor(member.ppeCompliance),
-                          ),
-                        ),
-                        SizedBox(width: AppSizes.w(8)),
-                        Expanded(
-                          child: _DetailStatCard(
-                            value: member.isCertified ? "Yes" : "No",
-                            label: "Certified",
-                            valueColor: member.isCertified
-                                ? const Color(0xFF22C55E)
-                                : const Color(0xFFFF4D4F),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: AppSizes.h(18)),
-                    _SectionHeader(
-                      icon: Icons.work_outline,
-                      title: "Current Task",
-                    ),
-                    SizedBox(height: AppSizes.h(10)),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppSizes.w(12),
-                        vertical: AppSizes.h(12),
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF7F7F7),
-                        borderRadius: BorderRadius.circular(AppSizes.w(10)),
-                      ),
-                      child: Text(
-                        member.currentTask ?? "No task assigned",
+                padding: EdgeInsets.symmetric(vertical: AppSizes.h(14)),
+              ),
+              child: Text(
+                "Jump to Alerts",
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs13,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppSizes.w(12)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                _CrewAvatar(
+                  initials: _getInitials(member.fullName),
+                  size: AppSizes.w(40),
+                  fontSize: AppSizes.fs14,
+                ),
+                SizedBox(width: AppSizes.w(12)),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        member.fullName,
                         style: AppStyles.poppins(
-                          fontSize: AppSizes.fs12,
-                          fontWeight: FontWeight.w500,
+                          fontSize: AppSizes.fs14,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.black,
                         ),
                       ),
-                    ),
-                    SizedBox(height: AppSizes.h(18)),
-                    _SectionHeader(
-                      icon: Icons.shield_outlined,
-                      title: "Recent Alerts",
-                    ),
-                    SizedBox(height: AppSizes.h(10)),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppSizes.w(12),
-                        vertical: AppSizes.h(12),
+                      SizedBox(height: AppSizes.h(2)),
+                      Text(
+                        "${member.designation ?? 'Not Available'}  ${member.department ?? 'Not Available'}",
+                        style: AppStyles.poppins(
+                          fontSize: AppSizes.fs11,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.grey,
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        color: member.recentAlerts.isEmpty
-                            ? const Color(0xFFE7F7EC)
-                            : const Color(0xFFFFF1F0),
-                        borderRadius: BorderRadius.circular(AppSizes.w(10)),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              member.recentAlerts.isEmpty
-                                  ? "No recent violations"
-                                  : member.recentAlerts.first,
-                              style: AppStyles.poppins(
-                                fontSize: AppSizes.fs12,
-                                fontWeight: FontWeight.w500,
-                                color: member.recentAlerts.isEmpty
-                                    ? const Color(0xFF22C55E)
-                                    : Colors.red,
-                              ),
-                            ),
-                          ),
-                          Icon(
-                            member.recentAlerts.isEmpty
-                                ? Icons.check
-                                : Icons.warning_amber_rounded,
-                            size: AppSizes.w(16),
-                            color: member.recentAlerts.isEmpty
-                                ? const Color(0xFF22C55E)
-                                : Colors.red,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: AppSizes.h(14)),
+            Row(
+              children: [
+                Expanded(
+                  child: _DetailStatCard(
+                    value: member.status,
+                    label: "Status",
+                    valueColor: member.status.toLowerCase() == 'active'
+                        ? const Color(0xFF22C55E)
+                        : const Color(0xFFFF8A00),
+                  ),
+                ),
+                SizedBox(width: AppSizes.w(8)),
+                Expanded(
+                  child: _DetailStatCard(
+                    value: member.ppeCompliance ?? "Unknown",
+                    label: "PPE",
+                    valueColor: _ppeTextColor(member.ppeCompliance),
+                  ),
+                ),
+                SizedBox(width: AppSizes.w(8)),
+                Expanded(
+                  child: _DetailStatCard(
+                    value: member.isCertified ? "Yes" : "No",
+                    label: "Certified",
+                    valueColor: member.isCertified
+                        ? const Color(0xFF22C55E)
+                        : const Color(0xFFFF4D4F),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: AppSizes.h(18)),
+            _SectionHeader(
+              icon: Icons.work_outline,
+              title: "Current Task",
+            ),
+            SizedBox(height: AppSizes.h(10)),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSizes.w(12),
+                vertical: AppSizes.h(12),
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF7F7F7),
+                borderRadius: BorderRadius.circular(AppSizes.w(10)),
+              ),
+              child: Text(
+                member.currentTask ?? "No task assigned",
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs12,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.black,
                 ),
               ),
             ),
-          ),
+            SizedBox(height: AppSizes.h(18)),
+            _SectionHeader(
+              icon: Icons.shield_outlined,
+              title: "Recent Alerts",
+            ),
+            SizedBox(height: AppSizes.h(10)),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSizes.w(12),
+                vertical: AppSizes.h(12),
+              ),
+              decoration: BoxDecoration(
+                color: member.recentAlerts.isEmpty
+                    ? const Color(0xFFE7F7EC)
+                    : const Color(0xFFFFF1F0),
+                borderRadius: BorderRadius.circular(AppSizes.w(10)),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      member.recentAlerts.isEmpty
+                          ? "No recent violations"
+                          : member.recentAlerts.first,
+                      style: AppStyles.poppins(
+                        fontSize: AppSizes.fs12,
+                        fontWeight: FontWeight.w500,
+                        color: member.recentAlerts.isEmpty
+                            ? const Color(0xFF22C55E)
+                            : Colors.red,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    member.recentAlerts.isEmpty
+                        ? Icons.check
+                        : Icons.warning_amber_rounded,
+                    size: AppSizes.w(16),
+                    color: member.recentAlerts.isEmpty
+                        ? const Color(0xFF22C55E)
+                        : Colors.red,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:safety_management/utils/app_colors.dart';
 import 'package:safety_management/utils/app_size.dart';
 import 'package:safety_management/utils/app_styles.dart';
+import 'package:safety_management/common_widgets/bottom_sheet_widget.dart';
 
 class CameraItem {
   final String id;
@@ -207,151 +208,397 @@ class _CameraCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final hasAlert = camera.alertCount > 0;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF5F6FA),
-        borderRadius: BorderRadius.circular(AppSizes.radiusSmall),
-        border: Border.all(
-          color: hasAlert ? AppColors.error : Colors.transparent,
-          width: 1.5,
+    return GestureDetector(
+      onTap: () => _showCameraDetails(context),
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F6FA),
+          borderRadius: BorderRadius.circular(AppSizes.radiusSmall),
+          border: Border.all(
+            color: hasAlert ? AppColors.error : Colors.transparent,
+            width: 1.5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.18),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.18),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //  Thumbnail area
+            Expanded(
+              child: Stack(
+                children: [
+                  // Camera placeholder
+                  Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(10),
+                      ),
+                    ),
+                    child: camera.thumbnailAsset != null
+                        ? ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(10),
+                            ),
+                            child: Image.asset(
+                              camera.thumbnailAsset!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : const Center(
+                            child: Icon(
+                              Icons.camera_alt_outlined,
+                              size: 36,
+                              color: Color(0xFFB0B7C3),
+                            ),
+                          ),
+                  ),
+
+                  // Alert count badge (top-left)
+                  if (hasAlert)
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        width: 24,
+                        height: 24,
+                        decoration: const BoxDecoration(
+                          color: AppColors.error,
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '${camera.alertCount}',
+                          style: AppStyles.poppins(
+                            fontSize: AppSizes.fs11,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                  // Live badge (top-right)
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFDFF6E9),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 7,
+                            height: 7,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF2DB468),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            camera.isLive ? 'Live' : 'Off',
+                            style: AppStyles.poppins(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: camera.isLive
+                                  ? const Color(0xFF2DB468)
+                                  : AppColors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            //  Camera info
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    camera.id,
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    camera.zone,
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs10,
+                      color: AppColors.grey,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showCameraDetails(BuildContext context) {
+    SafetyShieldBottomSheet.show(
+      context: context,
+      builder: (context) => CameraDetailsBottomSheet(camera: camera),
+    );
+  }
+}
+
+class CameraDetailsBottomSheet extends StatelessWidget {
+  final CameraItem camera;
+
+  const CameraDetailsBottomSheet({super.key, required this.camera});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafetyShieldBottomSheet(
+      padding: EdgeInsets.zero,
+      footer: Row(
+        children: [
+          Expanded(
+            child: ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.symmetric(vertical: AppSizes.h(14)),
+              ),
+              child: Text(
+                "Jump to Alerts",
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs13,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: AppSizes.w(12)),
+          Expanded(
+            child: OutlinedButton(
+              onPressed: () => Navigator.pop(context),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Color(0xFFD1D1D1)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.symmetric(vertical: AppSizes.h(14)),
+              ),
+              child: Text(
+                "Close",
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs13,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.black,
+                ),
+              ),
+            ),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          //  Thumbnail area
-          Expanded(
-            child: Stack(
-              children: [
-                // Camera placeholder
-                Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(10),
+          // Camera Title and Status
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    camera.id,
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs16,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
                     ),
                   ),
-                  child: camera.thumbnailAsset != null
-                      ? ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(10),
-                          ),
-                          child: Image.asset(
-                            camera.thumbnailAsset!,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : const Center(
-                          child: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 36,
-                            color: Color(0xFFB0B7C3),
-                          ),
-                        ),
+                  Text(
+                    camera.zone,
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs12,
+                      color: AppColors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
                 ),
-
-                // Alert count badge (top-left)
-                if (hasAlert)
-                  Positioned(
-                    top: 8,
-                    left: 8,
-                    child: Container(
-                      width: 24,
-                      height: 24,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFDFF6E9),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
                       decoration: const BoxDecoration(
-                        color: AppColors.error,
+                        color: Color(0xFF2DB468),
                         shape: BoxShape.circle,
                       ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        '${camera.alertCount}',
-                        style: AppStyles.poppins(
-                          fontSize: AppSizes.fs11,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.white,
-                        ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Live',
+                      style: AppStyles.poppins(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF2DB468),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: AppSizes.h(20)),
+          
+          // Camera Preview Rectangle
+          Container(
+            height: AppSizes.h(160),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F1F1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: const Color(0xFFE0E0E0)),
+            ),
+            child: const Center(
+              child: Icon(
+                Icons.camera_alt_outlined,
+                size: 48,
+                color: Color(0xFFBDBDBD),
+              ),
+            ),
+          ),
+          SizedBox(height: AppSizes.h(20)),
+
+          // Alert Info Section
+          if (camera.alertCount > 0)
+            Container(
+              padding: EdgeInsets.all(AppSizes.w(12)),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFF1F0),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFFFFCCC7)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.error_outline, color: AppColors.error, size: 20),
+                  SizedBox(width: AppSizes.w(10)),
+                  Expanded(
+                    child: Text(
+                      "${camera.alertCount} Active alerts",
+                      style: AppStyles.poppins(
+                        fontSize: AppSizes.fs13,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.error,
                       ),
                     ),
                   ),
-
-                // Live badge (top-right)
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 3,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFDFF6E9),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 7,
-                          height: 7,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFF2DB468),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          camera.isLive ? 'Live' : 'Off',
-                          style: AppStyles.poppins(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: camera.isLive
-                                ? const Color(0xFF2DB468)
-                                : AppColors.grey,
-                          ),
-                        ),
-                      ],
+                  Text(
+                    "Tap \"Jump to Alerts\" to see details",
+                    style: AppStyles.poppins(
+                      fontSize: AppSizes.fs11,
+                      color: AppColors.error.withOpacity(0.7),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
+            ),
+          SizedBox(height: AppSizes.h(20)),
+
+          // Last 5 Events Section
+          Text(
+            "Last 5 Events",
+            style: AppStyles.poppins(
+              fontSize: AppSizes.fs14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.black,
             ),
           ),
-
-          //  Camera info
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  camera.id,
-                  style: AppStyles.poppins(
-                    fontSize: AppSizes.fs12,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.black,
-                  ),
+          SizedBox(height: AppSizes.h(12)),
+          ...List.generate(5, (index) {
+            final events = [
+              "No Helmet",
+              "Motion Detected",
+              "Proximity alert",
+              "PPE Check",
+              "Zone Entry"
+            ];
+            final times = ["2m ago", "8m ago", "14m ago", "22m ago", "30m ago"];
+            
+            return Padding(
+              padding: EdgeInsets.only(bottom: AppSizes.h(8)),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSizes.w(12),
+                  vertical: AppSizes.h(10),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  camera.zone,
-                  style: AppStyles.poppins(
-                    fontSize: AppSizes.fs10,
-                    color: AppColors.grey,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF7F7F7),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-              ],
-            ),
-          ),
+                child: Row(
+                  children: [
+                    Icon(Icons.access_time, size: 14, color: AppColors.grey),
+                    SizedBox(width: AppSizes.w(8)),
+                    Expanded(
+                      child: Text(
+                        events[index % events.length],
+                        style: AppStyles.poppins(
+                          fontSize: AppSizes.fs12,
+                          color: AppColors.black.withOpacity(0.8),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      times[index % times.length],
+                      style: AppStyles.poppins(
+                        fontSize: AppSizes.fs11,
+                        color: AppColors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
         ],
       ),
     );
