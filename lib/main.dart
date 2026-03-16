@@ -6,6 +6,7 @@ import 'controller/auth/auth_controller.dart';
 import 'controller/crew/my_crew_controller.dart';
 import 'controller/alert/alert_stats_controller.dart';
 import 'controller/alert/alert_controller.dart';
+import 'controller/equipment/equipment_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MyCrewController()),
         ChangeNotifierProvider(create: (_) => AlertStatsController()),
         ChangeNotifierProvider(create: (_) => AlertController()),
+        ChangeNotifierProvider(create: (_) => EquipmentController()),
       ],
 
       child: MaterialApp(

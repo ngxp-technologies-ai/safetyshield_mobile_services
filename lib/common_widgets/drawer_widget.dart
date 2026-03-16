@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safety_management/utils/app_colors.dart';
 import 'package:safety_management/utils/app_styles.dart';
+import 'package:safety_management/view/equipments_screen.dart';
 import 'package:safety_management/view/my_crew_screen.dart';
 import 'package:safety_management/view/shift_handover_screen.dart';
 import 'package:safety_management/view/tasks_and_work_orders_screen.dart';
@@ -110,7 +111,12 @@ class SafetyShieldDrawer extends StatelessWidget {
                 _DrawerItem(
                   icon: Icons.build_outlined,
                   label: 'Equipment',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => EquipmentsScreen()),
+                    );
+                  },
                 ),
                 _DrawerItem(
                   icon: Icons.description_outlined,

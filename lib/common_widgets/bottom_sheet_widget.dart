@@ -8,6 +8,7 @@ class SafetyShieldBottomSheet extends StatelessWidget {
   final String? title;
   final Widget? footer;
   final bool showHandle;
+  final Color? backgroundColor;
   final EdgeInsetsGeometry? padding;
 
   const SafetyShieldBottomSheet({
@@ -16,6 +17,7 @@ class SafetyShieldBottomSheet extends StatelessWidget {
     this.title,
     this.footer,
     this.showHandle = true,
+    this.backgroundColor,
     this.padding,
   });
 
@@ -26,7 +28,7 @@ class SafetyShieldBottomSheet extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(bottom: bottomInset),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: backgroundColor ?? AppColors.white,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(AppSizes.w(22)),
         ),

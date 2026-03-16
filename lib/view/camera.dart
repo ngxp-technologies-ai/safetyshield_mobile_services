@@ -376,10 +376,33 @@ class CameraDetailsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasAlert = camera.alertCount > 0;
     return SafetyShieldBottomSheet(
-      padding: EdgeInsets.zero,
+      backgroundColor: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: AppSizes.w(16), vertical: AppSizes.h(10)),
       footer: Row(
         children: [
+          Expanded(
+            child: OutlinedButton(
+              onPressed: () => Navigator.pop(context),
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Color(0xFFD1D1D1)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.symmetric(vertical: AppSizes.h(14)),
+              ),
+              child: Text(
+                "Close",
+                style: AppStyles.poppins(
+                  fontSize: AppSizes.fs13,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.black,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: AppSizes.w(12)),
           Expanded(
             child: ElevatedButton(
               onPressed: () => Navigator.pop(context),
@@ -402,139 +425,167 @@ class CameraDetailsBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: AppSizes.w(12)),
-          Expanded(
-            child: OutlinedButton(
-              onPressed: () => Navigator.pop(context),
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Color(0xFFD1D1D1)),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                padding: EdgeInsets.symmetric(vertical: AppSizes.h(14)),
-              ),
-              child: Text(
-                "Close",
-                style: AppStyles.poppins(
-                  fontSize: AppSizes.fs13,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.black,
-                ),
-              ),
-            ),
-          ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Camera Title and Status
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    camera.id,
-                    style: AppStyles.poppins(
-                      fontSize: AppSizes.fs16,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.black,
-                    ),
-                  ),
-                  Text(
-                    camera.zone,
-                    style: AppStyles.poppins(
-                      fontSize: AppSizes.fs12,
-                      color: AppColors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFDFF6E9),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF2DB468),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      'Live',
-                      style: AppStyles.poppins(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF2DB468),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: AppSizes.h(20)),
-          
-          // Camera Preview Rectangle
+          // Camera Preview Card (Includes ID, Zone, and Status)
           Container(
-            height: AppSizes.h(160),
-            width: double.infinity,
             decoration: BoxDecoration(
-              color: const Color(0xFFF1F1F1),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFE0E0E0)),
-            ),
-            child: const Center(
-              child: Icon(
-                Icons.camera_alt_outlined,
-                size: 48,
-                color: Color(0xFFBDBDBD),
+              border: Border.all(
+                color: hasAlert ? AppColors.error : const Color(0xFFE0E0E0),
+                width: hasAlert ? 1.5 : 1,
               ),
             ),
-          ),
-          SizedBox(height: AppSizes.h(20)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Top Preview Area with Badges
+                Container(
+                  height: AppSizes.h(160),
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFF1F1F1),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(11)),
+                  ),
+                  child: Stack(
+                    children: [
+                      // Placeholder Icon
+                      const Center(
+                        child: Icon(
+                          Icons.camera_alt_outlined,
+                          size: 48,
+                          color: Color(0xFFBDBDBD),
+                        ),
+                      ),
+                      
+                      // Alert dot badge (top-left)
+                      if (hasAlert)
+                        Positioned(
+                          top: 12,
+                          left: 12,
+                          child: Container(
+                            width: 22,
+                            height: 22,
+                            decoration: const BoxDecoration(
+                              color: AppColors.error,
+                              shape: BoxShape.circle,
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${camera.alertCount}',
+                              style: AppStyles.poppins(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
 
-          // Alert Info Section
-          if (camera.alertCount > 0)
+                      // Live badge (top-right)
+                      Positioned(
+                        top: 12,
+                        right: 12,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFDFF6E9),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 7,
+                                height: 7,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFF2DB468),
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                'Live',
+                                style: AppStyles.poppins(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xFF2DB468),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                // Bottom Info Area (ID and Zone)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(11)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        camera.id,
+                        style: AppStyles.poppins(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.black,
+                        ),
+                      ),
+                      Text(
+                        camera.zone,
+                        style: AppStyles.poppins(
+                          fontSize: 11,
+                          color: AppColors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: AppSizes.h(16)),
+
+          // Alert Info Banner
+          if (hasAlert)
             Container(
-              padding: EdgeInsets.all(AppSizes.w(12)),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFF1F0),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFFFCCC7)),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.error_outline, color: AppColors.error, size: 20),
-                  SizedBox(width: AppSizes.w(10)),
-                  Expanded(
-                    child: Text(
-                      "${camera.alertCount} Active alerts",
-                      style: AppStyles.poppins(
-                        fontSize: AppSizes.fs13,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.error,
-                      ),
+                  const Icon(Icons.error_outline, color: AppColors.error, size: 18),
+                  const SizedBox(width: 8),
+                  Text(
+                    "${camera.alertCount} Active alerts",
+                    style: AppStyles.poppins(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.error,
                     ),
                   ),
+                  const Spacer(),
                   Text(
                     "Tap \"Jump to Alerts\" to see details",
                     style: AppStyles.poppins(
-                      fontSize: AppSizes.fs11,
+                      fontSize: 10,
                       color: AppColors.error.withOpacity(0.7),
                     ),
                   ),
@@ -547,7 +598,7 @@ class CameraDetailsBottomSheet extends StatelessWidget {
           Text(
             "Last 5 Events",
             style: AppStyles.poppins(
-              fontSize: AppSizes.fs14,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
               color: AppColors.black,
             ),
@@ -566,32 +617,25 @@ class CameraDetailsBottomSheet extends StatelessWidget {
             return Padding(
               padding: EdgeInsets.only(bottom: AppSizes.h(8)),
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSizes.w(12),
-                  vertical: AppSizes.h(10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF7F7F7),
-                  borderRadius: BorderRadius.circular(20),
+                  color: const Color(0xFFF9FAFB),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.access_time, size: 14, color: AppColors.grey),
-                    SizedBox(width: AppSizes.w(8)),
+                    Icon(Icons.access_time, size: 16, color: AppColors.grey.withOpacity(0.6)),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        events[index % events.length],
+                        "${events[index % events.length]} — ${times[index % times.length]}",
                         style: AppStyles.poppins(
-                          fontSize: AppSizes.fs12,
-                          color: AppColors.black.withOpacity(0.8),
+                          fontSize: 12,
+                          color: const Color(0xFF4B4B4B),
                         ),
-                      ),
-                    ),
-                    Text(
-                      times[index % times.length],
-                      style: AppStyles.poppins(
-                        fontSize: AppSizes.fs11,
-                        color: AppColors.grey,
                       ),
                     ),
                   ],
