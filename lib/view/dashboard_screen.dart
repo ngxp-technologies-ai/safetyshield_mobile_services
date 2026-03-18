@@ -17,6 +17,7 @@ import 'login_screen.dart';
 import '../controller/alert/alert_controller.dart';
 import '../controller/alert/alert_stats_controller.dart';
 import '../controller/crew/my_crew_controller.dart';
+import '../controller/dashboard/dashboard_controller.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -36,6 +37,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AlertStatsController>().fetchAlertStats();
       context.read<MyCrewController>().fetchMyCrew();
+      context.read<DashboardController>().fetchDashboardStats();
     });
   }
 
@@ -421,33 +423,33 @@ class _StatsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<MyCrewController, AlertStatsController>(
-      builder: (context, crewController, alertStatsController, _) {
+    return Consumer3<MyCrewController, AlertStatsController, DashboardController>(
+      builder: (context, crewController, alertStatsController, dashboardController, _) {
+        final dashStats = dashboardController.stats;
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _StatCard(
               icon: "assets/images/crew_icon.png",
               title: "Crew",
-              value: "${crewController.total}",
+              value: "${dashStats.crewPresent}/${dashStats.totalCrew}",
             ),
             _StatCard(
-              icon: "assets/images/alert_icon.png",
-              title: "Alert",
-              value: "${alertStatsController.stats.activeAlerts}",
-              iconColor: Colors.red,
-            ),
-            _StatCard(
-              icon: "assets/images/camera_icon.png",
-              title: "Camera",
-              value: "4",
+              icon: "assets/images/camera_icon.png", // Reusing icon for Active Workers
+              title: "Active",
+              value: "${dashStats.activeWorkers}",
               showGreenDot: true,
             ),
             _StatCard(
-              icon: "assets/images/warning_icon.png",
-              title: "Critical",
-              value: "${alertStatsController.stats.criticalCount}",
-              iconColor: Colors.orange,
+              icon: "assets/images/alert_icon.png", // Reusing icon for Tasks
+              title: "Tasks",
+              value: "${dashStats.tasksActive}",
+            ),
+            _StatCard(
+              icon: "assets/images/warning_icon.png", // Reusing icon
+              title: "Safety",
+              value: "${dashStats.safetyScore}%",
+              iconColor: const Color(0xFF2DB468), // Green to indicate safety score
             ),
           ],
         );

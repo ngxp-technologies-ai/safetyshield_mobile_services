@@ -5,6 +5,8 @@ import 'package:safety_management/view/equipments_screen.dart';
 import 'package:safety_management/view/my_crew_screen.dart';
 import 'package:safety_management/view/shift_handover_screen.dart';
 import 'package:safety_management/view/tasks_and_work_orders_screen.dart';
+import 'package:safety_management/view/zone_rules_screen.dart';
+import 'package:safety_management/view/safety_compliance_screen.dart';
 
 class SafetyShieldDrawer extends StatelessWidget {
   const SafetyShieldDrawer({super.key});
@@ -79,7 +81,7 @@ class SafetyShieldDrawer extends StatelessWidget {
                   ),
                 ),
                 _DrawerItem(
-                  icon: Icons.group_outlined,
+                  assetIcon: 'assets/icons/users_drawer.png',
                   label: 'My crew',
                   onTap: () {
                     Navigator.push(
@@ -89,7 +91,7 @@ class SafetyShieldDrawer extends StatelessWidget {
                   },
                 ),
                 _DrawerItem(
-                  icon: Icons.sync,
+                  assetIcon: 'assets/icons/shifthandover.png',
                   label: 'Shift Handover',
                   onTap: () {
                     Navigator.push(
@@ -99,7 +101,7 @@ class SafetyShieldDrawer extends StatelessWidget {
                   },
                 ),
                 _DrawerItem(
-                  icon: Icons.assignment_outlined,
+                  assetIcon: 'assets/icons/task&workorders.png',
                   label: 'Tasks & Work Orders',
                   onTap: () {
                     Navigator.push(
@@ -109,7 +111,27 @@ class SafetyShieldDrawer extends StatelessWidget {
                   },
                 ),
                 _DrawerItem(
-                  icon: Icons.build_outlined,
+                  assetIcon: 'assets/icons/safety&compliance.png',
+                  label: 'Safety & Compliance',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const SafetyComplianceScreen()),
+                    );
+                  },
+                ),
+                _DrawerItem(
+                  assetIcon: 'assets/icons/zonerules.png',
+                  label: 'Zone Rules',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const ZoneRulesScreen()),
+                    );
+                  },
+                ),
+                _DrawerItem(
+                  assetIcon: 'assets/icons/equipment.png',
                   label: 'Equipment',
                   onTap: () {
                     Navigator.push(
@@ -119,12 +141,17 @@ class SafetyShieldDrawer extends StatelessWidget {
                   },
                 ),
                 _DrawerItem(
-                  icon: Icons.description_outlined,
+                  assetIcon: 'assets/icons/dailyreports.png',
                   label: 'Daily Reports',
                   onTap: () {},
                 ),
+
+                const SizedBox(height: 12),
+                const Divider(height: 1, indent: 24, endIndent: 24, color: Color(0xFFF0F0F0)),
+                const SizedBox(height: 12),
+
                 _DrawerItem(
-                  icon: Icons.settings_outlined,
+                  assetIcon: 'assets/icons/setings_dawer.png',
                   label: 'Settings',
                   onTap: () {},
                 ),
@@ -154,12 +181,14 @@ class SafetyShieldDrawer extends StatelessWidget {
 }
 
 class _DrawerItem extends StatelessWidget {
-  final IconData icon;
+  final String? assetIcon;
+  final IconData? icon;
   final String label;
   final VoidCallback onTap;
 
   const _DrawerItem({
-    required this.icon,
+    this.assetIcon,
+    this.icon,
     required this.label,
     required this.onTap,
   });
@@ -168,12 +197,24 @@ class _DrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-      leading: Icon(icon, color: AppColors.black, size: 24),
+      leading: assetIcon != null
+          ? Image.asset(
+              assetIcon!,
+              width: 24,
+              height: 24,
+              color: AppColors.black,
+              errorBuilder: (_, __, ___) => Icon(
+                icon ?? Icons.circle_outlined,
+                color: AppColors.black,
+                size: 24,
+              ),
+            )
+          : Icon(icon ?? Icons.circle_outlined, color: AppColors.black, size: 24),
       title: Text(
         label,
         style: AppStyles.poppins(
           fontSize: 16,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
           color: const Color(0xFF344054),
         ),
       ),

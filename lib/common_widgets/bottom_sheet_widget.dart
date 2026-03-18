@@ -78,9 +78,22 @@ class SafetyShieldBottomSheet extends StatelessWidget {
                 ),
               ),
               if (footer != null) ...[
-                SizedBox(height: AppSizes.h(16)),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppSizes.w(16)),
+                Container(
+                  padding: EdgeInsets.only(
+                    left: AppSizes.w(16),
+                    right: AppSizes.w(16),
+                    top: AppSizes.h(16),
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor ?? AppColors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.06),
+                        blurRadius: 10,
+                        offset: const Offset(0, -4),
+                      ),
+                    ],
+                  ),
                   child: footer!,
                 ),
               ],

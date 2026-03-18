@@ -1,64 +1,44 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import '../../model/equipment/equipment_model.dart';
+import '../../repository/equipment/equipment_repository.dart';
 
 class EquipmentController with ChangeNotifier {
-  final List<EquipmentModel> _allEquipments = [
-    const EquipmentModel(
-      id: 'TC-200',
-      name: 'Tower Crane',
-      location: 'Grid A3',
-      status: EquipmentStatus.active,
-      utilization: 0.78,
-      operatorName: 'Ahmed Hassan',
-      runtimeToday: '6.5h today',
-      alertCount: 2,
-      alertMessage: '2 proximity alerts today',
-    ),
-    const EquipmentModel(
-      id: 'CAT 320',
-      name: 'Excavator',
-      location: 'Grid C4',
-      status: EquipmentStatus.active,
-      utilization: 0.85,
-      operatorName: 'Ravi Patel',
-      runtimeToday: '7.1h today',
-    ),
-    const EquipmentModel(
-      id: 'CM-50',
-      name: 'Concrete Mixer',
-      location: 'Staging Area',
-      status: EquipmentStatus.idle,
-      utilization: 0.30,
-      operatorName: 'Unassigned',
-      runtimeToday: '2.1h today',
-    ),
-    const EquipmentModel(
-      id: 'WS-12',
-      name: 'Welding Set',
-      location: 'Grid B2',
-      status: EquipmentStatus.active,
-      utilization: 0.60,
-      operatorName: 'John Doe',
-      runtimeToday: '4.2h today',
-    ),
-    const EquipmentModel(
-      id: 'LT-10',
-      name: 'Light Tower',
-      location: 'Zone B',
-      status: EquipmentStatus.maintenance,
-      utilization: 0.0,
-      operatorName: 'Service Dept',
-      runtimeToday: '0h today',
-    ),
-  ];
+  final EquipmentRepository _repository = EquipmentRepository();
+
+  List<EquipmentModel> _allEquipments = [];
+  bool _isLoading = false;
+  String _errorMessage = '';
 
   int _selectedTabIndex = 0;
   String _searchQuery = '';
+  Set<String> _selectedTypes = {};
 
+  List<EquipmentModel> get allEquipments => _allEquipments;
+  bool get isLoading => _isLoading;
+  String get errorMessage => _errorMessage;
   int get selectedTabIndex => _selectedTabIndex;
   String get searchQuery => _searchQuery;
+  Set<String> get selectedTypes => _selectedTypes;
 
   final List<String> tabs = ['All', 'Active', 'Idle', 'Maintenance', 'Alerts'];
+
+  Future<void> fetchEquipment({int? zoneId}) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+
+    try {
+      _allEquipments = await _repository.getEquipment(zoneId: zoneId);
+      log("Fetched ${_allEquipments.length} equipment items");
+    } catch (e) {
+      log("EquipmentController Error: $e");
+      _errorMessage = "Failed to load equipment. Please try again.";
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
   List<EquipmentModel> get filteredEquipments {
     List<EquipmentModel> list = _allEquipments;
@@ -66,8 +46,10 @@ class EquipmentController with ChangeNotifier {
     // Filter by tab
     if (_selectedTabIndex > 0) {
       final tab = tabs[_selectedTabIndex];
+      // Note: 'Alerts' tab logic might need careful handling if it's not a direct status
       if (tab == 'Alerts') {
-        list = list.where((e) => e.alertCount > 0).toList();
+         // Assuming alerts means equipment with alerts, for now just filtering by some logic if applicable
+         // list = list.where((e) => e.hasAlerts).toList(); 
       } else {
         list = list.where((e) => e.statusLabel == tab).toList();
       }
@@ -77,7 +59,12 @@ class EquipmentController with ChangeNotifier {
     if (_searchQuery.isNotEmpty) {
       list = list.where((e) =>
           e.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          e.id.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+          e.equipmentCode.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+    }
+
+    // Filter by type
+    if (_selectedTypes.isNotEmpty) {
+      list = list.where((e) => _selectedTypes.contains(e.equipmentType)).toList();
     }
 
     return list;
@@ -93,9 +80,27 @@ class EquipmentController with ChangeNotifier {
     notifyListeners();
   }
 
+  void toggleType(String type) {
+    if (_selectedTypes.contains(type)) {
+      _selectedTypes.remove(type);
+    } else {
+      _selectedTypes.add(type);
+    }
+    notifyListeners();
+  }
+
+  void clearFilters() {
+    _selectedTypes.clear();
+    notifyListeners();
+  }
+
+  List<String> get availableTypes {
+    return _allEquipments.map((e) => e.equipmentType).toSet().toList();
+  }
+
   int getCountForTab(String tab) {
     if (tab == 'All') return _allEquipments.length;
-    if (tab == 'Alerts') return _allEquipments.where((e) => e.alertCount > 0).length;
+    if (tab == 'Alerts') return 0; // Placeholder until alert logic is defined
     return _allEquipments.where((e) => e.statusLabel == tab).length;
   }
 }
