@@ -230,6 +230,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
           });
         },
       ),
+      floatingActionButton: _currentIndex == 0 
+        ? FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AiAssistantScreen(),
+                ),
+              );
+            },
+            backgroundColor: Colors.white,
+            elevation: 4,
+            shape: const CircleBorder(),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Image.asset(
+                'assets/images/ai_assistant.png',
+                fit: BoxFit.contain,
+              ),
+            ),
+          )
+        : null,
     );
   }
 }
@@ -372,45 +394,6 @@ class _GoodMorningSection extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-        Positioned(
-          right: AppSizes.space16,
-          top: AppSizes.h(68),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AiAssistantScreen(),
-                ),
-              );
-            },
-            child: Container(
-              width: AppSizes.w(40),
-              height: AppSizes.w(40),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xff1A8FB5).withOpacity(0.3),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset(
-                  'assets/images/ai_assistant.png', // ✅ your image path here
-                  width: AppSizes.w(20),
-                  height: AppSizes.w(20),
-
-                  // ✅ removes if your image already has color
-                ),
-              ),
-            ),
           ),
         ),
       ],
