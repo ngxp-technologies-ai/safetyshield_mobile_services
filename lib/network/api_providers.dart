@@ -228,7 +228,7 @@ class ApiProvider {
     // Show session expired message
     NotifySnackBar.show(
       "Session expired. Please login again.",
-      SnackBarType.Fail,
+      SnackBarType.fail,
     );
 
     // Navigate to login screen using navigatorKey
@@ -283,7 +283,7 @@ class ApiProvider {
         log(
           '401 error caught in PUT - should have been handled by interceptor',
         );
-        throw e;
+        rethrow;
       }
       // Rethrow client errors (4xx) so callers can extract the error message
       if (e.response != null &&
@@ -339,7 +339,7 @@ class ApiProvider {
         log(
           '401 error caught in GET - should have been handled by interceptor',
         );
-        throw e;
+        rethrow;
       }
       log('GET request failed: $e');
       log('Stacktrace: ${e.stackTrace}');
@@ -391,7 +391,7 @@ class ApiProvider {
         log(
           '401 error caught in POST - should have been handled by interceptor',
         );
-        throw e;
+        rethrow;
       }
       // Return 400/409 response data so callers can extract error messages
       if (e.response != null &&
@@ -549,7 +549,7 @@ class ApiProvider {
         log(
           '401 error caught in DELETE - should have been handled by interceptor',
         );
-        throw e;
+        rethrow;
       }
       // Return 400/409 response data so callers can extract error messages
       if (e.response != null &&

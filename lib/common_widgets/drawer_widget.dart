@@ -106,7 +106,9 @@ class SafetyShieldDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => TasksAndWorkOrdersScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => TasksAndWorkOrdersScreen(),
+                      ),
                     );
                   },
                 ),
@@ -116,7 +118,9 @@ class SafetyShieldDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const SafetyComplianceScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => const SafetyComplianceScreen(),
+                      ),
                     );
                   },
                 ),
@@ -126,7 +130,9 @@ class SafetyShieldDrawer extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const ZoneRulesScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => const ZoneRulesScreen(),
+                      ),
                     );
                   },
                 ),
@@ -147,7 +153,12 @@ class SafetyShieldDrawer extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 12),
-                const Divider(height: 1, indent: 24, endIndent: 24, color: Color(0xFFF0F0F0)),
+                const Divider(
+                  height: 1,
+                  indent: 24,
+                  endIndent: 24,
+                  color: Color(0xFFF0F0F0),
+                ),
                 const SizedBox(height: 12),
 
                 _DrawerItem(
@@ -182,16 +193,10 @@ class SafetyShieldDrawer extends StatelessWidget {
 
 class _DrawerItem extends StatelessWidget {
   final String? assetIcon;
-  final IconData? icon;
   final String label;
   final VoidCallback onTap;
 
-  const _DrawerItem({
-    this.assetIcon,
-    this.icon,
-    required this.label,
-    required this.onTap,
-  });
+  const _DrawerItem({this.assetIcon, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -203,13 +208,13 @@ class _DrawerItem extends StatelessWidget {
               width: 24,
               height: 24,
               color: AppColors.black,
-              errorBuilder: (_, __, ___) => Icon(
-                icon ?? Icons.circle_outlined,
+              errorBuilder: (_, __, ___) => const Icon(
+                Icons.circle_outlined,
                 color: AppColors.black,
                 size: 24,
               ),
             )
-          : Icon(icon ?? Icons.circle_outlined, color: AppColors.black, size: 24),
+          : const Icon(Icons.circle_outlined, color: AppColors.black, size: 24),
       title: Text(
         label,
         style: AppStyles.poppins(

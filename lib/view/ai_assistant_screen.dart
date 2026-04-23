@@ -98,7 +98,7 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: const Color(0xFF1F8FB5).withOpacity(0.1),
+              color: const Color(0xFF1F8FB5).withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -141,7 +141,7 @@ class _AiAssistantScreenState extends State<AiAssistantScreen> {
           Icon(
             Icons.auto_awesome,
             size: 48,
-            color: const Color(0xFF1F8FB5).withOpacity(0.4),
+            color: const Color(0xFF1F8FB5).withValues(alpha: 0.4),
           ),
           const SizedBox(height: 12),
           Text(
@@ -270,7 +270,7 @@ class _MessageBubble extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 6,
                   offset: const Offset(0, 2),
                 ),

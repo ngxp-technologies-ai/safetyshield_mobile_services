@@ -5,8 +5,8 @@ import '../utils/app_colors.dart';
 
 class RtspVideoPlayer extends StatefulWidget {
   final String url;
-  
-  const RtspVideoPlayer({Key? key, required this.url}) : super(key: key);
+
+  const RtspVideoPlayer({super.key, required this.url});
 
   @override
   State<RtspVideoPlayer> createState() => _RtspVideoPlayerState();
@@ -22,21 +22,23 @@ class _RtspVideoPlayerState extends State<RtspVideoPlayer> {
     super.initState();
     WakelockPlus.enable();
     _controller = VideoPlayerController.networkUrl(Uri.parse(widget.url))
-      ..initialize().then((_) {
-        if (mounted) {
-          setState(() {
-            _initialized = true;
+      ..initialize()
+          .then((_) {
+            if (mounted) {
+              setState(() {
+                _initialized = true;
+              });
+              _controller.play();
+              _controller.setVolume(0.0); // usually mute by default
+            }
+          })
+          .catchError((e) {
+            if (mounted) {
+              setState(() {
+                _hasError = true;
+              });
+            }
           });
-          _controller.play();
-          _controller.setVolume(0.0); // usually mute by default
-        }
-      }).catchError((e) {
-        if (mounted) {
-          setState(() {
-            _hasError = true;
-          });
-        }
-      });
   }
 
   @override
@@ -56,13 +58,11 @@ class _RtspVideoPlayerState extends State<RtspVideoPlayer> {
         ),
       );
     }
-    
+
     if (!_initialized) {
       return Container(
         color: Colors.black12,
-        child: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        child: const Center(child: CircularProgressIndicator()),
       );
     }
 

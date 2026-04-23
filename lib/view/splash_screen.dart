@@ -21,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _initApp() async {
     await Future.delayed(const Duration(seconds: 2));
 
+    if (!mounted) return;
     final authController = context.read<AuthController>();
     final isLoggedIn = await authController.restoreSession();
 

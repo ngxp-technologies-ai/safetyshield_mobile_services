@@ -19,7 +19,7 @@ class TaskController extends ChangeNotifier {
     } catch (e) {
       NotifySnackBar.show(
         e.toString().replaceFirst("Exception: ", ""),
-        SnackBarType.Fail,
+        SnackBarType.fail,
       );
     } finally {
       isLoading = false;
@@ -29,7 +29,9 @@ class TaskController extends ChangeNotifier {
 
   List<TaskModel> getTasksByStatus(String? status) {
     if (status == null || status.toLowerCase() == 'all') return _tasks;
-    return _tasks.where((task) => task.status.toLowerCase() == status.toLowerCase()).toList();
+    return _tasks
+        .where((task) => task.status.toLowerCase() == status.toLowerCase())
+        .toList();
   }
 
   Future<void> addTask(TaskModel task) async {
@@ -38,11 +40,11 @@ class TaskController extends ChangeNotifier {
       notifyListeners();
       final newTask = await _repository.createTask(task);
       _tasks.add(newTask);
-      NotifySnackBar.show("Task created successfully", SnackBarType.Success);
+      NotifySnackBar.show("Task created successfully", SnackBarType.success);
     } catch (e) {
       NotifySnackBar.show(
         e.toString().replaceFirst("Exception: ", ""),
-        SnackBarType.Fail,
+        SnackBarType.fail,
       );
     } finally {
       isLoading = false;
@@ -56,11 +58,11 @@ class TaskController extends ChangeNotifier {
       notifyListeners();
       await _repository.deleteTask(id);
       _tasks.removeWhere((task) => task.id == id);
-      NotifySnackBar.show("Task deleted successfully", SnackBarType.Success);
+      NotifySnackBar.show("Task deleted successfully", SnackBarType.success);
     } catch (e) {
       NotifySnackBar.show(
         e.toString().replaceFirst("Exception: ", ""),
-        SnackBarType.Fail,
+        SnackBarType.fail,
       );
     } finally {
       isLoading = false;

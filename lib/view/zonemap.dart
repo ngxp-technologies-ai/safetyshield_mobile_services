@@ -187,7 +187,7 @@ class _ZoneMapScreenState extends State<ZoneMapScreen> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
+                        color: Colors.black.withValues(alpha: 0.04),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -336,7 +336,7 @@ class _ZoneMapBox extends StatelessWidget {
               style: AppStyles.poppins(
                 fontSize: AppSizes.fs15,
                 fontWeight: FontWeight.w600,
-                color: AppColors.black.withOpacity(0.8),
+                color: AppColors.black.withValues(alpha: 0.8),
               ),
             ),
           ),
@@ -395,7 +395,7 @@ class _ZoneListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppSizes.radiusSmall),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -480,9 +480,12 @@ class _ZoneListItem extends StatelessWidget {
               vertical: AppSizes.h(5),
             ),
             decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.1),
+              color: statusColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(AppSizes.radiusXLarge),
-              border: Border.all(color: statusColor.withOpacity(0.3), width: 1),
+              border: Border.all(
+                color: statusColor.withValues(alpha: 0.3),
+                width: 1,
+              ),
             ),
             child: Text(
               zone.status,

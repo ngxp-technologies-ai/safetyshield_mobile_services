@@ -33,7 +33,7 @@ class MyCrewController extends ChangeNotifier {
     } catch (e) {
       NotifySnackBar.show(
         e.toString().replaceFirst("Exception: ", ""),
-        SnackBarType.Fail,
+        SnackBarType.fail,
       );
     } finally {
       isLoading = false;

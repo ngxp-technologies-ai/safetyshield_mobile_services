@@ -190,7 +190,6 @@ class SignUpScreen extends StatelessWidget {
             left: ScreenSize.width * 0.05,
             child: GestureDetector(
               onTap: () {
-                print("BACK PRESSED");
                 Navigator.pop(context);
               },
               child: Image.asset(

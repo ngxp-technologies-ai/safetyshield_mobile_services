@@ -267,7 +267,6 @@ class _TaskCard extends StatelessWidget {
       backgroundColor: Colors.transparent,
       builder: (_) => TaskOptionsBottomSheet(
         onEdit: () {
-          // TODO: Implement Edit
         },
         onDelete: () {
           if (task.id != null) {

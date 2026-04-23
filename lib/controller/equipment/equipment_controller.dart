@@ -12,7 +12,7 @@ class EquipmentController with ChangeNotifier {
 
   int _selectedTabIndex = 0;
   String _searchQuery = '';
-  Set<String> _selectedTypes = {};
+  final Set<String> _selectedTypes = {};
 
   List<EquipmentModel> get allEquipments => _allEquipments;
   bool get isLoading => _isLoading;

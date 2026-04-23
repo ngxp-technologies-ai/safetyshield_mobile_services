@@ -73,7 +73,9 @@ class SafetyShieldBottomSheet extends StatelessWidget {
               ],
               Flexible(
                 child: Padding(
-                  padding: padding ?? EdgeInsets.symmetric(horizontal: AppSizes.w(16)),
+                  padding:
+                      padding ??
+                      EdgeInsets.symmetric(horizontal: AppSizes.w(16)),
                   child: child,
                 ),
               ),
@@ -88,7 +90,7 @@ class SafetyShieldBottomSheet extends StatelessWidget {
                     color: backgroundColor ?? AppColors.white,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.06),
+                        color: Colors.black.withValues(alpha: 0.06),
                         blurRadius: 10,
                         offset: const Offset(0, -4),
                       ),
@@ -106,7 +108,7 @@ class SafetyShieldBottomSheet extends StatelessWidget {
 
   static Future<T?> show<T>({
     required BuildContext context,
-    required Widget builder(BuildContext context),
+    required Widget Function(BuildContext context) builder,
     bool isScrollControlled = true,
     Color backgroundColor = Colors.transparent,
   }) {

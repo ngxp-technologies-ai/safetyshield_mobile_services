@@ -38,8 +38,9 @@ class _CameraScreenState extends State<CameraScreen> {
           'With Alerts(${alertCameras.length})',
         ];
 
-        final List<CameraModel> displayed =
-            _selectedTab == 0 ? activeCameras : alertCameras;
+        final List<CameraModel> displayed = _selectedTab == 0
+            ? activeCameras
+            : alertCameras;
 
         if (controller.isLoading) {
           return const Center(child: CircularProgressIndicator());
@@ -84,8 +85,9 @@ class _CameraScreenState extends State<CameraScreen> {
                   return GestureDetector(
                     onTap: () => setState(() => _selectedTab = index),
                     child: Container(
-                      margin:
-                          EdgeInsets.only(right: AppSizes.horizontalPadding),
+                      margin: EdgeInsets.only(
+                        right: AppSizes.horizontalPadding,
+                      ),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         border: isSelected
@@ -126,11 +128,11 @@ class _CameraScreenState extends State<CameraScreen> {
                       padding: EdgeInsets.all(AppSizes.cardPaddingLarge),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                        childAspectRatio: 0.85,
-                      ),
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: 0.85,
+                          ),
                       itemCount: displayed.length,
                       itemBuilder: (context, index) {
                         return _CameraCard(camera: displayed[index]);
@@ -165,7 +167,7 @@ class _CameraCard extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -191,7 +193,7 @@ class _CameraCard extends StatelessWidget {
                           'rtsp://Admin:Lmpp2025@103.182.160.134:10554/live/channel0',
                           'rtsp://Admin:Lmpp2025@103.182.160.134:10555/live/channel0',
                           'rtsp://Admin:Lmpp2025@103.182.160.134:10558/live/channel0',
-                          'rtsp://Admin:Lmpp2025@103.182.160.134:10559/live/channel0'
+                          'rtsp://Admin:Lmpp2025@103.182.160.134:10559/live/channel0',
                         ][camera.id % 6],
                       ),
                     ),
@@ -316,7 +318,9 @@ class CameraDetailsBottomSheet extends StatelessWidget {
     return SafetyShieldBottomSheet(
       backgroundColor: Colors.white,
       padding: EdgeInsets.symmetric(
-          horizontal: AppSizes.w(16), vertical: AppSizes.h(10)),
+        horizontal: AppSizes.w(16),
+        vertical: AppSizes.h(10),
+      ),
       footer: Row(
         children: [
           Expanded(
@@ -386,15 +390,18 @@ class CameraDetailsBottomSheet extends StatelessWidget {
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: Color(0xFFF1F1F1),
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(11)),
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(11),
+                    ),
                   ),
                   child: Stack(
                     children: [
                       // Live Stream Player
                       Positioned.fill(
                         child: ClipRRect(
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(11)),
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(11),
+                          ),
                           child: CameraStreamPlayer(
                             rtspUrl: [
                               'rtsp://Admin:Lmpp2025@103.182.160.134:10557/live/channel0',
@@ -402,7 +409,7 @@ class CameraDetailsBottomSheet extends StatelessWidget {
                               'rtsp://Admin:Lmpp2025@103.182.160.134:10554/live/channel0',
                               'rtsp://Admin:Lmpp2025@103.182.160.134:10555/live/channel0',
                               'rtsp://Admin:Lmpp2025@103.182.160.134:10558/live/channel0',
-                              'rtsp://Admin:Lmpp2025@103.182.160.134:10559/live/channel0'
+                              'rtsp://Admin:Lmpp2025@103.182.160.134:10559/live/channel0',
                             ][camera.id % 6],
                           ),
                         ),
@@ -479,8 +486,9 @@ class CameraDetailsBottomSheet extends StatelessWidget {
                   padding: const EdgeInsets.all(12),
                   decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius:
-                        BorderRadius.vertical(bottom: Radius.circular(11)),
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(11),
+                    ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -518,8 +526,11 @@ class CameraDetailsBottomSheet extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.error_outline,
-                      color: AppColors.error, size: 18),
+                  const Icon(
+                    Icons.error_outline,
+                    color: AppColors.error,
+                    size: 18,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     "${camera.alertCount} Active alerts",
@@ -534,7 +545,7 @@ class CameraDetailsBottomSheet extends StatelessWidget {
                     "Tap \"Jump to Alerts\" to see details",
                     style: AppStyles.poppins(
                       fontSize: 10,
-                      color: AppColors.error.withOpacity(0.7),
+                      color: AppColors.error.withValues(alpha: 0.7),
                     ),
                   ),
                 ],
@@ -558,7 +569,7 @@ class CameraDetailsBottomSheet extends StatelessWidget {
               "Motion Detected",
               "Proximity alert",
               "PPE Check",
-              "Zone Entry"
+              "Zone Entry",
             ];
             final times = ["2m ago", "8m ago", "14m ago", "22m ago", "30m ago"];
 
@@ -575,8 +586,11 @@ class CameraDetailsBottomSheet extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.access_time,
-                        size: 16, color: AppColors.grey.withOpacity(0.6)),
+                    Icon(
+                      Icons.access_time,
+                      size: 16,
+                      color: AppColors.grey.withValues(alpha: 0.6),
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(

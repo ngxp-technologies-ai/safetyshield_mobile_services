@@ -68,9 +68,6 @@ class _SafetyComplianceScreenState extends State<SafetyComplianceScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
       appBar: PreferredSize(
@@ -92,74 +89,78 @@ class _SafetyComplianceScreenState extends State<SafetyComplianceScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppSizes.w(20), vertical: AppSizes.h(16)),
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSizes.w(20),
+            vertical: AppSizes.h(16),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // KPI Grid
               Consumer2<DashboardController, AlertStatsController>(
-                builder: (context, dashController, alertStatsController, child) {
-                  final dashStats = dashController.stats;
-                  final alertStats = alertStatsController.stats;
-                  
-                  final kpis = [
-                    _KPIItem(
-                      title: "PPE Compliance", 
-                      value: "${dashStats.safetyScore}%", 
-                      icon: Icons.shield_outlined, 
-                      color: const Color(0xFFFDB022),
-                    ),
-                    _KPIItem(
-                      title: "Active Permits", 
-                      value: "${dashStats.tasksActive}", 
-                      icon: Icons.description_outlined, 
-                      color: const Color(0xFF12B76A),
-                    ),
-                    _KPIItem(
-                      title: "Expired Permits", 
-                      value: "${dashStats.delayed}", 
-                      icon: Icons.error_outline, 
-                      color: const Color(0xFFF04438),
-                    ),
-                    _KPIItem(
-                      title: "Near Misses", 
-                      value: "${alertStats.criticalCount}", 
-                      icon: Icons.warning_amber_rounded, 
-                      color: const Color(0xFFFDB022),
-                    ),
-                    _KPIItem(
-                      title: "Violations", 
-                      value: "${alertStats.activeAlerts}", 
-                      icon: Icons.block, 
-                      color: const Color(0xFFF04438),
-                    ),
-                    _KPIItem(
-                      title: "Coaching Notes", 
-                      value: "${alertStats.acknowledgedToday}", 
-                      icon: Icons.chat_bubble_outline, 
-                      color: AppColors.black,
-                    ),
-                  ];
-                  
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: AppSizes.h(8),
-                      crossAxisSpacing: AppSizes.w(8),
-                      childAspectRatio: 1.15,
-                    ),
-                    itemCount: kpis.length,
-                    itemBuilder: (context, index) {
-                      return _KPICard(kpi: kpis[index]);
+                builder:
+                    (context, dashController, alertStatsController, child) {
+                      final dashStats = dashController.stats;
+                      final alertStats = alertStatsController.stats;
+
+                      final kpis = [
+                        _KPIItem(
+                          title: "PPE Compliance",
+                          value: "${dashStats.safetyScore}%",
+                          icon: Icons.shield_outlined,
+                          color: const Color(0xFFFDB022),
+                        ),
+                        _KPIItem(
+                          title: "Active Permits",
+                          value: "${dashStats.tasksActive}",
+                          icon: Icons.description_outlined,
+                          color: const Color(0xFF12B76A),
+                        ),
+                        _KPIItem(
+                          title: "Expired Permits",
+                          value: "${dashStats.delayed}",
+                          icon: Icons.error_outline,
+                          color: const Color(0xFFF04438),
+                        ),
+                        _KPIItem(
+                          title: "Near Misses",
+                          value: "${alertStats.criticalCount}",
+                          icon: Icons.warning_amber_rounded,
+                          color: const Color(0xFFFDB022),
+                        ),
+                        _KPIItem(
+                          title: "Violations",
+                          value: "${alertStats.activeAlerts}",
+                          icon: Icons.block,
+                          color: const Color(0xFFF04438),
+                        ),
+                        _KPIItem(
+                          title: "Coaching Notes",
+                          value: "${alertStats.acknowledgedToday}",
+                          icon: Icons.chat_bubble_outline,
+                          color: AppColors.black,
+                        ),
+                      ];
+
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          mainAxisSpacing: AppSizes.h(8),
+                          crossAxisSpacing: AppSizes.w(8),
+                          childAspectRatio: 1.15,
+                        ),
+                        itemCount: kpis.length,
+                        itemBuilder: (context, index) {
+                          return _KPICard(kpi: kpis[index]);
+                        },
+                      );
                     },
-                  );
-                },
               ),
-              
+
               SizedBox(height: AppSizes.h(16)),
-              
+
               // Recent Violations Header
               Row(
                 children: [
@@ -182,18 +183,19 @@ class _SafetyComplianceScreenState extends State<SafetyComplianceScreen> {
                   ),
                 ],
               ),
-              
+
               SizedBox(height: AppSizes.h(16)),
-              
+
               // Violations List
               Consumer<AlertController>(
                 builder: (context, alertController, child) {
-                  if (alertController.isLoading && alertController.activeAlerts.isEmpty) {
+                  if (alertController.isLoading &&
+                      alertController.activeAlerts.isEmpty) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  
+
                   final alerts = alertController.activeAlerts;
-                  
+
                   if (alerts.isEmpty) {
                     return Center(
                       child: Padding(
@@ -213,16 +215,16 @@ class _SafetyComplianceScreenState extends State<SafetyComplianceScreen> {
                     itemBuilder: (context, index) {
                       final alert = alerts[index];
                       final bColor = _getColorForSeverity(alert.severity);
-                      
+
                       final violationItem = _ViolationItem(
                         initials: _getInitials(alert.personId),
                         title: alert.violationTitle,
                         subtitle: alert.cameraId,
                         timeAgo: _timeAgo(alert.timestamp),
                         color: bColor,
-                        snapshotUrl: alert.snapshotUrl, 
+                        snapshotUrl: alert.snapshotUrl,
                       );
-                      
+
                       return _ViolationCard(item: violationItem);
                     },
                   );
@@ -242,7 +244,12 @@ class _KPIItem {
   final IconData icon;
   final Color color;
 
-  _KPIItem({required this.title, required this.value, required this.icon, required this.color});
+  _KPIItem({
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
 }
 
 class _KPICard extends StatelessWidget {
@@ -259,13 +266,16 @@ class _KPICard extends StatelessWidget {
         border: Border.all(color: const Color(0xFFF0F0F0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
         ],
       ),
-      padding: EdgeInsets.symmetric(vertical: AppSizes.h(10), horizontal: AppSizes.w(6)),
+      padding: EdgeInsets.symmetric(
+        vertical: AppSizes.h(10),
+        horizontal: AppSizes.w(6),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -347,7 +357,7 @@ class _ViolationCard extends StatelessWidget {
           border: Border.all(color: const Color(0xFFF0F0F0)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.02),
+              color: Colors.black.withValues(alpha: 0.02),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -376,7 +386,7 @@ class _ViolationCard extends StatelessWidget {
               ),
             ),
             SizedBox(width: AppSizes.w(10)),
-            
+
             // Text Content
             Expanded(
               child: Column(

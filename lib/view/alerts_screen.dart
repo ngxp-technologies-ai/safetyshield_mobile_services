@@ -61,7 +61,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
     await alertController.acknowledgeAlert(item.id);
     NotifySnackBar.show(
       'Alert acknowledged successfully',
-      SnackBarType.Success,
+      SnackBarType.success,
     );
     // Refresh stats to update tab counts and app bar subtitle
     if (mounted) {
@@ -189,7 +189,7 @@ class AlertCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(AppSizes.w(12)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -218,7 +218,7 @@ class AlertCard extends StatelessWidget {
                             (isCritical
                                     ? AppColors.error
                                     : AppColors.activeOrange)
-                                .withOpacity(0.08),
+                                .withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(AppSizes.w(10)),
                       ),
                       child: Center(
@@ -431,8 +431,8 @@ class AlertCard extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: isCritical
-                  ? AppColors.error.withOpacity(0.1)
-                  : AppColors.warning.withOpacity(0.1),
+                  ? AppColors.error.withValues(alpha: 0.1)
+                  : AppColors.warning.withValues(alpha: 0.1),
               borderRadius: const BorderRadius.only(
                 topRight: Radius.circular(12),
                 bottomLeft: Radius.circular(8),

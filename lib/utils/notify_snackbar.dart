@@ -3,18 +3,18 @@ import 'package:safety_management/utils/app_size.dart';
 import 'package:safety_management/utils/app_styles.dart';
 import '../../utils/app_colors.dart';
 
-enum SnackBarType { Success, Fail }
+enum SnackBarType { success, fail }
 
 class NotifySnackBar {
   static final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
-  static void show(String message, [SnackBarType? type = SnackBarType.Fail]) {
+  static void show(String message, [SnackBarType? type = SnackBarType.fail]) {
     scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
     scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: type == SnackBarType.Success
+        backgroundColor: type == SnackBarType.success
             ? Colors.green
             : Colors.red,
         content: AnimatedSnackBarText(message: message, type: type),
@@ -76,7 +76,7 @@ class _AnimatedSnackBarTextState extends State<AnimatedSnackBarText>
 
   @override
   Widget build(BuildContext context) {
-    final icon = widget.type == SnackBarType.Success
+    final icon = widget.type == SnackBarType.success
         ? Icons.check_circle_outline
         : Icons.error_outline;
 

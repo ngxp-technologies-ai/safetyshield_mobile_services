@@ -115,9 +115,7 @@ class _EquipmentsScreenState extends State<EquipmentsScreen> {
                 height: AppSizes.h(45),
                 decoration: const BoxDecoration(
                   color: AppColors.white,
-                  border: Border(
-                    bottom: BorderSide(color: Color(0xFFE5E5E5)),
-                  ),
+                  border: Border(bottom: BorderSide(color: Color(0xFFE5E5E5))),
                 ),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -136,11 +134,11 @@ class _EquipmentsScreenState extends State<EquipmentsScreen> {
                         decoration: BoxDecoration(
                           border: isSelected
                               ? const Border(
-                            bottom: BorderSide(
-                              color: AppColors.primary,
-                              width: 2,
-                            ),
-                          )
+                                  bottom: BorderSide(
+                                    color: AppColors.primary,
+                                    width: 2,
+                                  ),
+                                )
                               : null,
                         ),
                         child: Text(
@@ -150,8 +148,9 @@ class _EquipmentsScreenState extends State<EquipmentsScreen> {
                             fontWeight: isSelected
                                 ? FontWeight.w600
                                 : FontWeight.w400,
-                            color:
-                            isSelected ? AppColors.black : AppColors.grey,
+                            color: isSelected
+                                ? AppColors.black
+                                : AppColors.grey,
                           ),
                         ),
                       ),
@@ -164,21 +163,23 @@ class _EquipmentsScreenState extends State<EquipmentsScreen> {
               Expanded(
                 child: controller.filteredEquipments.isEmpty
                     ? Center(
-                  child: Text(
-                    "No equipment found",
-                    style: AppStyles.poppins(
-                        fontSize: 14, color: AppColors.grey),
-                  ),
-                )
+                        child: Text(
+                          "No equipment found",
+                          style: AppStyles.poppins(
+                            fontSize: 14,
+                            color: AppColors.grey,
+                          ),
+                        ),
+                      )
                     : ListView.builder(
-                  padding: EdgeInsets.all(AppSizes.w(16)),
-                  itemCount: controller.filteredEquipments.length,
-                  itemBuilder: (context, index) {
-                    final equipment =
-                    controller.filteredEquipments[index];
-                    return _EquipmentCard(equipment: equipment);
-                  },
-                ),
+                        padding: EdgeInsets.all(AppSizes.w(16)),
+                        itemCount: controller.filteredEquipments.length,
+                        itemBuilder: (context, index) {
+                          final equipment =
+                              controller.filteredEquipments[index];
+                          return _EquipmentCard(equipment: equipment);
+                        },
+                      ),
               ),
             ],
           );
@@ -209,7 +210,7 @@ class _EquipmentCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withValues(alpha: 0.04),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -286,8 +287,10 @@ class _EquipmentCard extends StatelessWidget {
                   children: [
                     Text(
                       "Utilization",
-                      style:
-                      AppStyles.poppins(fontSize: 11, color: AppColors.grey),
+                      style: AppStyles.poppins(
+                        fontSize: 11,
+                        color: AppColors.grey,
+                      ),
                     ),
                     const Spacer(),
                     Text(
@@ -316,35 +319,47 @@ class _EquipmentCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(top: AppSizes.h(10)),
                   decoration: const BoxDecoration(
-                    border:
-                    Border(top: BorderSide(color: Color(0xFFF0F0F0))),
+                    border: Border(top: BorderSide(color: Color(0xFFF0F0F0))),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.person_outline,
-                          size: 14, color: AppColors.grey),
+                      const Icon(
+                        Icons.person_outline,
+                        size: 14,
+                        color: AppColors.grey,
+                      ),
                       SizedBox(width: AppSizes.w(4)),
                       Flexible(
                         child: Text(
                           equipment.operatorName ?? 'Unassigned',
                           style: AppStyles.poppins(
-                              fontSize: 11, color: AppColors.grey),
+                            fontSize: 11,
+                            color: AppColors.grey,
+                          ),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       SizedBox(width: AppSizes.w(14)),
-                      const Icon(Icons.access_time,
-                          size: 14, color: AppColors.grey),
+                      const Icon(
+                        Icons.access_time,
+                        size: 14,
+                        color: AppColors.grey,
+                      ),
                       SizedBox(width: AppSizes.w(4)),
                       Text(
                         equipment.runtimeToday,
                         style: AppStyles.poppins(
-                            fontSize: 11, color: AppColors.grey),
+                          fontSize: 11,
+                          color: AppColors.grey,
+                        ),
                       ),
                       if (equipment.hoursToday > 0) ...[
                         SizedBox(width: AppSizes.w(14)),
-                        const Icon(Icons.warning_amber_rounded,
-                            size: 14, color: AppColors.error),
+                        const Icon(
+                          Icons.warning_amber_rounded,
+                          size: 14,
+                          color: AppColors.error,
+                        ),
                         SizedBox(width: AppSizes.w(4)),
                         Text(
                           "2 alerts",
@@ -375,8 +390,11 @@ class _EquipmentCard extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.warning_amber_rounded,
-                            color: AppColors.error, size: 14),
+                        const Icon(
+                          Icons.warning_amber_rounded,
+                          color: AppColors.error,
+                          size: 14,
+                        ),
                         SizedBox(width: AppSizes.w(6)),
                         Text(
                           "2 proximity alerts today",
@@ -443,11 +461,11 @@ class _EquipmentFilterSheetState extends State<_EquipmentFilterSheet> {
                 child: OutlinedButton(
                   onPressed: () => controller.clearFilters(),
                   style: OutlinedButton.styleFrom(
-                    padding:
-                    EdgeInsets.symmetric(vertical: AppSizes.h(14)),
+                    padding: EdgeInsets.symmetric(vertical: AppSizes.h(14)),
                     side: const BorderSide(color: Color(0xFFD0D5DD)),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   child: Text(
                     "Reset",
@@ -465,10 +483,10 @@ class _EquipmentFilterSheetState extends State<_EquipmentFilterSheet> {
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
-                    padding:
-                    EdgeInsets.symmetric(vertical: AppSizes.h(14)),
+                    padding: EdgeInsets.symmetric(vertical: AppSizes.h(14)),
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     elevation: 0,
                   ),
                   child: Text(
@@ -502,8 +520,7 @@ class _EquipmentFilterSheetState extends State<_EquipmentFilterSheet> {
   String _formatType(String type) {
     return type
         .split('_')
-        .map((w) =>
-    w.isNotEmpty ? w[0].toUpperCase() + w.substring(1) : '')
+        .map((w) => w.isNotEmpty ? w[0].toUpperCase() + w.substring(1) : '')
         .join(' ');
   }
 }
@@ -538,8 +555,7 @@ class _FilterCheckboxRow extends StatelessWidget {
                       : const Color(0xFFD0D5DD),
                   width: 1.5,
                 ),
-                color:
-                isSelected ? AppColors.primary : Colors.transparent,
+                color: isSelected ? AppColors.primary : Colors.transparent,
               ),
               child: isSelected
                   ? const Icon(Icons.check, size: 14, color: Colors.white)
@@ -586,15 +602,20 @@ class _EquipmentDetailsSheet extends StatelessWidget {
               label: Text(
                 "View on map",
                 style: AppStyles.poppins(
-                    fontSize: 12, fontWeight: FontWeight.w500),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.black,
                 side: const BorderSide(color: Color(0xFFD0D5DD)),
                 padding: EdgeInsets.symmetric(
-                    vertical: AppSizes.h(12), horizontal: 8),
+                  vertical: AppSizes.h(12),
+                  horizontal: 8,
+                ),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
             ),
           ),
@@ -606,9 +627,10 @@ class _EquipmentDetailsSheet extends StatelessWidget {
               label: Text(
                 "Request maintenance",
                 style: AppStyles.poppins(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.white),
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.white,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -616,9 +638,12 @@ class _EquipmentDetailsSheet extends StatelessWidget {
                 backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.white,
                 padding: EdgeInsets.symmetric(
-                    vertical: AppSizes.h(12), horizontal: 8),
+                  vertical: AppSizes.h(12),
+                  horizontal: 8,
+                ),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 elevation: 0,
               ),
             ),
@@ -742,8 +767,11 @@ class _EquipmentDetailsSheet extends StatelessWidget {
             // Maintenance Schedule
             Row(
               children: [
-                Icon(Icons.event_note_outlined,
-                    size: 16, color: AppColors.grey),
+                Icon(
+                  Icons.event_note_outlined,
+                  size: 16,
+                  color: AppColors.grey,
+                ),
                 const SizedBox(width: 6),
                 Text(
                   "Maintenance schedule",
@@ -758,7 +786,9 @@ class _EquipmentDetailsSheet extends StatelessWidget {
             SizedBox(height: AppSizes.h(10)),
             Container(
               padding: EdgeInsets.symmetric(
-                  horizontal: AppSizes.w(14), vertical: AppSizes.h(10)),
+                horizontal: AppSizes.w(14),
+                vertical: AppSizes.h(10),
+              ),
               decoration: BoxDecoration(
                 color: const Color(0xFFF9FAFB),
                 borderRadius: BorderRadius.circular(8),
@@ -773,7 +803,9 @@ class _EquipmentDetailsSheet extends StatelessWidget {
                         Text(
                           "Last service",
                           style: AppStyles.poppins(
-                              fontSize: 14, color: AppColors.grey),
+                            fontSize: 14,
+                            color: AppColors.grey,
+                          ),
                         ),
                         Text(
                           "3 days ago",
@@ -787,7 +819,10 @@ class _EquipmentDetailsSheet extends StatelessWidget {
                     ),
                   ),
                   Container(
-                      width: 1, height: 30, color: const Color(0xFFE5E5E5)),
+                    width: 1,
+                    height: 30,
+                    color: const Color(0xFFE5E5E5),
+                  ),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(left: AppSizes.w(14)),
@@ -797,7 +832,9 @@ class _EquipmentDetailsSheet extends StatelessWidget {
                           Text(
                             "Next due",
                             style: AppStyles.poppins(
-                                fontSize: 14, color: AppColors.grey),
+                              fontSize: 14,
+                              color: AppColors.grey,
+                            ),
                           ),
                           Text(
                             "In 4 days",
@@ -819,8 +856,7 @@ class _EquipmentDetailsSheet extends StatelessWidget {
             // Recent Alerts
             Row(
               children: [
-                Icon(Icons.notifications_none,
-                    size: 16, color: AppColors.grey),
+                Icon(Icons.notifications_none, size: 16, color: AppColors.grey),
                 const SizedBox(width: 6),
                 Text(
                   "Recent Alerts",
@@ -836,7 +872,9 @@ class _EquipmentDetailsSheet extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(
-                  horizontal: AppSizes.w(12), vertical: AppSizes.h(10)),
+                horizontal: AppSizes.w(12),
+                vertical: AppSizes.h(10),
+              ),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFF1F0),
                 borderRadius: BorderRadius.circular(8),
@@ -844,8 +882,11 @@ class _EquipmentDetailsSheet extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.warning_amber_rounded,
-                      color: AppColors.error, size: 16),
+                  const Icon(
+                    Icons.warning_amber_rounded,
+                    color: AppColors.error,
+                    size: 16,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -869,8 +910,7 @@ class _EquipmentDetailsSheet extends StatelessWidget {
   String _formatType(String type) {
     return type
         .split('_')
-        .map((w) =>
-    w.isNotEmpty ? w[0].toUpperCase() + w.substring(1) : '')
+        .map((w) => w.isNotEmpty ? w[0].toUpperCase() + w.substring(1) : '')
         .join(' ');
   }
 }

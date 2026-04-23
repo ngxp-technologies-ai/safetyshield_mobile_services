@@ -65,10 +65,10 @@ class AuthController extends ChangeNotifier {
       await SecureStorage.storeRefreshToken(response.refreshToken);
       await SecureStorage.storeUserRole(response.role);
 
-      NotifySnackBar.show("Login successful", SnackBarType.Success);
+      NotifySnackBar.show("Login successful", SnackBarType.success);
       return true;
     } catch (e) {
-      NotifySnackBar.show(_readableErrorMessage(e), SnackBarType.Fail);
+      NotifySnackBar.show(_readableErrorMessage(e), SnackBarType.fail);
       return false;
     } finally {
       isLoading = false;
@@ -111,7 +111,7 @@ class AuthController extends ChangeNotifier {
       await SecureStorage.storeAccessToken(response.accessToken);
 
       if (showMessage) {
-        NotifySnackBar.show("Session refreshed", SnackBarType.Success);
+        NotifySnackBar.show("Session refreshed", SnackBarType.success);
       }
 
       return true;
@@ -119,7 +119,7 @@ class AuthController extends ChangeNotifier {
       await logout();
 
       if (showMessage) {
-        NotifySnackBar.show(_readableErrorMessage(e), SnackBarType.Fail);
+        NotifySnackBar.show(_readableErrorMessage(e), SnackBarType.fail);
       }
 
       return false;
@@ -152,7 +152,7 @@ class AuthController extends ChangeNotifier {
     emailController.clear();
     passwordController.clear();
 
-    NotifySnackBar.show("Logged out successfully", SnackBarType.Success);
+    NotifySnackBar.show("Logged out successfully", SnackBarType.success);
 
     notifyListeners();
   }
