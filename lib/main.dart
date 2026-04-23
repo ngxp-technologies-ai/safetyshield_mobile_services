@@ -10,8 +10,12 @@ import 'controller/equipment/equipment_controller.dart';
 import 'controller/zone/zone_controller.dart';
 import 'controller/dashboard/dashboard_controller.dart';
 import 'controller/task/task_controller.dart';
+import 'controller/camera/camera_controller.dart';
+import 'package:fvp/fvp.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  registerWith();
   runApp(const MyApp());
 }
 
@@ -30,6 +34,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ZoneController()),
         ChangeNotifierProvider(create: (_) => DashboardController()),
         ChangeNotifierProvider(create: (_) => TaskController()),
+        ChangeNotifierProvider(create: (_) => CameraController()),
+
       ],
 
       child: MaterialApp(

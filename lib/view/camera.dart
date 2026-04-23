@@ -1,24 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:safety_management/utils/app_colors.dart';
 import 'package:safety_management/utils/app_size.dart';
 import 'package:safety_management/utils/app_styles.dart';
 import 'package:safety_management/common_widgets/bottom_sheet_widget.dart';
-
-class CameraItem {
-  final String id;
-  final String zone;
-  final bool isLive;
-  final int alertCount;
-  final String? thumbnailAsset;
-
-  const CameraItem({
-    required this.id,
-    required this.zone,
-    this.isLive = true,
-    this.alertCount = 0,
-    this.thumbnailAsset,
-  });
-}
+import '../controller/camera/camera_controller.dart';
+import '../model/camera/camera_model.dart';
+import 'package:safety_management/view/camera_stream_player.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -30,177 +18,134 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   int _selectedTab = 0;
 
-  final List<CameraItem> _allCameras = const [
-    CameraItem(
-      id: 'CAM-A1',
-      zone: 'Zone A  Foundation',
-      isLive: true,
-      alertCount: 0,
-    ),
-    CameraItem(
-      id: 'CAM-A2',
-      zone: 'Zone A  Foundation',
-      isLive: true,
-      alertCount: 0,
-    ),
-    CameraItem(
-      id: 'CAM-A3',
-      zone: 'Zone A  Foundation',
-      isLive: true,
-      alertCount: 2,
-    ),
-    CameraItem(
-      id: 'CAM-A4',
-      zone: 'Zone A  Foundation',
-      isLive: true,
-      alertCount: 1,
-    ),
-    CameraItem(
-      id: 'CAM-B1',
-      zone: 'Zone B  Scaffolding',
-      isLive: true,
-      alertCount: 1,
-    ),
-    CameraItem(
-      id: 'CAM-B2',
-      zone: 'Zone B  Scaffolding',
-      isLive: true,
-      alertCount: 0,
-    ),
-    CameraItem(
-      id: 'CAM-C1',
-      zone: 'Zone C  Crane Ops',
-      isLive: true,
-      alertCount: 0,
-    ),
-    CameraItem(
-      id: 'CAM-C2',
-      zone: 'Zone C  Crane Ops',
-      isLive: false,
-      alertCount: 0,
-    ),
-    CameraItem(
-      id: 'CAM-D1',
-      zone: 'Zone D  Storage',
-      isLive: true,
-      alertCount: 0,
-    ),
-    CameraItem(
-      id: 'CAM-D2',
-      zone: 'Zone D  Storage',
-      isLive: true,
-      alertCount: 0,
-    ),
-    CameraItem(
-      id: 'CAM-D3',
-      zone: 'Zone D  Storage',
-      isLive: true,
-      alertCount: 0,
-    ),
-    CameraItem(
-      id: 'CAM-D4',
-      zone: 'Zone D  Electrical',
-      isLive: true,
-      alertCount: 1,
-    ),
-  ];
-
-  List<CameraItem> get _activeCameras =>
-      _allCameras.where((c) => c.isLive).toList();
-
-  List<CameraItem> get _alertCameras =>
-      _allCameras.where((c) => c.alertCount > 0).toList();
-
-  List<CameraItem> get _displayed =>
-      _selectedTab == 0 ? _activeCameras : _alertCameras;
-
-  List<String> get _tabs => [
-    'Active camera(${_activeCameras.length})',
-    'With Alerts(${_alertCameras.length})',
-  ];
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CameraController>().fetchCameras();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cameras = _displayed;
+    return Consumer<CameraController>(
+      builder: (context, controller, _) {
+        final activeCameras = controller.activeCameras;
+        final alertCameras = controller.alertCameras;
 
-    return Column(
-      children: [
-        //  Tab Bar
-        Container(
-          height: 48,
-          decoration: const BoxDecoration(
-            color: AppColors.white,
-            border: Border(
-              bottom: BorderSide(color: AppColors.greyLight, width: 1),
+        final List<String> tabs = [
+          'Active camera(${activeCameras.length})',
+          'With Alerts(${alertCameras.length})',
+        ];
+
+        final List<CameraModel> displayed =
+            _selectedTab == 0 ? activeCameras : alertCameras;
+
+        if (controller.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.errorMessage != null) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  controller.errorMessage!,
+                  style: AppStyles.poppins(color: AppColors.error),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () => controller.fetchCameras(),
+                  child: const Text("Retry"),
+                ),
+              ],
             ),
-          ),
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: _tabs.length,
-            padding: EdgeInsets.symmetric(horizontal: AppSizes.pagePadding),
-            itemBuilder: (context, index) {
-              final isSelected = _selectedTab == index;
-              return GestureDetector(
-                onTap: () => setState(() => _selectedTab = index),
-                child: Container(
-                  margin: EdgeInsets.only(right: AppSizes.horizontalPadding),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: isSelected
-                        ? const Border(
-                            bottom: BorderSide(
-                              color: AppColors.primary,
-                              width: 2,
-                            ),
-                          )
-                        : null,
-                  ),
-                  child: Text(
-                    _tabs[index],
-                    style: AppStyles.poppins(
-                      fontSize: AppSizes.fs12,
-                      fontWeight: isSelected
-                          ? FontWeight.w600
-                          : FontWeight.w400,
-                      color: isSelected ? AppColors.black : AppColors.grey,
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
+          );
+        }
 
-        //  Camera Grid
-        Expanded(
-          child: cameras.isEmpty
-              ? Center(
-                  child: Text(
-                    'No Cameras found',
-                    style: AppStyles.poppins(color: AppColors.grey),
-                  ),
-                )
-              : GridView.builder(
-                  padding: EdgeInsets.all(AppSizes.cardPaddingLarge),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 0.85,
-                  ),
-                  itemCount: cameras.length,
-                  itemBuilder: (context, index) {
-                    return _CameraCard(camera: cameras[index]);
-                  },
+        return Column(
+          children: [
+            // Tab Bar
+            Container(
+              height: 48,
+              decoration: const BoxDecoration(
+                color: AppColors.white,
+                border: Border(
+                  bottom: BorderSide(color: AppColors.greyLight, width: 1),
                 ),
-        ),
-      ],
+              ),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: tabs.length,
+                padding: EdgeInsets.symmetric(horizontal: AppSizes.pagePadding),
+                itemBuilder: (context, index) {
+                  final isSelected = _selectedTab == index;
+                  return GestureDetector(
+                    onTap: () => setState(() => _selectedTab = index),
+                    child: Container(
+                      margin:
+                          EdgeInsets.only(right: AppSizes.horizontalPadding),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: isSelected
+                            ? const Border(
+                                bottom: BorderSide(
+                                  color: AppColors.primary,
+                                  width: 2,
+                                ),
+                              )
+                            : null,
+                      ),
+                      child: Text(
+                        tabs[index],
+                        style: AppStyles.poppins(
+                          fontSize: AppSizes.fs12,
+                          fontWeight: isSelected
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                          color: isSelected ? AppColors.black : AppColors.grey,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            // Camera Grid
+            Expanded(
+              child: displayed.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No Cameras found',
+                        style: AppStyles.poppins(color: AppColors.grey),
+                      ),
+                    )
+                  : GridView.builder(
+                      padding: EdgeInsets.all(AppSizes.cardPaddingLarge),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        childAspectRatio: 0.85,
+                      ),
+                      itemCount: displayed.length,
+                      itemBuilder: (context, index) {
+                        return _CameraCard(camera: displayed[index]);
+                      },
+                    ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
 class _CameraCard extends StatelessWidget {
-  final CameraItem camera;
+  final CameraModel camera;
 
   const _CameraCard({required this.camera});
 
@@ -220,7 +165,7 @@ class _CameraCard extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.18),
+              color: Colors.black.withOpacity(0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -229,36 +174,27 @@ class _CameraCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //  Thumbnail area
+            // Thumbnail area
             Expanded(
               child: Stack(
                 children: [
-                  // Camera placeholder
-                  Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.vertical(
+                  // Live Stream Player
+                  Positioned.fill(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
                         top: Radius.circular(10),
                       ),
+                      child: CameraStreamPlayer(
+                        rtspUrl: [
+                          'rtsp://Admin:Lmpp2025@103.182.160.134:10557/live/channel0',
+                          'rtsp://Admin:Lmpp2025@103.182.160.134:10556/live/channel0',
+                          'rtsp://Admin:Lmpp2025@103.182.160.134:10554/live/channel0',
+                          'rtsp://Admin:Lmpp2025@103.182.160.134:10555/live/channel0',
+                          'rtsp://Admin:Lmpp2025@103.182.160.134:10558/live/channel0',
+                          'rtsp://Admin:Lmpp2025@103.182.160.134:10559/live/channel0'
+                        ][camera.id % 6],
+                      ),
                     ),
-                    child: camera.thumbnailAsset != null
-                        ? ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(10),
-                            ),
-                            child: Image.asset(
-                              camera.thumbnailAsset!,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : const Center(
-                            child: Icon(
-                              Icons.camera_alt_outlined,
-                              size: 36,
-                              color: Color(0xFFB0B7C3),
-                            ),
-                          ),
                   ),
 
                   // Alert count badge (top-left)
@@ -311,11 +247,11 @@ class _CameraCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            camera.isLive ? 'Live' : 'Off',
+                            camera.isActive ? 'Live' : 'Off',
                             style: AppStyles.poppins(
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
-                              color: camera.isLive
+                              color: camera.isActive
                                   ? const Color(0xFF2DB468)
                                   : AppColors.grey,
                             ),
@@ -328,14 +264,14 @@ class _CameraCard extends StatelessWidget {
               ),
             ),
 
-            //  Camera info
+            // Camera info
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    camera.id,
+                    camera.cameraId,
                     style: AppStyles.poppins(
                       fontSize: AppSizes.fs12,
                       fontWeight: FontWeight.w600,
@@ -344,7 +280,7 @@ class _CameraCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    camera.zone,
+                    camera.zone?.name ?? 'Unknown Zone',
                     style: AppStyles.poppins(
                       fontSize: AppSizes.fs10,
                       color: AppColors.grey,
@@ -370,7 +306,7 @@ class _CameraCard extends StatelessWidget {
 }
 
 class CameraDetailsBottomSheet extends StatelessWidget {
-  final CameraItem camera;
+  final CameraModel camera;
 
   const CameraDetailsBottomSheet({super.key, required this.camera});
 
@@ -379,7 +315,8 @@ class CameraDetailsBottomSheet extends StatelessWidget {
     final hasAlert = camera.alertCount > 0;
     return SafetyShieldBottomSheet(
       backgroundColor: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: AppSizes.w(16), vertical: AppSizes.h(10)),
+      padding: EdgeInsets.symmetric(
+          horizontal: AppSizes.w(16), vertical: AppSizes.h(10)),
       footer: Row(
         children: [
           Expanded(
@@ -449,19 +386,28 @@ class CameraDetailsBottomSheet extends StatelessWidget {
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: Color(0xFFF1F1F1),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(11)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(11)),
                   ),
                   child: Stack(
                     children: [
-                      // Placeholder Icon
-                      const Center(
-                        child: Icon(
-                          Icons.camera_alt_outlined,
-                          size: 48,
-                          color: Color(0xFFBDBDBD),
+                      // Live Stream Player
+                      Positioned.fill(
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(11)),
+                          child: CameraStreamPlayer(
+                            rtspUrl: [
+                              'rtsp://Admin:Lmpp2025@103.182.160.134:10557/live/channel0',
+                              'rtsp://Admin:Lmpp2025@103.182.160.134:10556/live/channel0',
+                              'rtsp://Admin:Lmpp2025@103.182.160.134:10554/live/channel0',
+                              'rtsp://Admin:Lmpp2025@103.182.160.134:10555/live/channel0',
+                              'rtsp://Admin:Lmpp2025@103.182.160.134:10558/live/channel0',
+                              'rtsp://Admin:Lmpp2025@103.182.160.134:10559/live/channel0'
+                            ][camera.id % 6],
+                          ),
                         ),
                       ),
-                      
+
                       // Alert dot badge (top-left)
                       if (hasAlert)
                         Positioned(
@@ -526,20 +472,21 @@ class CameraDetailsBottomSheet extends StatelessWidget {
                     ],
                   ),
                 ),
-                
+
                 // Bottom Info Area (ID and Zone)
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
                   decoration: const BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(11)),
+                    borderRadius:
+                        BorderRadius.vertical(bottom: Radius.circular(11)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        camera.id,
+                        camera.cameraId,
                         style: AppStyles.poppins(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
@@ -547,7 +494,7 @@ class CameraDetailsBottomSheet extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        camera.zone,
+                        camera.zone?.name ?? 'Unknown Zone',
                         style: AppStyles.poppins(
                           fontSize: 11,
                           color: AppColors.grey,
@@ -571,7 +518,8 @@ class CameraDetailsBottomSheet extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.error_outline, color: AppColors.error, size: 18),
+                  const Icon(Icons.error_outline,
+                      color: AppColors.error, size: 18),
                   const SizedBox(width: 8),
                   Text(
                     "${camera.alertCount} Active alerts",
@@ -613,7 +561,7 @@ class CameraDetailsBottomSheet extends StatelessWidget {
               "Zone Entry"
             ];
             final times = ["2m ago", "8m ago", "14m ago", "22m ago", "30m ago"];
-            
+
             return Padding(
               padding: EdgeInsets.only(bottom: AppSizes.h(8)),
               child: Container(
@@ -627,7 +575,8 @@ class CameraDetailsBottomSheet extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.access_time, size: 16, color: AppColors.grey.withOpacity(0.6)),
+                    Icon(Icons.access_time,
+                        size: 16, color: AppColors.grey.withOpacity(0.6)),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(

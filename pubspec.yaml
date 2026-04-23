@@ -41,7 +41,9 @@ dependencies:
   provider: ^6.1.5+1
   speech_to_text: ^7.3.0
   intl: ^0.19.0
-
+  video_player: ^2.8.6
+  fvp: ^0.26.0
+  wakelock_plus: ^1.1.1
 
 dev_dependencies:
   flutter_test:

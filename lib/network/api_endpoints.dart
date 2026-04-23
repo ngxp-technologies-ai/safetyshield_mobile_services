@@ -14,5 +14,6 @@ class ApiEndpoint {
   static const String getZones = "/api/zones/";
   static const String getEquipment = "/api/equipment/";
   static const String tasks = "/api/admin/tasks/";
+  static const String getCameras = "/api/cameras/";
   static const String chatAsk = "/api/chat/ask";
 }
