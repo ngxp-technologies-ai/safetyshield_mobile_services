@@ -44,6 +44,7 @@ dependencies:
   video_player: ^2.8.6
   fvp: ^0.26.0
   wakelock_plus: ^1.1.1
+  web_socket_channel: ^3.0.2
 
 dev_dependencies:
   flutter_test:

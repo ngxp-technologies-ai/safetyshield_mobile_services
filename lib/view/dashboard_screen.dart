@@ -16,6 +16,7 @@ import 'ai_assistant_screen.dart';
 import 'login_screen.dart';
 import '../controller/alert/alert_controller.dart';
 import '../controller/alert/alert_stats_controller.dart';
+import '../controller/alert/alert_websocket_controller.dart';
 import '../controller/crew/my_crew_controller.dart';
 import '../controller/dashboard/dashboard_controller.dart';
 
@@ -38,6 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       context.read<AlertStatsController>().fetchAlertStats();
       context.read<MyCrewController>().fetchMyCrew();
       context.read<DashboardController>().fetchDashboardStats();
+      context.read<AlertWebSocketController>().connect();
     });
   }
 
@@ -230,28 +232,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
           });
         },
       ),
-      floatingActionButton: _currentIndex == 0 
-        ? FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AiAssistantScreen(),
+      floatingActionButton: _currentIndex == 0
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AiAssistantScreen(),
+                  ),
+                );
+              },
+              backgroundColor: Colors.white,
+              elevation: 4,
+              shape: const CircleBorder(),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Image.asset(
+                  'assets/images/ai_assistant.png',
+                  fit: BoxFit.contain,
                 ),
-              );
-            },
-            backgroundColor: Colors.white,
-            elevation: 4,
-            shape: const CircleBorder(),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Image.asset(
-                'assets/images/ai_assistant.png',
-                fit: BoxFit.contain,
               ),
-            ),
-          )
-        : null,
+            )
+          : null,
     );
   }
 }
@@ -406,37 +408,52 @@ class _StatsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer3<MyCrewController, AlertStatsController, DashboardController>(
-      builder: (context, crewController, alertStatsController, dashboardController, _) {
-        final dashStats = dashboardController.stats;
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _StatCard(
-              icon: "assets/images/crew_icon.png",
-              title: "Crew",
-              value: "${dashStats.crewPresent}/${dashStats.totalCrew}",
-            ),
-            _StatCard(
-              icon: "assets/images/camera_icon.png", // Reusing icon for Active Workers
-              title: "Active",
-              value: "${dashStats.activeWorkers}",
-              showGreenDot: true,
-            ),
-            _StatCard(
-              icon: "assets/images/alert_icon.png", // Reusing icon for Tasks
-              title: "Tasks",
-              value: "${dashStats.tasksActive}",
-            ),
-            _StatCard(
-              icon: "assets/images/warning_icon.png", // Reusing icon
-              title: "Safety",
-              value: "${dashStats.safetyScore}%",
-              iconColor: const Color(0xFF2DB468), // Green to indicate safety score
-            ),
-          ],
-        );
-      },
+    return Consumer3<
+      MyCrewController,
+      AlertStatsController,
+      DashboardController
+    >(
+      builder:
+          (
+            context,
+            crewController,
+            alertStatsController,
+            dashboardController,
+            _,
+          ) {
+            final dashStats = dashboardController.stats;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _StatCard(
+                  icon: "assets/images/crew_icon.png",
+                  title: "Crew",
+                  value: "${dashStats.crewPresent}/${dashStats.totalCrew}",
+                ),
+                _StatCard(
+                  icon:
+                      "assets/images/camera_icon.png", // Reusing icon for Active Workers
+                  title: "Active",
+                  value: "${dashStats.activeWorkers}",
+                  showGreenDot: true,
+                ),
+                _StatCard(
+                  icon:
+                      "assets/images/alert_icon.png", // Reusing icon for Tasks
+                  title: "Tasks",
+                  value: "${dashStats.tasksActive}",
+                ),
+                _StatCard(
+                  icon: "assets/images/warning_icon.png", // Reusing icon
+                  title: "Safety",
+                  value: "${dashStats.safetyScore}%",
+                  iconColor: const Color(
+                    0xFF2DB468,
+                  ), // Green to indicate safety score
+                ),
+              ],
+            );
+          },
     );
   }
 }

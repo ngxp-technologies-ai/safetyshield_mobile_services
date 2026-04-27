@@ -1,5 +1,5 @@
 class ApiEndpoint {
-  static const String baseUrl = "https://safetyapi.prod-app.in";
+  static const String baseUrl = "https://safety-qa-api.prod-app.in";
 
   static const String refreshToken = "/api/auth/refresh";
   static const String login = "/api/auth/login";

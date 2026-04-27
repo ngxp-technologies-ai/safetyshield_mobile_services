@@ -11,6 +11,7 @@ import 'controller/zone/zone_controller.dart';
 import 'controller/dashboard/dashboard_controller.dart';
 import 'controller/task/task_controller.dart';
 import 'controller/camera/camera_controller.dart';
+import 'controller/alert/alert_websocket_controller.dart';
 import 'package:fvp/fvp.dart';
 
 void main() {
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => DashboardController()),
         ChangeNotifierProvider(create: (_) => TaskController()),
         ChangeNotifierProvider(create: (_) => CameraController()),
-
+        ChangeNotifierProvider(create: (_) => AlertWebSocketController()),
       ],
 
       child: MaterialApp(

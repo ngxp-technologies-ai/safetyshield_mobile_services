@@ -10,14 +10,23 @@ class AlertController extends ChangeNotifier {
   List<AlertModel> activeAlerts = [];
   List<AlertModel> acknowledgedAlerts = [];
   // Fetch the list of active alerts and update the state
-  Future<void> fetchActiveAlerts({bool showLoader = true}) async {
+  Future<void> fetchActiveAlerts({
+    bool showLoader = true,
+    String? violationType,
+    String? severity,
+    int? zoneId,
+  }) async {
     try {
       if (showLoader) {
         isLoading = true;
         notifyListeners();
       }
 
-      final response = await _repository.getActiveAlerts();
+      final response = await _repository.getActiveAlerts(
+        violationType: violationType,
+        severity: severity,
+        zoneId: zoneId,
+      );
       activeAlerts = response;
     } catch (e) {
       NotifySnackBar.show(
@@ -31,14 +40,17 @@ class AlertController extends ChangeNotifier {
   }
 
   // Fetch the list of acknowledged alerts and update the state
-  Future<void> fetchAcknowledgedAlerts({bool showLoader = true}) async {
+  Future<void> fetchAcknowledgedAlerts({
+    bool showLoader = true,
+    int? zoneId,
+  }) async {
     try {
       if (showLoader) {
         isLoading = true;
         notifyListeners();
       }
 
-      final response = await _repository.getAcknowledgedAlerts();
+      final response = await _repository.getAcknowledgedAlerts(zoneId: zoneId);
       acknowledgedAlerts = response;
     } catch (e) {
       NotifySnackBar.show(

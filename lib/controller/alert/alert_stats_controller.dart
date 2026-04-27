@@ -9,14 +9,14 @@ class AlertStatsController extends ChangeNotifier {
   bool isLoading = false;
   AlertStatsModel stats = AlertStatsModel.empty();
   //
-  Future<void> fetchAlertStats({bool showLoader = true}) async {
+  Future<void> fetchAlertStats({bool showLoader = true, int? zoneId}) async {
     try {
       if (showLoader) {
         isLoading = true;
         notifyListeners();
       }
 
-      final response = await _repository.getAlertStats();
+      final response = await _repository.getAlertStats(zoneId: zoneId);
       stats = response;
     } catch (e) {
       NotifySnackBar.show(

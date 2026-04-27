@@ -7,10 +7,11 @@ import 'package:safety_management/network/api_providers.dart';
 class AlertRepository {
   final ApiProvider _apiProvider = ApiProvider();
   //get alert stats count of active and acknowledged alerts
-  Future<AlertStatsModel> getAlertStats() async {
+  Future<AlertStatsModel> getAlertStats({int? zoneId}) async {
     try {
+      final query = zoneId != null ? '?zone_id=$zoneId' : '';
       final response = await _apiProvider.get(
-        ApiEndpoint.alertStats,
+        '${ApiEndpoint.alertStats}$query',
         requiresAuth: true,
       );
 
@@ -32,14 +33,25 @@ class AlertRepository {
     }
   }
 
-  //get list of active alerts and acknowledged alerts with pagination
+  //get list of active alerts with pagination and filters
   Future<List<AlertModel>> getActiveAlerts({
     int skip = 0,
     int limit = 50,
+    String? violationType,
+    String? severity,
+    int? zoneId,
   }) async {
     try {
+      final params = StringBuffer('?skip=$skip&limit=$limit');
+      if (violationType != null && violationType.isNotEmpty) {
+        params.write('&violation_type=$violationType');
+      }
+      if (severity != null && severity.isNotEmpty) {
+        params.write('&severity=$severity');
+      }
+      if (zoneId != null) params.write('&zone_id=$zoneId');
       final response = await _apiProvider.get(
-        "${ApiEndpoint.activeAlerts}?skip=$skip&limit=$limit",
+        '${ApiEndpoint.activeAlerts}$params',
         requiresAuth: true,
       );
 
@@ -67,10 +79,13 @@ class AlertRepository {
   Future<List<AlertModel>> getAcknowledgedAlerts({
     int skip = 0,
     int limit = 50,
+    int? zoneId,
   }) async {
     try {
+      final params = StringBuffer('?skip=$skip&limit=$limit');
+      if (zoneId != null) params.write('&zone_id=$zoneId');
       final response = await _apiProvider.get(
-        "${ApiEndpoint.acknowledgedAlerts}?skip=$skip&limit=$limit",
+        '${ApiEndpoint.acknowledgedAlerts}$params',
         requiresAuth: true,
       );
 
